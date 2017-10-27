@@ -47,5 +47,12 @@ public class Bompad extends JFrame{
             JOptionPane.showMessageDialog(null, instruct);   
          }
       });
+      
+      this.add(Pond, BorderLayout.CENTER);
+      this.add(Chat, BorderLayout.SOUTH);
+      this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+      this.setLocationRelativeTo(null);
+      this.pack();
+      this.setVisible(true);
    }//end constructor
 }//end class
