@@ -3,7 +3,8 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
-   Blabalbalbalbalbalbabbaabllaaaaaaaahhh JAVADOCS
+   JAVADOCS
+   Final display - brings all classes together
 */
 
 public class Bompad extends JFrame{
@@ -23,6 +24,7 @@ public class Bompad extends JFrame{
       JMenu jmHelp = new JMenu("Help");
       
       //menu items and actionlisteners
+      //EXIT
       JMenuItem jmiExit = new JMenuItem("Exit");
       jmiExit.addActionListener(new ActionListener()
       {
@@ -33,6 +35,7 @@ public class Bompad extends JFrame{
          }
       });
       
+      //ABOUT
       JMenuItem jmiAbout = new JMenuItem("About");
       jmiAbout.addActionListener(new ActionListener()
       {
@@ -43,6 +46,7 @@ public class Bompad extends JFrame{
          }
       });
       
+      //INSTRUCT
       JMenuItem jmiInstruct = new JMenuItem("Instructions");
       jmiInstruct.addActionListener(new ActionListener()
       {
@@ -54,12 +58,21 @@ public class Bompad extends JFrame{
          }
       });
       
-      //add classes to frame and set frame
+      //add menus and menuitems to menubar
+      jmb.add(jmFile);
+      jmb.add(jmHelp);
+      jmFile.add(jmiExit);
+      jmHelp.add(jmiAbout);
+      jmHelp.add(jmiInstruct);
+      
+      //add classes(panels) to frame
       this.add(Pond, BorderLayout.CENTER);
       this.add(Chat, BorderLayout.SOUTH);
+      
+      //sets frame
       this.setDefaultCloseOperation(EXIT_ON_CLOSE);
       this.setLocationRelativeTo(null);
       this.pack();
       this.setVisible(true);
    }//end constructor
-}//end class
+}//end Bompad class

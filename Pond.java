@@ -4,7 +4,8 @@ import javax.swing.*;
 import java.util.*;
 
 /**
-   Blabalbalbalbalbalbabbaabllaaaaaaaahhh JAVADOCS
+   JAVADOCS
+   Pond(Board) class
 */
 
 public class Pond extends JPanel{
