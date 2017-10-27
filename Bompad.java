@@ -32,6 +32,7 @@ public class Bompad extends JFrame{
          {
             //informs server we quit
             JOptionPane.showMessageDialog(null, "Thanks for playing Bompad");
+            System.exit(0);
          }
       });
       
@@ -65,14 +66,19 @@ public class Bompad extends JFrame{
       jmHelp.add(jmiAbout);
       jmHelp.add(jmiInstruct);
       
+      //instantiate outer classes
+      Pond pond = new Pond();
+      Chat chat = new Chat();
+      
       //add classes(panels) to frame
-      this.add(Pond, BorderLayout.CENTER);
-      this.add(Chat, BorderLayout.SOUTH);
+      this.add(pond, BorderLayout.CENTER);
+      this.add(chat, BorderLayout.SOUTH);
       
       //sets frame
       this.setDefaultCloseOperation(EXIT_ON_CLOSE);
       this.setLocationRelativeTo(null);
       this.pack();
+      this.setTitle("Bompad");
       this.setVisible(true);
    }//end constructor
 }//end Bompad class
