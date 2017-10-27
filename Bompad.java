@@ -1,4 +1,10 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
+/**
+   Blabalbalbalbalbalbabbaabllaaaaaaaahhh JAVADOCS
+*/
 
 public class Bompad extends JFrame{
    
@@ -48,6 +54,7 @@ public class Bompad extends JFrame{
          }
       });
       
+      //add classes to frame and set frame
       this.add(Pond, BorderLayout.CENTER);
       this.add(Chat, BorderLayout.SOUTH);
       this.setDefaultCloseOperation(EXIT_ON_CLOSE);
