@@ -44,9 +44,34 @@ public class Player{
             }   
             chatColor = "blue";
             break;
-      }
-   
-   
+         case 2:
+            try{
+               frog = ImageIO.read(getClass().getResource("black-circle.png"));
+            }
+            catch(IOException ie){
+               ie.printStackTrace();
+            }   
+            chatColor = "green";
+            break;
+         case 3:
+            try{
+               frog = ImageIO.read(getClass().getResource("black-circle.png"));
+            }
+            catch(IOException ie){
+               ie.printStackTrace();
+            }   
+            chatColor = "blue";
+            break;
+         case 4:
+            try{
+               frog = ImageIO.read(getClass().getResource("black-circle.png"));
+            }
+            catch(IOException ie){
+               ie.printStackTrace();
+            }   
+            chatColor = "green";
+            break;
+      } 
    }//end constructor 
    
    /**
