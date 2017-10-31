@@ -67,11 +67,11 @@ public class Bompad extends JFrame{
       jmHelp.add(jmiInstruct);
       
       //instantiate outer classes
-      Pond pond = new Pond();
+      //Pond pond = new Pond();
       Chat chat = new Chat();
       
       //add classes(panels) to frame
-      this.add(pond, BorderLayout.CENTER);
+      //this.add(pond, BorderLayout.CENTER);
       this.add(chat, BorderLayout.SOUTH);
       
       //sets frame
