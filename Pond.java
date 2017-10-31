@@ -4,13 +4,18 @@ import javax.swing.*;
 import java.util.*;
 
 /**
-   JAVADOCS
-   Pond(Board) class
+* A class containing the constructors and methods associated with a board of lilypads.
+* @Author - Team 2
+* @version - 1
 */
-
 public class Pond extends JPanel{
-   ArrayList<LilyPad> lilypads = new ArrayList<LilyPad>();
    
+   //Declares and instantiates an ArrayList of LilyPads.
+   private ArrayList<LilyPad> lilypads = new ArrayList<LilyPad>();
+   
+   /**
+   * Constructor for a "pond" board of 64 LilyPads in an 8 x 8 grid layout.
+   */
    public Pond()
    {
       this.setLayout(new GridLayout(8,8));
@@ -18,11 +23,13 @@ public class Pond extends JPanel{
       {
          LilyPad lp = new LilyPad();
          
-         //random number generator
-         /*if(random == predetermined value)
+         /*Generates a random number. If the number matches a 
+         predetermined value, then the LilyPad is set as a bonus space.*/
+         if( ( 1 + (int)(Math.random() * 10)) == 1)
          {
             lp.setBonus(true);
-         }*/
+         }
+         
          lilypads.add(lp);
       }
    }//end constructor

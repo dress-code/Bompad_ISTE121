@@ -3,35 +3,45 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
-   JAVADOCS
-   Lilypad buttons class
-   create icons(Anna's field - HAVE FUN :) )
+* A class containing constructors and methods associated with a LilyPad object.
+* @author - Team 2
+* @version 1
 */
-
-
-public class Lilypad extends JButton
+public class LilyPad extends JButton
 {
-   boolean isSpecial = true;
+
+   //Declares and instantiates the necessary attributes.
+   private boolean bonus = false;
+   private Icon empty = new ImageIcon(/*filepath to empty icon*/);
    
-   public Lilypad()
+   /**
+   * Constructor for a LilyPad object.
+   */
+   public LilyPad()
    {
-      //new button
-      JButton jbLily = new JButton();
+      //Creates a new JButton.
+      JButton jbPad = new JButton();
       
-      //set icons
-      Icon lily = new ImageIcon(pic_file); //regular lilypad
-      Icon sink = new ImageIcon(pic_file); //sunken lilypad
-      Icon pieces = new ImageIcon(pic_file); //blown up lilypad
-      
-      //put icons on buttons
-      jbLily.setIcon(lily); //default
-      jbLily.setIcon(sink); //after player choose to sink lily
-      jbLily.setIcon(pieces); //aftermath of boom
+      //Sets the new LilyPad icon to the empty space.
+      jbPad.setIcon(empty);
       
    }//end constructor
    
+   /**
+   * Mutator method for setting the bonus (boolean) attribute of a LilyPad object.
+   * @param boolean b The value determining whether or not a LilyPad is a bonus.
+   */
    public void setBonus(boolean b)
    {
-      
+      bonus = b;
    }//end setBonus
+   
+   /**
+   * Accessor method for the bonus attribute.
+   * @return True if the LilyPad is a bonus, false if not.
+   */
+   public boolean isBonus()
+   {
+      return bonus;
+   }
 }//end Lilypad class
