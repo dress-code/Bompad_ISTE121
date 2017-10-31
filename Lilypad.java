@@ -12,19 +12,16 @@ public class LilyPad extends JButton
 
    //Declares and instantiates the necessary attributes.
    private boolean bonus = false;
-   private Icon empty = new ImageIcon(/*filepath to empty icon*/);
+   //private Icon empty = new ImageIcon(/*filepath to empty icon*/);
    
    /**
    * Constructor for a LilyPad object.
    */
    public LilyPad()
    {
-      //Creates a new JButton.
-      JButton jbPad = new JButton();
-      
+      this.setPreferredSize(new Dimension(85,85));
       //Sets the new LilyPad icon to the empty space.
-      jbPad.setIcon(empty);
-      
+      //jbPad.setIcon(empty);
    }//end constructor
    
    /**

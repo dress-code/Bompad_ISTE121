@@ -26,6 +26,7 @@ public class Chat extends JPanel{
       
       this.add(scrollpane);
       this.add(jpSend);
+      this.setSize(200,100);
       
    }//end constructor
 }//end Chat class

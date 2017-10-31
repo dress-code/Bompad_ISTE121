@@ -22,15 +22,14 @@ public class Pond extends JPanel{
       for(int i = 0; i < 64; i++)
       {
          LilyPad lp = new LilyPad();
-         
          /*Generates a random number. If the number matches a 
          predetermined value, then the LilyPad is set as a bonus space.*/
          if( ( 1 + (int)(Math.random() * 10)) == 1)
          {
             lp.setBonus(true);
          }
-         
          lilypads.add(lp);
+         this.add(lilypads.get(i));
       }
    }//end constructor
 }//end Pond class
