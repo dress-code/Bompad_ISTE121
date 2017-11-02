@@ -37,7 +37,7 @@ public class Player{
       switch(playerNum){
          case 1:
             try{
-               frog = ImageIO.read(getClass().getResource("black-circle.png"));
+               frog = ImageIO.read(getClass().getResource("redfrog.png"));
             }
             catch(IOException ie){
                ie.printStackTrace();
@@ -46,7 +46,7 @@ public class Player{
             break;
          case 2:
             try{
-               frog = ImageIO.read(getClass().getResource("black-circle.png"));
+               frog = ImageIO.read(getClass().getResource("trumpfrog.png"));
             }
             catch(IOException ie){
                ie.printStackTrace();
@@ -55,7 +55,7 @@ public class Player{
             break;
          case 3:
             try{
-               frog = ImageIO.read(getClass().getResource("black-circle.png"));
+               frog = ImageIO.read(getClass().getResource("redfrog.png"));
             }
             catch(IOException ie){
                ie.printStackTrace();
@@ -64,7 +64,7 @@ public class Player{
             break;
          case 4:
             try{
-               frog = ImageIO.read(getClass().getResource("black-circle.png"));
+               frog = ImageIO.read(getClass().getResource("trumpfrog.png"));
             }
             catch(IOException ie){
                ie.printStackTrace();
