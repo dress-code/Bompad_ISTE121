@@ -12,7 +12,7 @@ public class Pond extends JPanel{
    
    //Declares and instantiates an ArrayList of LilyPads.
    private ArrayList<LilyPad> lilypads = new ArrayList<LilyPad>();
-   
+   private Player testPlayer = new Player("Doug", 1);
    /**
    * Constructor for a "pond" board of 64 LilyPads in an 8 x 8 grid layout.
    */
@@ -29,6 +29,9 @@ public class Pond extends JPanel{
             lp.setBonus(true);
          }
          lilypads.add(lp);
+         if(i==0){
+            lp.setIcon(new ImageIcon(testPlayer.getImage()));
+         }
          this.add(lilypads.get(i));
       }
    }//end constructor
