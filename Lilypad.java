@@ -7,7 +7,7 @@ import javax.swing.*;
 * @author - Team 2
 * @version 1
 */
-public class LilyPad extends JButton
+public class Lilypad extends JButton
 {
 
    //Declares and instantiates the necessary attributes.
@@ -17,7 +17,7 @@ public class LilyPad extends JButton
    /**
    * Constructor for a LilyPad object.
    */
-   public LilyPad()
+   public Lilypad()
    {
       this.setPreferredSize(new Dimension(85,85));
       //Sets the new LilyPad icon to the empty space.
