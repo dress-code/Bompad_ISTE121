@@ -21,7 +21,7 @@ public class Pond extends JPanel{
    */
    public Pond(){
    
-      this.setLayout(new GridLayout(8,8));
+      this.setLayout(new GridLayout(10,10));
       for(int p=1; p<5; p++){
          Player player = new Player("testing", p);
          testPlayer.add(player);
