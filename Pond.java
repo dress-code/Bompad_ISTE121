@@ -13,7 +13,8 @@ import java.io.*;
 public class Pond extends JPanel{
    
    //Declares and instantiates an ArrayList of LilyPads.
-   private ArrayList<Lilypad> lilypads = new ArrayList<Lilypad>();
+   //private ArrayList<Lilypad> lilypads = new ArrayList<Lilypad>();
+   private Lilypad[][] lilypads = new Lilypad[10][10];
    private ArrayList<Player> testPlayer = new ArrayList<Player>();
    /**
    * Constructor for a "pond" board of 64 LilyPads in an 8 x 8 grid layout.
@@ -26,48 +27,50 @@ public class Pond extends JPanel{
          testPlayer.add(player);
       }
       
-      for(int i = 0; i < 64; i++){
-      
-         Lilypad lp = new Lilypad();
+      for(int i = 0; i < 10; i++){
+         for(int j=0; j<10; j++){
+         
+            Lilypad lp = new Lilypad();
          /*Generates a random number. If the number matches a 
          predetermined value, then the LilyPad is set as a bonus space.*/
-         if( ( 1 + (int)(Math.random() * 10)) == 1)
-         {
-            lp.setBonus(true);
-         }
-         lilypads.add(lp);
+            if( ( 1 + (int)(Math.random() * 10)) == 1)
+            {
+               lp.setBonus(true);
+            }
+            lilypads[i][j]=lp;
          
-         if(i==0){
-            Image img = testPlayer.get(0).getImage();
-            Image resizedImage = img.getScaledInstance(85, 85, 0);
-            lp.setIcon(new ImageIcon(resizedImage));
-         }
-         else if(i==7){
-            Image img = testPlayer.get(1).getImage();
-            Image resizedImage = img.getScaledInstance(85, 85, 0);
-            lp.setIcon(new ImageIcon(resizedImage));
-         }
-         else if(i==56){
-            Image img = testPlayer.get(2).getImage();
-            Image resizedImage = img.getScaledInstance(85, 85, 0);
-            lp.setIcon(new ImageIcon(resizedImage));
-         }
-         else if(i==63){
-            Image img = testPlayer.get(3).getImage();
-            Image resizedImage = img.getScaledInstance(85, 85, 0);
-            lp.setIcon(new ImageIcon(resizedImage));
-         }
-         else{
-            try{
-               Image imge = ImageIO.read(getClass().getResource("empty.png"));
-               Image resizeImage = imge.getScaledInstance(85, 85, 0);
-               lp.setIcon(new ImageIcon(resizeImage));
+            if(i==1 && j==1){
+               Image img = testPlayer.get(0).getImage();
+               Image resizedImage = img.getScaledInstance(85, 85, 0);
+               lp.setIcon(new ImageIcon(resizedImage));
             }
-            catch(IOException ie){
-               ie.printStackTrace();
+            else if(i==1 && j==8){
+               Image img = testPlayer.get(1).getImage();
+               Image resizedImage = img.getScaledInstance(85, 85, 0);
+               lp.setIcon(new ImageIcon(resizedImage));
             }
+            else if(i==8 && j==1){
+               Image img = testPlayer.get(2).getImage();
+               Image resizedImage = img.getScaledInstance(85, 85, 0);
+               lp.setIcon(new ImageIcon(resizedImage));
+            }
+            else if(i==8 && j==8){
+               Image img = testPlayer.get(3).getImage();
+               Image resizedImage = img.getScaledInstance(85, 85, 0);
+               lp.setIcon(new ImageIcon(resizedImage));
+            }
+            else{
+               try{
+                  Image imge = ImageIO.read(getClass().getResource("empty.png"));
+                  Image resizeImage = imge.getScaledInstance(85, 85, 0);
+                  lp.setIcon(new ImageIcon(resizeImage));
+               }
+               catch(IOException ie){
+                  ie.printStackTrace();
+               }
+            }
+            this.add(lilypads[i][j]);
          }
-         this.add(lilypads.get(i));
       }
    }//end constructor
 }//end Pond class
