@@ -37,7 +37,7 @@ public class Player{
       switch(playerNum){
          case 1:
             try{
-               frog = ImageIO.read(getClass().getResource("redfrog.png"));
+               frog = ImageIO.read(getClass().getResource("red-frog.png"));
             }
             catch(IOException ie){
                ie.printStackTrace();
@@ -46,7 +46,7 @@ public class Player{
             break;
          case 2:
             try{
-               frog = ImageIO.read(getClass().getResource("trumpfrog.png"));
+               frog = ImageIO.read(getClass().getResource("orange-frog.png"));
             }
             catch(IOException ie){
                ie.printStackTrace();

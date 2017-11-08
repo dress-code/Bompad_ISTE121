@@ -41,28 +41,28 @@ public class Pond extends JPanel{
          
             if(i==1 && j==1){
                Image img = testPlayer.get(0).getImage();
-               Image resizedImage = img.getScaledInstance(85, 85, 0);
+               Image resizedImage = img.getScaledInstance(70, 70, 0);
                lp.setIcon(new ImageIcon(resizedImage));
             }
             else if(i==1 && j==8){
                Image img = testPlayer.get(1).getImage();
-               Image resizedImage = img.getScaledInstance(85, 85, 0);
+               Image resizedImage = img.getScaledInstance(70, 70, 0);
                lp.setIcon(new ImageIcon(resizedImage));
             }
             else if(i==8 && j==1){
                Image img = testPlayer.get(2).getImage();
-               Image resizedImage = img.getScaledInstance(85, 85, 0);
+               Image resizedImage = img.getScaledInstance(70, 70, 0);
                lp.setIcon(new ImageIcon(resizedImage));
             }
             else if(i==8 && j==8){
                Image img = testPlayer.get(3).getImage();
-               Image resizedImage = img.getScaledInstance(85, 85, 0);
+               Image resizedImage = img.getScaledInstance(70, 70, 0);
                lp.setIcon(new ImageIcon(resizedImage));
             }
             else{
                try{
                   Image imge = ImageIO.read(getClass().getResource("empty.png"));
-                  Image resizeImage = imge.getScaledInstance(85, 85, 0);
+                  Image resizeImage = imge.getScaledInstance(70, 70, 0);
                   lp.setIcon(new ImageIcon(resizeImage));
                }
                catch(IOException ie){
@@ -70,6 +70,42 @@ public class Pond extends JPanel{
                }
             }
             this.add(lilypads[i][j]);
+         }
+      }
+      for(int i=0; i<10; i++){
+         try{
+            Image imge = ImageIO.read(getClass().getResource("border-left.png"));
+            lilypads[i][0].setIcon(new ImageIcon(imge));
+         }
+         catch(IOException ie){
+            ie.printStackTrace();
+         }
+      }
+      for(int i=0; i<10; i++){
+         try{
+            Image imge = ImageIO.read(getClass().getResource("border-top.png"));
+            lilypads[0][i].setIcon(new ImageIcon(imge));
+         }
+         catch(IOException ie){
+            ie.printStackTrace();
+         }
+      }
+      for(int i=0; i<10; i++){
+         try{
+            Image imge = ImageIO.read(getClass().getResource("border-right.png"));
+            lilypads[i][9].setIcon(new ImageIcon(imge));
+         }
+         catch(IOException ie){
+            ie.printStackTrace();
+         }
+      }
+      for(int i=0; i<10; i++){
+         try{
+            Image imge = ImageIO.read(getClass().getResource("border-bottom.png"));
+            lilypads[9][i].setIcon(new ImageIcon(imge));
+         }
+         catch(IOException ie){
+            ie.printStackTrace();
          }
       }
    }//end constructor
