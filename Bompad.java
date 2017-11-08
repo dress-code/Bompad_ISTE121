@@ -87,6 +87,7 @@ public class Bompad extends JFrame{
       this.setTitle("Bompad");
       this.setVisible(true);
       
+      pond.newGame();
    }//end constructor
    
    class ClientConnection extends Thread

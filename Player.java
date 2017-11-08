@@ -6,18 +6,17 @@ import javax.swing.*;
 /**
 	Player.java
 	A class that create a playable character
-   Authors: Douglas Kaelin, Zacharry Georges
+   Authors: Douglas Kaelin, Zacharry Georges, Anna Jacobsen, Alexa Lewis
    Version: 0.0.2
 */
-
-
 public class Player{
    
    private String name;
    private boolean turn;
-   private Image frog;
+   private Icon frog;
    private boolean isDead;
    private String chatColor;
+   private Point currentLocation;
    
    
    /**
@@ -36,86 +35,79 @@ public class Player{
       isDead = false;
       switch(playerNum){
          case 1:
-            try{
-               frog = ImageIO.read(getClass().getResource("red-frog.png"));
-            }
-            catch(IOException ie){
-               ie.printStackTrace();
-            }   
+            frog = new ImageIcon("red-frog.png");
             chatColor = "blue";
             break;
          case 2:
-            try{
-               frog = ImageIO.read(getClass().getResource("orange-frog.png"));
-            }
-            catch(IOException ie){
-               ie.printStackTrace();
-            }   
+            frog = new ImageIcon("orange-frog.png");  
             chatColor = "green";
             break;
          case 3:
-            try{
-               frog = ImageIO.read(getClass().getResource("pink-frog.png"));
-            }
-            catch(IOException ie){
-               ie.printStackTrace();
-            }   
+            frog = new ImageIcon("pink-frog.png"); 
             chatColor = "blue";
             break;
          case 4:
-            try{
-               frog = ImageIO.read(getClass().getResource("blue-frog.png"));
-            }
-            catch(IOException ie){
-               ie.printStackTrace();
-            }   
+            frog = new ImageIcon("blue-frog.png");  
             chatColor = "green";
             break;
       } 
    }//end constructor 
    
    /**
-      This method gets whether or not it's the player object's turn
-      
-      @return boolean If it is ture then it is the players turn, otherwise it is not
+   * This method gets whether or not it's the player object's turn
+   * @return boolean If it is ture then it is the players turn, otherwise it is not
    */
    public boolean getTurn(){
       return turn;
    }
    
    /**
-      This method sets the turn of the player object
-      
-      @param _turn Is a boolean to set the turns to
+   * This method sets the turn of the player object
+   * @param _turn Is a boolean to set the turns to
    */
    public void setTurn(boolean _turn){
       turn = _turn;
    }
    
    /**
-      This method gets whether or not it's the player object's is dead
-      
-      @return boolean If it is ture then it is the players turn, otherwise it is not
+   * This method gets whether or not it's the player object's is dead
+   * @return boolean If it is ture then it is the players turn, otherwise it is not
    */
    public boolean getIsDead(){
       return isDead;
    }
    
    /**
-      This method sets the turn of the player object
-      
-      @param _turn Is a boolean to set the turns to
+   * This method sets the turn of the player object
+   * @param _turn Is a boolean to set the turns to
    */
    public void setIsDead(boolean _isDead){
       isDead = _isDead;
    }
    
    /**
-      This method gets the player object's image
-      
-      @return Image Is the image for that player object
+   * This method gets the player object's image
+   * @return Image Is the image for that player object
    */
-   public Image getImage(){
+   public Icon getIcon(){
       return frog;
+   }
+   
+   /**
+   * A method which returns the point at which the Player is currently located.
+   * @return the current location of the Player object.
+   */
+   public Point getCurrentLocation()
+   {
+      return currentLocation;
+   }
+   
+   /**
+   * A method that sets the current location of a Player object.
+   * @param newLocation The new location of the Player object.
+   */
+   public void setCurrentLocation(Point newLocation)
+   {
+      currentLocation = newLocation;
    }
 }

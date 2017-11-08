@@ -15,7 +15,10 @@ public class Pond extends JPanel{
    //Declares and instantiates an ArrayList of LilyPads.
    //private ArrayList<Lilypad> lilypads = new ArrayList<Lilypad>();
    private Lilypad[][] lilypads = new Lilypad[10][10];
-   private ArrayList<Player> testPlayer = new ArrayList<Player>();
+   private ArrayList<Player> players = new ArrayList<Player>();
+   private boolean winner = false;
+   Icon emptyPad = new ImageIcon("empty.png");
+   
    /**
    * Constructor for a "pond" board of 64 LilyPads in an 8 x 8 grid layout.
    */
@@ -24,12 +27,11 @@ public class Pond extends JPanel{
       this.setLayout(new GridLayout(10,10));
       for(int p=1; p<5; p++){
          Player player = new Player("testing", p);
-         testPlayer.add(player);
+         players.add(player);
       }
       
       for(int i = 0; i < 10; i++){
          for(int j=0; j<10; j++){
-         
             Lilypad lp = new Lilypad(i,j);
          /*Generates a random number. If the number matches a 
          predetermined value, then the LilyPad is set as a bonus space.*/
@@ -39,89 +41,66 @@ public class Pond extends JPanel{
             }
             lilypads[i][j]=lp;
             lp.setValid(true);
-            //to do: remove resized imaged
             if(i==1 && j==1){
-               Image img = testPlayer.get(0).getImage();
-               Image resizedImage = img.getScaledInstance(70, 70, 0);
-               lp.setIcon(new ImageIcon(img));
+               lp.setIcon(players.get(0).getIcon());
             }
             else if(i==1 && j==8){
-               Image img = testPlayer.get(1).getImage();
-               Image resizedImage = img.getScaledInstance(70, 70, 0);
-               lp.setIcon(new ImageIcon(img));
+               lp.setIcon(players.get(1).getIcon());
             }
             else if(i==8 && j==1){
-               Image img = testPlayer.get(2).getImage();
-               Image resizedImage = img.getScaledInstance(70, 70, 0);
-               lp.setIcon(new ImageIcon(img));
+               lp.setIcon(players.get(2).getIcon());
             }
             else if(i==8 && j==8){
-               Image img = testPlayer.get(3).getImage();
-               Image resizedImage = img.getScaledInstance(70, 70, 0);
-               lp.setIcon(new ImageIcon(img));
+               lp.setIcon(players.get(3).getIcon());
             }
             else{
-               try{
-                  Image imge = ImageIO.read(getClass().getResource("empty.png"));
-                  Image resizeImage = imge.getScaledInstance(70, 70, 0);
-                  lp.setIcon(new ImageIcon(imge));
-               }
-               catch(IOException ie){
-                  ie.printStackTrace();
-               }
+               lp.setIcon(emptyPad);
             }
             this.add(lilypads[i][j]);
          }
       }
       for(int i=0; i<10; i++){
-         try{
-            Image imge = ImageIO.read(getClass().getResource("border-left.png"));
-            lilypads[i][0].setIcon(new ImageIcon(imge));
+            Icon borderLeft = new ImageIcon("border-left.png");
+            lilypads[i][0].setIcon(borderLeft);
             lilypads[i][0].setValid(false);
-         }
-         catch(IOException ie){
-            ie.printStackTrace();
-         }
       }
       for(int i=0; i<10; i++){
-         try{
-            Image imge = ImageIO.read(getClass().getResource("border-top.png"));
-            lilypads[0][i].setIcon(new ImageIcon(imge));
+            Icon borderTop = new ImageIcon("border-top.png");
+            lilypads[0][i].setIcon(borderTop);
             lilypads[0][i].setValid(false);
-         }
-         catch(IOException ie){
-            ie.printStackTrace();
-         }
       }
       for(int i=0; i<10; i++){
-         try{
-            Image imge = ImageIO.read(getClass().getResource("border-right.png"));
-            lilypads[i][9].setIcon(new ImageIcon(imge));
+            Icon borderRight = new ImageIcon("border-right.png");
+            lilypads[i][9].setIcon(borderRight);
             lilypads[i][9].setValid(false);
-         }
-         catch(IOException ie){
-            ie.printStackTrace();
-         }
       }
       for(int i=0; i<10; i++){
-         try{
-            Image imge = ImageIO.read(getClass().getResource("border-bottom.png"));
-            lilypads[9][i].setIcon(new ImageIcon(imge));
+            Icon borderBottom = new ImageIcon("border-bottom.png");
+            lilypads[9][i].setIcon(borderBottom);
             lilypads[9][i].setValid(false);
-         }
-         catch(IOException ie){
-            ie.printStackTrace();
-         }
       }
-      try{
-         Image imge = ImageIO.read(getClass().getResource("water.png"));
-         lilypads[9][0].setIcon(new ImageIcon(imge));
-         lilypads[9][9].setIcon(new ImageIcon(imge));
-         lilypads[0][0].setIcon(new ImageIcon(imge));
-         lilypads[0][9].setIcon(new ImageIcon(imge));
-      }
-      catch(IOException ie){
-         ie.printStackTrace();
-      }
+      Icon water = new ImageIcon("water.png");
+      lilypads[9][0].setIcon(water);
+      lilypads[9][9].setIcon(water);
+      lilypads[0][0].setIcon(water);
+      lilypads[0][9].setIcon(water);
+      
    }//end constructor
+   
+   /**
+   * newGame method starts a new game.
+   */
+   public void newGame()
+   {
+      //Code for turn system. Will continue as long as there is no winner for the game.
+      while(winner == false){
+         for(int i = 0; i < players.size(); i++){
+            if(players.get(i).getIsDead() == false){
+               players.get(i).setTurn(true);
+               System.out.println("Player at " + i + "'s turn?: " + players.get(i).getTurn());
+               players.get(i).setTurn(false);
+            }
+         }//end turn for loop
+      }//end game while loop
+   }
 }//end Pond class
