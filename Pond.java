@@ -30,7 +30,7 @@ public class Pond extends JPanel{
       for(int i = 0; i < 10; i++){
          for(int j=0; j<10; j++){
          
-            Lilypad lp = new Lilypad();
+            Lilypad lp = new Lilypad(i,j);
          /*Generates a random number. If the number matches a 
          predetermined value, then the LilyPad is set as a bonus space.*/
             if( ( 1 + (int)(Math.random() * 10)) == 1)
