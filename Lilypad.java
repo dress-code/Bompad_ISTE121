@@ -24,7 +24,6 @@ public class Lilypad extends JButton
    public Lilypad(int _row, int _col){
       row = _row;
       col = _col;
-      this.setPreferredSize(new Dimension(85,85));
       this.setPreferredSize(new Dimension(70,70));
       //Sets the new LilyPad icon to the empty space.
       //jbPad.setIcon(empty);
