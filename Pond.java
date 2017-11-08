@@ -38,32 +38,33 @@ public class Pond extends JPanel{
                lp.setBonus(true);
             }
             lilypads[i][j]=lp;
-         
+            lp.setValid(true);
+            //to do: remove resized imaged
             if(i==1 && j==1){
                Image img = testPlayer.get(0).getImage();
                Image resizedImage = img.getScaledInstance(70, 70, 0);
-               lp.setIcon(new ImageIcon(resizedImage));
+               lp.setIcon(new ImageIcon(img));
             }
             else if(i==1 && j==8){
                Image img = testPlayer.get(1).getImage();
                Image resizedImage = img.getScaledInstance(70, 70, 0);
-               lp.setIcon(new ImageIcon(resizedImage));
+               lp.setIcon(new ImageIcon(img));
             }
             else if(i==8 && j==1){
                Image img = testPlayer.get(2).getImage();
                Image resizedImage = img.getScaledInstance(70, 70, 0);
-               lp.setIcon(new ImageIcon(resizedImage));
+               lp.setIcon(new ImageIcon(img));
             }
             else if(i==8 && j==8){
                Image img = testPlayer.get(3).getImage();
                Image resizedImage = img.getScaledInstance(70, 70, 0);
-               lp.setIcon(new ImageIcon(resizedImage));
+               lp.setIcon(new ImageIcon(img));
             }
             else{
                try{
                   Image imge = ImageIO.read(getClass().getResource("empty.png"));
                   Image resizeImage = imge.getScaledInstance(70, 70, 0);
-                  lp.setIcon(new ImageIcon(resizeImage));
+                  lp.setIcon(new ImageIcon(imge));
                }
                catch(IOException ie){
                   ie.printStackTrace();
@@ -76,6 +77,7 @@ public class Pond extends JPanel{
          try{
             Image imge = ImageIO.read(getClass().getResource("border-left.png"));
             lilypads[i][0].setIcon(new ImageIcon(imge));
+            lilypads[i][0].setValid(false);
          }
          catch(IOException ie){
             ie.printStackTrace();
@@ -85,6 +87,7 @@ public class Pond extends JPanel{
          try{
             Image imge = ImageIO.read(getClass().getResource("border-top.png"));
             lilypads[0][i].setIcon(new ImageIcon(imge));
+            lilypads[0][i].setValid(false);
          }
          catch(IOException ie){
             ie.printStackTrace();
@@ -94,6 +97,7 @@ public class Pond extends JPanel{
          try{
             Image imge = ImageIO.read(getClass().getResource("border-right.png"));
             lilypads[i][9].setIcon(new ImageIcon(imge));
+            lilypads[i][9].setValid(false);
          }
          catch(IOException ie){
             ie.printStackTrace();
@@ -103,10 +107,21 @@ public class Pond extends JPanel{
          try{
             Image imge = ImageIO.read(getClass().getResource("border-bottom.png"));
             lilypads[9][i].setIcon(new ImageIcon(imge));
+            lilypads[9][i].setValid(false);
          }
          catch(IOException ie){
             ie.printStackTrace();
          }
+      }
+      try{
+         Image imge = ImageIO.read(getClass().getResource("water.png"));
+         lilypads[9][0].setIcon(new ImageIcon(imge));
+         lilypads[9][9].setIcon(new ImageIcon(imge));
+         lilypads[0][0].setIcon(new ImageIcon(imge));
+         lilypads[0][9].setIcon(new ImageIcon(imge));
+      }
+      catch(IOException ie){
+         ie.printStackTrace();
       }
    }//end constructor
 }//end Pond class
