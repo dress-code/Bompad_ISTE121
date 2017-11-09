@@ -3,8 +3,9 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
-   JAVADOCS
-   Final display - brings all classes together
+* Class Bompad constructs all of the necessary components for a game of Bompad.
+* @author Team 2
+* @version 11/9/2017
 */
 
 public class Bompad extends JFrame{
@@ -14,6 +15,9 @@ public class Bompad extends JFrame{
       new Bompad();
    }//end main
    
+   /**
+   * Construcots a game of Bompad.
+   */
    public Bompad()
    {
       //MENUS
