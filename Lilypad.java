@@ -3,35 +3,78 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
-   JAVADOCS
-   Lilypad buttons class
-   create icons(Anna's field - HAVE FUN :) )
+* A class containing constructors and methods associated with a LilyPad object.
+* @author - Team 2
+* @version 1
 */
-
-
 public class Lilypad extends JButton
 {
-   boolean isSpecial = true;
+
+   //Declares and instantiates the necessary attributes.
+   private boolean bonus = false;
+   private boolean valid = true;
+   private int row;
+   private int col;
+   //private Icon empty = new ImageIcon(/*filepath to empty icon*/);
    
-   public Lilypad()
-   {
-      //new button
-      JButton jbLily = new JButton();
-      
-      //set icons
-      Icon lily = new ImageIcon(pic_file); //regular lilypad
-      Icon sink = new ImageIcon(pic_file); //sunken lilypad
-      Icon pieces = new ImageIcon(pic_file); //blown up lilypad
-      
-      //put icons on buttons
-      jbLily.setIcon(lily); //default
-      jbLily.setIcon(sink); //after player choose to sink lily
-      jbLily.setIcon(pieces); //aftermath of boom
-      
+   /**
+   * Constructor for a LilyPad object.
+   */
+
+   public Lilypad(int _row, int _col){
+      row = _row;
+      col = _col;
+      this.setPreferredSize(new Dimension(75,75));
+      //Sets the new LilyPad icon to the empty space.
+      //jbPad.setIcon(empty);
    }//end constructor
    
-   public void setBonus(boolean b)
-   {
-      
+   /**
+   * Accessor method for the vaid attribute.
+   * @return True if the LilyPad is a valid false if not.
+   */
+   public int getRow(){
+      return row;
+   }//end getRow
+   
+   /**
+   * Accessor method for the vaid attribute.
+   * @return True if the LilyPad is a valid false if not.
+   */
+   public int getCol(){
+      return col;
+   }//end getCol
+
+   
+   /**
+   * Mutator method for setting the valid (boolean) attribute of a LilyPad object.
+   * @param boolean v The value determining whether or not a LilyPad is a valid.
+   */
+   public void setValid(boolean v){
+      valid = v;
+   }//end setValid
+   
+   /**
+   * Accessor method for the vaid attribute.
+   * @return True if the LilyPad is a valid false if not.
+   */
+   public boolean isValid(){
+      return valid;
+   }//end isValid
+   
+   /**
+   * Mutator method for setting the bonus (boolean) attribute of a LilyPad object.
+   * @param boolean b The value determining whether or not a LilyPad is a bonus.
+   */
+   public void setBonus(boolean b){
+      bonus = b;
    }//end setBonus
+   
+   /**
+   * Accessor method for the bonus attribute.
+   * @return True if the LilyPad is a bonus, false if not.
+   */
+   public boolean isBonus(){
+      return bonus;
+   }//end isBonus   
 }//end Lilypad class
