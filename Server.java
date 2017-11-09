@@ -69,7 +69,7 @@ public class Server{
                //Reads the message from the client.
                clientMsg = bin.readLine();
                
-               // do something with the message
+               //Does something with the code.
                StringBuilder sb = new StringBuilder( clientMsg );
                sb = sb.reverse();
                
