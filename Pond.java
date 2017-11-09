@@ -17,6 +17,10 @@ public class Pond extends JPanel{
    private Lilypad[][] lilypads = new Lilypad[10][10];
    private ArrayList<Player> players = new ArrayList<Player>();
    private boolean winner = false;
+   Point lilyPadCoord;
+   String action = "";
+   
+   
    Icon emptyPad = new ImageIcon("empty.png");
    
    /**
@@ -33,6 +37,14 @@ public class Pond extends JPanel{
       for(int i = 0; i < 10; i++){
          for(int j=0; j<10; j++){
             Lilypad lp = new Lilypad(i,j);
+            lp.addActionListener(new ActionListener() {
+               public void actionPerformed(ActionEvent ae){
+                  int x = lp.getRow();
+                  int y = lp.getCol();
+                  lilyPadCoord = new Point(x, y);
+                  action = "move";
+               }
+            });
          /*Generates a random number. If the number matches a 
          predetermined value, then the LilyPad is set as a bonus space.*/
             if( ( 1 + (int)(Math.random() * 10)) == 1)
@@ -93,14 +105,20 @@ public class Pond extends JPanel{
    public void newGame()
    {
       //Code for turn system. Will continue as long as there is no winner for the game.
-      while(winner == false){
+      /*while(winner == false){
          for(int i = 0; i < players.size(); i++){
             if(players.get(i).getIsDead() == false){
                players.get(i).setTurn(true);
-               System.out.println("Player at " + i + "'s turn?: " + players.get(i).getTurn());
+               System.out.println("Player " + (i+1) + "'s turn. ");
+               while(players.get(i).getTurn)
+               {
+                  if(
+               }
+               //gets the information from an action performed
+               //sets the turn of the player to false.
                players.get(i).setTurn(false);
             }
          }//end turn for loop
-      }//end game while loop
+      }//end game while loop*/
    }
 }//end Pond class
