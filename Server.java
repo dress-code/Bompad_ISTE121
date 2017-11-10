@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
 import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
 * The server for BomPad. 
@@ -9,6 +10,9 @@ import java.text.SimpleDateFormat;
 */
 public class Server{
 
+   //an ArrayList containing all of the ObjectOutputStreams associated with all of the clients.
+   ArrayList<ObjectOutputStream> outputs = new ArrayList<ObjectOutputStream>();
+   
    /**
    * Constructs a Server for BomPad.
    */
@@ -21,7 +25,7 @@ public class Server{
          while(true){
             System.out.println("Waiting for a player to connect...");
             cs = ss.accept();
-            System.out.println("Have a player: "+cs);
+            System.out.println("Have a player: " + cs);
             
             ThreadedServer ts = new ThreadedServer( cs );
             ts.start();
@@ -49,6 +53,15 @@ public class Server{
       */
       public ThreadedServer( Socket clientSocket ){
          cs = clientSocket;
+         
+         try{
+            OutputStream out = cs.getOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(out);
+            outputs.add(oos);
+         }
+         catch( IOException ioe ){
+            ioe.printStackTrace();
+         } // end out try/catch
       }//end ThreadedServer constructor.
       
       /**
@@ -56,40 +69,36 @@ public class Server{
       */
       @Override
       public void run(){
-      
-         try {
-            InputStream in = cs.getInputStream();
-            BufferedReader bin = new BufferedReader( new InputStreamReader( in ));
+                  
+            try{
+               InputStream in = cs.getInputStream();
+               ObjectInputStream oins = new ObjectInputStream(in);
             
-            OutputStream out = cs.getOutputStream();
-            PrintWriter pout = new PrintWriter(new OutputStreamWriter(out));
-            String clientMsg = null;
-            
-            do{
-               //Reads the message from the client.
-               clientMsg = bin.readLine();
+               while ( oins.available() > 0 ){
+                  Object unidentifiedObject = oins.readObject();
+                  
+                  //How do we determine if what was received was a String or a Player?
+                  
+                  //Writes objects back out to all of the clients.
+                  for(int i = 0; i < outputs.size(); i++){
+                     outputs.get(i).writeObject(unidentifiedObject);
+                     outputs.get(i).flush();
+                  }//end for loop writing objects out to all clients.
+               }//end while loop listening for input.
                
-               //Does something with the code.
-               StringBuilder sb = new StringBuilder( clientMsg );
-               sb = sb.reverse();
-               
-               //Send the message back to the client.
-               pout.println( sb.toString() );
-               //FLUSH.
-               pout.flush();
-               
-               System.out.println("Received: "+ clientMsg + ", sent " + sb.toString() );
-               
-            } while (  ! clientMsg.equalsIgnoreCase("QUIT") );
-            // close everything
-            bin.close();
-            pout.close();
-            cs.close();
-         
-         }
-         catch( IOException ioe ){
-            ioe.printStackTrace();
-         } // end catch - inner try
+               //Close everything with all of the client connections.
+               for(int i = 0; i < outputs.size(); i++){
+                  outputs.get(i).close();
+               }//end for loop closing all of the output streams.
+               oins.close();
+               cs.close();
+            }
+            catch(ClassNotFoundException cnfe){
+               cnfe.printStackTrace();
+            }//end inner try/catch 
+            catch(IOException ioe){
+               ioe.printStackTrace();
+            }//end IOE catch block
 
       }//end run method.
 
