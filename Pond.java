@@ -8,7 +8,7 @@ import java.io.*;
 /**
 * A class containing the constructors and methods associated with a board of lilypads.
 * @Author - Team 2
-* @version - 1
+* @version - 11/10/17
 */
 public class Pond extends JPanel{
    
@@ -33,14 +33,14 @@ public class Pond extends JPanel{
    
       this.setLayout(new GridLayout(10,10));
       //Creates Player objects and adds them to the ArrayList.
-      for(int p=1; p<5; p++){
+      for(int p = 1; p < 5; p++){
          Player player = new Player("testing", p);
          players.add(player);
       }
       
       //Creates lilypads and adds them to the 2-D array.
       for(int i = 0; i < 10; i++){
-         for(int j=0; j<10; j++){
+         for(int j = 0; j < 10; j++){
             Lilypad lp = new Lilypad(i,j);
             lp.addMouseListener(new CustomMouseListener()); 
          /*Generates a random number. If the number matches a 
@@ -49,22 +49,22 @@ public class Pond extends JPanel{
             {
                lp.setBonus(true);
             }
-            lilypads[i][j]=lp;
+            lilypads[i][j] = lp;
             
             //sets all new lilypads as a valid space for movement.
             lp.setValid(true);
             
             //Sets the players at their respective starting locations.
-            if(i==1 && j==1){
+            if(i == 1 && j == 1){
                lp.setIcon(players.get(0).getIcon());
             }
-            else if(i==1 && j==8){
+            else if(i == 1 && j == 8){
                lp.setIcon(players.get(1).getIcon());
             }
-            else if(i==8 && j==1){
+            else if(i == 8 && j == 1){
                lp.setIcon(players.get(2).getIcon());
             }
-            else if(i==8 && j==8){
+            else if(i == 8 && j == 8){
                lp.setIcon(players.get(3).getIcon());
             }
             else{
@@ -74,25 +74,25 @@ public class Pond extends JPanel{
          }
       }
       //sets border on left side.
-      for(int i=0; i<10; i++){
+      for(int i = 0; i < 10; i++){
          Icon borderLeft = new ImageIcon("border-left.png");
          lilypads[i][0].setIcon(borderLeft);
          lilypads[i][0].setValid(false);
       }
       //sets border on top.
-      for(int i=0; i<10; i++){
+      for(int i = 0; i < 10; i++){
          Icon borderTop = new ImageIcon("border-top.png");
          lilypads[0][i].setIcon(borderTop);
          lilypads[0][i].setValid(false);
       }
       //sets border on right side.
-      for(int i=0; i<10; i++){
+      for(int i = 0; i < 10; i++){
          Icon borderRight = new ImageIcon("border-right.png");
          lilypads[i][9].setIcon(borderRight);
          lilypads[i][9].setValid(false);
       }
       //Sets border on bottom.
-      for(int i=0; i<10; i++){
+      for(int i = 0; i < 10; i++){
          Icon borderBottom = new ImageIcon("border-bottom.png");
          lilypads[9][i].setIcon(borderBottom);
          lilypads[9][i].setValid(false);
@@ -168,6 +168,7 @@ public class Pond extends JPanel{
                //if the player is not dead...
                if(players.get(currentTurn).getIsDead() == false){
                   System.out.println("Player " + (currentTurn+1) + "'s turn. ");
+                  //Sinks the lilypad.
                   lilypads[row][column].setIcon(water);
                   lilypads[row][column].setValid(false);
                   //ends the turn of the player and increments the class variable so it becomes the next player's turn.
@@ -176,7 +177,7 @@ public class Pond extends JPanel{
                }//end if
              }//end if
              else{
-               JOptionPane.showMessageDialog(null, "Not a valid lilypad to sink.");
+               JOptionPane.showMessageDialog(null, "Oops! That lilypads has been sunk!");
              }
         }//end else if
         else{
