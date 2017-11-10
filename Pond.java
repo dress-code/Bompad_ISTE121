@@ -22,8 +22,9 @@ public class Pond extends JPanel{
    String action = "";
    //Whose turn is it?
    int currentTurn = 0;
-   //Icon for an empty lilypad.
+   //Icon for an empty lilypad and open water spot.
    Icon emptyPad = new ImageIcon("empty.png");
+   Icon water = new ImageIcon("water.png");
    
    /**
    * Constructor for a "pond" board of 64 LilyPads in an 8 x 8 grid layout.
@@ -97,7 +98,6 @@ public class Pond extends JPanel{
          lilypads[9][i].setValid(false);
       }
       //Sets corners of the pond.
-      Icon water = new ImageIcon("water.png");
       lilypads[9][0].setIcon(water);
       lilypads[9][9].setIcon(water);
       lilypads[0][0].setIcon(water);
@@ -108,8 +108,13 @@ public class Pond extends JPanel{
    public class CustomMouseListener implements MouseListener {
       public void mouseClicked(MouseEvent e) {
          //left click moves the Player.
-         if (e.getButton() == MouseEvent.BUTTON1) { 
-               System.out.println("x pos " + e.getX() + "y pos " + e.getY());
+         
+         if(currentTurn == 4){
+            currentTurn = 0;
+         }//end if statement
+               
+         players.get(currentTurn).setTurn(true);
+         if (e.getButton() == MouseEvent.BUTTON1 && players.get(currentTurn).getTurn()) { 
                int row = -1;
                int column = -1;
                //Is there a better way to do this than going over the entire board?
@@ -118,14 +123,9 @@ public class Pond extends JPanel{
                  row = ((Lilypad)e.getComponent()).getRow();
                  column = ((Lilypad)e.getComponent()).getCol();
                  if(lilypads[row][column].isValid())
-                 {
-                              
+                 {       
                      System.out.println("Row: " + row + " Col: " + column);
-                     if(currentTurn == 4){
-                        currentTurn = 0;
-                     }//end if statement
-               
-                     players.get(currentTurn).setTurn(true);
+                     
                      //if the player is not dead...
                         if(players.get(currentTurn).getIsDead() == false){
                            System.out.println("Player " + (currentTurn+1) + "'s turn. ");
@@ -155,14 +155,34 @@ public class Pond extends JPanel{
              }//end catch block
 
          }//end outermost if statement.
-         
+   
          //Right click sinks a lilypad.
-         if (e.getButton() == MouseEvent.BUTTON3) {
-               int row = -1;
-               int column = -1;
-
-         }
-      }
+         else if (e.getButton() == MouseEvent.BUTTON3 && players.get(currentTurn).getTurn()){
+            int row = -1;
+            int column = -1;
+            row = ((Lilypad)e.getComponent()).getRow();
+            column = ((Lilypad)e.getComponent()).getCol();
+            if(lilypads[row][column].isValid()){       
+               System.out.println("Row: " + row + " Col: " + column);
+                     
+               //if the player is not dead...
+               if(players.get(currentTurn).getIsDead() == false){
+                  System.out.println("Player " + (currentTurn+1) + "'s turn. ");
+                  lilypads[row][column].setIcon(water);
+                  lilypads[row][column].setValid(false);
+                  //ends the turn of the player and increments the class variable so it becomes the next player's turn.
+                  players.get(currentTurn).setTurn(false);
+                  currentTurn++;
+               }//end if
+             }//end if
+             else{
+               JOptionPane.showMessageDialog(null, "Not a valid lilypad to sink.");
+             }
+        }//end else if
+        else{
+          JOptionPane.showMessageDialog(lilypads[4][4],"It is not your turn.");
+        }
+   }        
    
       public void mousePressed(MouseEvent e) {
       }
