@@ -37,6 +37,7 @@ public class Player{
          case 1:
             frog = new ImageIcon("red-frog.png");
             chatColor = "blue";
+            currentLocation = new Point(1,1);
             break;
          case 2:
             frog = new ImageIcon("orange-frog.png");  

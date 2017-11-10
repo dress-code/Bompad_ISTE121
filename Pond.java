@@ -37,14 +37,7 @@ public class Pond extends JPanel{
       for(int i = 0; i < 10; i++){
          for(int j=0; j<10; j++){
             Lilypad lp = new Lilypad(i,j);
-            lp.addActionListener(new ActionListener() {
-               public void actionPerformed(ActionEvent ae){
-                  int x = lp.getRow();
-                  int y = lp.getCol();
-                  lilyPadCoord = new Point(x, y);
-                  action = "move";
-               }
-            });
+            lp.addMouseListener(new CustomMouseListener()); 
          /*Generates a random number. If the number matches a 
          predetermined value, then the LilyPad is set as a bonus space.*/
             if( ( 1 + (int)(Math.random() * 10)) == 1)
@@ -72,24 +65,24 @@ public class Pond extends JPanel{
          }
       }
       for(int i=0; i<10; i++){
-            Icon borderLeft = new ImageIcon("border-left.png");
-            lilypads[i][0].setIcon(borderLeft);
-            lilypads[i][0].setValid(false);
+         Icon borderLeft = new ImageIcon("border-left.png");
+         lilypads[i][0].setIcon(borderLeft);
+         lilypads[i][0].setValid(false);
       }
       for(int i=0; i<10; i++){
-            Icon borderTop = new ImageIcon("border-top.png");
-            lilypads[0][i].setIcon(borderTop);
-            lilypads[0][i].setValid(false);
+         Icon borderTop = new ImageIcon("border-top.png");
+         lilypads[0][i].setIcon(borderTop);
+         lilypads[0][i].setValid(false);
       }
       for(int i=0; i<10; i++){
-            Icon borderRight = new ImageIcon("border-right.png");
-            lilypads[i][9].setIcon(borderRight);
-            lilypads[i][9].setValid(false);
+         Icon borderRight = new ImageIcon("border-right.png");
+         lilypads[i][9].setIcon(borderRight);
+         lilypads[i][9].setValid(false);
       }
       for(int i=0; i<10; i++){
-            Icon borderBottom = new ImageIcon("border-bottom.png");
-            lilypads[9][i].setIcon(borderBottom);
-            lilypads[9][i].setValid(false);
+         Icon borderBottom = new ImageIcon("border-bottom.png");
+         lilypads[9][i].setIcon(borderBottom);
+         lilypads[9][i].setValid(false);
       }
       Icon water = new ImageIcon("water.png");
       lilypads[9][0].setIcon(water);
@@ -120,5 +113,64 @@ public class Pond extends JPanel{
             }
          }//end turn for loop
       }//end game while loop*/
+   }
+   
+   public class CustomMouseListener implements MouseListener {
+      private int turn =0;
+      public void mouseClicked(MouseEvent e) {
+         if (e.getButton() == MouseEvent.BUTTON1) { // left click
+            // do stuff
+            System.out.println("x pos " + e.getX() + "y pos " + e.getY());
+            int r = -1;
+            int c = -1;
+            for (int row = 0; row < lilypads.length; row++) {
+               for (int col = 0; col < lilypads[row].length; col++) {
+                  if (lilypads[row][col] == e.getSource()) {
+                     r = row;
+                     c = col;
+                  }
+               }
+            }
+            System.out.println("Row: " + r + " Col: " + c);
+            if(turn==4){
+               turn=0;
+            }
+            //for(int i = 0; i < players.size(); i++){
+            //players.get(turn-1).setTurn(true);
+            players.get(turn).setTurn(true);
+               if(players.get(turn).getIsDead() == false){
+                  System.out.println("Player " + (turn+1) + "'s turn. ");
+                  if(players.get(turn).getTurn())
+                  {
+                     lilypads[r][c].setIcon(players.get(turn).getIcon());
+                     Point oldPos = players.get(turn).getCurrentLocation();
+                     int xCoor =(int) oldPos.getX();
+                     int yCoor =(int) oldPos.getY();
+                     lilypads[xCoor][yCoor].setIcon(emptyPad);
+                     players.get(turn).setCurrentLocation(new Point(r,c));;
+                  }
+               //gets the information from an action performed
+               //sets the turn of the player to false.
+                  players.get(turn).setTurn(false);
+                  turn++;
+               }
+           // }//end turn for loop
+         }
+         if (e.getButton() == MouseEvent.BUTTON3) { //right click
+            // do stuff
+         }
+      }
+   
+      public void mousePressed(MouseEvent e) {
+      }
+   
+      public void mouseReleased(MouseEvent e) {
+      }
+   
+      public void mouseEntered(MouseEvent e) {
+      }
+   
+      public void mouseExited(MouseEvent e) {
+      }
    }
 }//end Pond class
