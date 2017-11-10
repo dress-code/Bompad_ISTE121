@@ -3,20 +3,31 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
+<<<<<<< HEAD
 * Class Bompad constructs all of the necessary components for a game of Bompad.
 * @author Team 2
 * @version 11/9/2017
+=======
+* A class containing the constructor for a BomPad game.
+* @author - Team 2
+* @version 10/31/2017
+>>>>>>> Doug
 */
 
 public class Bompad extends JFrame{
    
+   //Main method calls the constructor for a new BomPad game.
    public static void main(String [] args)
    {
       new Bompad();
    }//end main
    
    /**
+<<<<<<< HEAD
    * Construcots a game of Bompad.
+=======
+   * Constructor for a BomPad game.
+>>>>>>> Doug
    */
    public Bompad()
    {
@@ -35,7 +46,7 @@ public class Bompad extends JFrame{
          public void actionPerformed(ActionEvent ae)
          {
             //informs server we quit
-            JOptionPane.showMessageDialog(null, "Thanks for playing Bompad");
+            JOptionPane.showMessageDialog(null, "Thanks for playing Bompad!");
             System.exit(0);
          }
       });
@@ -76,13 +87,40 @@ public class Bompad extends JFrame{
       
       //add classes(panels) to frame
       this.add(pond, BorderLayout.CENTER);
-      this.add(chat, BorderLayout.SOUTH);
+      this.add(chat, BorderLayout.WEST);
       
       //sets frame
       this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-      this.setLocationRelativeTo(null);
       this.pack();
+      this.setLocationRelativeTo(null);
+      this.setResizable(false);
       this.setTitle("Bompad");
       this.setVisible(true);
+      
+      pond.newGame();
    }//end constructor
+   
+   class ClientConnection extends Thread
+   {
+      private Player player;
+      //private Socket s;
+      
+      /**
+      * ClientConnection constructor.
+      */
+      public ClientConnection(Player p)
+      {
+         player = p;
+         //code for the client connection constructor
+      }
+      
+      /**
+      * Run method for ClientConnection objects.
+      */
+      @Override
+      public void run()
+      {
+         //code for the run method.
+      }
+   }
 }//end Bompad class
