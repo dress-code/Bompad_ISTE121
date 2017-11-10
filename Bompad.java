@@ -6,6 +6,8 @@ import javax.swing.*;
 * Class Bompad constructs all of the necessary components for a game of Bompad.
 * @author Team 2
 * @version 11/9/2017
+* @author Team 2
+* @version 11/9/2017
 */
 
 public class Bompad extends JFrame{
