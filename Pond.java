@@ -65,26 +65,31 @@ public class Pond extends JPanel{
             this.add(lilypads[i][j]);
          }
       }
+      //sets border on left side.
       for(int i=0; i<10; i++){
          Icon borderLeft = new ImageIcon("border-left.png");
          lilypads[i][0].setIcon(borderLeft);
          lilypads[i][0].setValid(false);
       }
+      //sets border on top.
       for(int i=0; i<10; i++){
          Icon borderTop = new ImageIcon("border-top.png");
          lilypads[0][i].setIcon(borderTop);
          lilypads[0][i].setValid(false);
       }
+      //sets border on right side.
       for(int i=0; i<10; i++){
          Icon borderRight = new ImageIcon("border-right.png");
          lilypads[i][9].setIcon(borderRight);
          lilypads[i][9].setValid(false);
       }
+      //Sets border on bottom.
       for(int i=0; i<10; i++){
          Icon borderBottom = new ImageIcon("border-bottom.png");
          lilypads[9][i].setIcon(borderBottom);
          lilypads[9][i].setValid(false);
       }
+      //Sets corners of the pond.
       Icon water = new ImageIcon("water.png");
       lilypads[9][0].setIcon(water);
       lilypads[9][9].setIcon(water);
@@ -93,69 +98,56 @@ public class Pond extends JPanel{
       
    }//end constructor
    
-   /**
-   * newGame method starts a new game.
-   */
-   public void newGame()
-   {
-      //Code for turn system. Will continue as long as there is no winner for the game.
-      /*while(winner == false){
-         for(int i = 0; i < players.size(); i++){
-            if(players.get(i).getIsDead() == false){
-               players.get(i).setTurn(true);
-               System.out.println("Player " + (i+1) + "'s turn. ");
-               while(players.get(i).getTurn)
-               {
-                  if(
-               }
-               //gets the information from an action performed
-               //sets the turn of the player to false.
-               players.get(i).setTurn(false);
-            }
-         }//end turn for loop
-      }//end game while loop*/
-   }
-   
    public class CustomMouseListener implements MouseListener {
       public void mouseClicked(MouseEvent e) {
          if (e.getButton() == MouseEvent.BUTTON1) { // left click
             // do stuff
-            System.out.println("x pos " + e.getX() + "y pos " + e.getY());
-            int r = -1;
-            int c = -1;
-            for (int row = 0; row < lilypads.length; row++) {
-               for (int col = 0; col < lilypads[row].length; col++) {
-                  if (lilypads[row][col] == e.getSource()) {
-                     r = row;
-                     c = col;
-                  }
-               }
-            }
-            System.out.println("Row: " + r + " Col: " + c);
-            if(currentTurn == 4){
-               currentTurn = 0;
-            }
-            //for(int i = 0; i < players.size(); i++){
-            //players.get(turn-1).setTurn(true);
-            players.get(currentTurn).setTurn(true);
-               if(players.get(currentTurn).getIsDead() == false){
-                  System.out.println("Player " + (currentTurn+1) + "'s turn. ");
-                  if(players.get(currentTurn).getTurn())
-                  {
+               System.out.println("x pos " + e.getX() + "y pos " + e.getY());
+               int r = -1;
+               int c = -1;
+               //Is there a better way to do this than going over the entire board?
+               try{
+                  for (int row = 0; row < lilypads.length; row++) {
+                     for (int col = 0; col < lilypads[row].length; col++) {
+                        if (lilypads[row][col] == e.getSource() && lilypads[row][col].isValid()) {
+                           r = row;
+                           c = col;
+                        }//end if statement
+                     }//end inner for loop
+                  }//end for loop
+                              
+               System.out.println("Row: " + r + " Col: " + c);
+               if(currentTurn == 4){
+                  currentTurn = 0;
+               }//end if statement
+               
+               players.get(currentTurn).setTurn(true);
+               //if the player is not dead...
+                  if(players.get(currentTurn).getIsDead() == false){
+                     System.out.println("Player " + (currentTurn+1) + "'s turn. ");
                      lilypads[r][c].setIcon(players.get(currentTurn).getIcon());
+                     
+                     //Gets the position of the player before the move is made and sets the icon to the empty tile.
                      Point oldPos = players.get(currentTurn).getCurrentLocation();
                      int xCoor =(int) oldPos.getX();
                      int yCoor =(int) oldPos.getY();
                      lilypads[xCoor][yCoor].setIcon(emptyPad);
+                     
+                     //Sets the position of the player to the new location.
                      players.get(currentTurn).setCurrentLocation(new Point(r,c));;
-                  }
-               //gets the information from an action performed
-               //sets the turn of the player to false.
-                  players.get(currentTurn).setTurn(false);
-                  currentTurn++;
-               }
-           // }//end turn for loop
-         }
+             
+                     //ends the turn of the player and increments the class variable so it becomes the next player's turn.
+                     players.get(currentTurn).setTurn(false);
+                     currentTurn++;
+                  }//end if statement 1b
+             }//end try block
+             
+             catch(ArrayIndexOutOfBoundsException aioobe){
+                  JOptionPane.showMessageDialog(lilypads[4][4], "Please choose a valid lilypad.");
+             }//end catch block
+
+         }//end if statement 1
+         
          if (e.getButton() == MouseEvent.BUTTON3) { //right click
             // do stuff
          }

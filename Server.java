@@ -78,7 +78,7 @@ public class Server{
                //FLUSH.
                pout.flush();
                
-               System.out.println("Received: "+clientMsg+", sent "+sb.toString() );
+               System.out.println("Received: "+ clientMsg + ", sent " + sb.toString() );
                
             } while (  ! clientMsg.equalsIgnoreCase("QUIT") );
             // close everything
