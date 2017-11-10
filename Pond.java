@@ -19,6 +19,7 @@ public class Pond extends JPanel{
    private boolean winner = false;
    Point lilyPadCoord;
    String action = "";
+   int currentTurn = 0;
    
    
    Icon emptyPad = new ImageIcon("empty.png");
@@ -116,7 +117,6 @@ public class Pond extends JPanel{
    }
    
    public class CustomMouseListener implements MouseListener {
-      private int turn =0;
       public void mouseClicked(MouseEvent e) {
          if (e.getButton() == MouseEvent.BUTTON1) { // left click
             // do stuff
@@ -132,27 +132,27 @@ public class Pond extends JPanel{
                }
             }
             System.out.println("Row: " + r + " Col: " + c);
-            if(turn==4){
-               turn=0;
+            if(currentTurn == 4){
+               currentTurn = 0;
             }
             //for(int i = 0; i < players.size(); i++){
             //players.get(turn-1).setTurn(true);
-            players.get(turn).setTurn(true);
-               if(players.get(turn).getIsDead() == false){
-                  System.out.println("Player " + (turn+1) + "'s turn. ");
-                  if(players.get(turn).getTurn())
+            players.get(currentTurn).setTurn(true);
+               if(players.get(currentTurn).getIsDead() == false){
+                  System.out.println("Player " + (currentTurn+1) + "'s turn. ");
+                  if(players.get(currentTurn).getTurn())
                   {
-                     lilypads[r][c].setIcon(players.get(turn).getIcon());
-                     Point oldPos = players.get(turn).getCurrentLocation();
+                     lilypads[r][c].setIcon(players.get(currentTurn).getIcon());
+                     Point oldPos = players.get(currentTurn).getCurrentLocation();
                      int xCoor =(int) oldPos.getX();
                      int yCoor =(int) oldPos.getY();
                      lilypads[xCoor][yCoor].setIcon(emptyPad);
-                     players.get(turn).setCurrentLocation(new Point(r,c));;
+                     players.get(currentTurn).setCurrentLocation(new Point(r,c));;
                   }
                //gets the information from an action performed
                //sets the turn of the player to false.
-                  players.get(turn).setTurn(false);
-                  turn++;
+                  players.get(currentTurn).setTurn(false);
+                  currentTurn++;
                }
            // }//end turn for loop
          }
