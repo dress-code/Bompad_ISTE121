@@ -44,7 +44,7 @@ public class Chat extends JPanel implements ActionListener {
       
       
       String host = "localhost";
-      int portNumber = 2222;
+      int portNumber = 16789;
       
      /*
      * Open a socket on a given host and port. Open input and output streams.
@@ -54,9 +54,9 @@ public class Chat extends JPanel implements ActionListener {
          inputLine = new BufferedReader(new InputStreamReader(System.in));
          os = new PrintStream(clientSocket.getOutputStream());
          is = new DataInputStream(clientSocket.getInputStream());
-      } catch (UnknownHostException e) {
+      } catch (UnknownHostException uke) {
          System.err.println("Don't know about host " + host);
-      } catch (IOException e) {
+      } catch (IOException ioe) {
          System.err.println("Couldn't get I/O for the connection to the host "
             + host);
       }

@@ -3,15 +3,9 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
-<<<<<<< HEAD
-* A class containing the constructor for a BomPad game.
-* @author - Team 2
-* @version 10/31/2017
-=======
 * Class Bompad constructs all of the necessary components for a game of Bompad.
 * @author Team 2
 * @version 11/9/2017
->>>>>>> Anna's-branch.-
 */
 
 public class Bompad extends JFrame{
@@ -23,11 +17,7 @@ public class Bompad extends JFrame{
    }//end main
    
    /**
-<<<<<<< HEAD
-   * Constructor for a BomPad game.
-=======
    * Construcots a game of Bompad.
->>>>>>> Anna's-branch.-
    */
    public Bompad()
    {
