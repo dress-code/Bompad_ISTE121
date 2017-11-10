@@ -12,16 +12,17 @@ import java.io.*;
 */
 public class Pond extends JPanel{
    
-   //Declares and instantiates an ArrayList of LilyPads.
-   //private ArrayList<Lilypad> lilypads = new ArrayList<Lilypad>();
+   //Declares and instantiates a 2-D array of LilyPads.
    private Lilypad[][] lilypads = new Lilypad[10][10];
+   //Declares and insntantiates an ArrayList of Player objects.
    private ArrayList<Player> players = new ArrayList<Player>();
+   //Is there a winner of the game?
    private boolean winner = false;
    Point lilyPadCoord;
    String action = "";
+   //Whose turn is it?
    int currentTurn = 0;
-   
-   
+   //Icon for an empty lilypad.
    Icon emptyPad = new ImageIcon("empty.png");
    
    /**
@@ -30,11 +31,13 @@ public class Pond extends JPanel{
    public Pond(){
    
       this.setLayout(new GridLayout(10,10));
+      //Creates Player objects and adds them to the ArrayList.
       for(int p=1; p<5; p++){
          Player player = new Player("testing", p);
          players.add(player);
       }
       
+      //Creates lilypads and adds them to the 2-D array.
       for(int i = 0; i < 10; i++){
          for(int j=0; j<10; j++){
             Lilypad lp = new Lilypad(i,j);
@@ -46,7 +49,11 @@ public class Pond extends JPanel{
                lp.setBonus(true);
             }
             lilypads[i][j]=lp;
+            
+            //sets all new lilypads as a valid space for movement.
             lp.setValid(true);
+            
+            //Sets the players at their respective starting locations.
             if(i==1 && j==1){
                lp.setIcon(players.get(0).getIcon());
             }
@@ -100,56 +107,60 @@ public class Pond extends JPanel{
    
    public class CustomMouseListener implements MouseListener {
       public void mouseClicked(MouseEvent e) {
-         if (e.getButton() == MouseEvent.BUTTON1) { // left click
-            // do stuff
+         //left click moves the Player.
+         if (e.getButton() == MouseEvent.BUTTON1) { 
                System.out.println("x pos " + e.getX() + "y pos " + e.getY());
-               int r = -1;
-               int c = -1;
+               int row = -1;
+               int column = -1;
                //Is there a better way to do this than going over the entire board?
+               //Yes, changed to a more efficient option.
                try{
-                  for (int row = 0; row < lilypads.length; row++) {
-                     for (int col = 0; col < lilypads[row].length; col++) {
-                        if (lilypads[row][col] == e.getSource() && lilypads[row][col].isValid()) {
-                           r = row;
-                           c = col;
-                        }//end if statement
-                     }//end inner for loop
-                  }//end for loop
+                 row = ((Lilypad)e.getComponent()).getRow();
+                 column = ((Lilypad)e.getComponent()).getCol();
+                 if(lilypads[row][column].isValid())
+                 {
                               
-               System.out.println("Row: " + r + " Col: " + c);
-               if(currentTurn == 4){
-                  currentTurn = 0;
-               }//end if statement
+                     System.out.println("Row: " + row + " Col: " + column);
+                     if(currentTurn == 4){
+                        currentTurn = 0;
+                     }//end if statement
                
-               players.get(currentTurn).setTurn(true);
-               //if the player is not dead...
-                  if(players.get(currentTurn).getIsDead() == false){
-                     System.out.println("Player " + (currentTurn+1) + "'s turn. ");
-                     lilypads[r][c].setIcon(players.get(currentTurn).getIcon());
-                     
-                     //Gets the position of the player before the move is made and sets the icon to the empty tile.
-                     Point oldPos = players.get(currentTurn).getCurrentLocation();
-                     int xCoor =(int) oldPos.getX();
-                     int yCoor =(int) oldPos.getY();
-                     lilypads[xCoor][yCoor].setIcon(emptyPad);
-                     
-                     //Sets the position of the player to the new location.
-                     players.get(currentTurn).setCurrentLocation(new Point(r,c));;
-             
-                     //ends the turn of the player and increments the class variable so it becomes the next player's turn.
-                     players.get(currentTurn).setTurn(false);
-                     currentTurn++;
-                  }//end if statement 1b
+                     players.get(currentTurn).setTurn(true);
+                     //if the player is not dead...
+                        if(players.get(currentTurn).getIsDead() == false){
+                           System.out.println("Player " + (currentTurn+1) + "'s turn. ");
+                           lilypads[row][column].setIcon(players.get(currentTurn).getIcon());
+                           
+                           //Gets the position of the player before the move is made and sets the icon to the empty tile.
+                           Point oldPos = players.get(currentTurn).getCurrentLocation();
+                           int xCoor =(int) oldPos.getX();
+                           int yCoor =(int) oldPos.getY();
+                           lilypads[xCoor][yCoor].setIcon(emptyPad);
+                           
+                           //Sets the position of the player to the new location.
+                           players.get(currentTurn).setCurrentLocation(new Point(row,column));;
+                   
+                           //ends the turn of the player and increments the class variable so it becomes the next player's turn.
+                           players.get(currentTurn).setTurn(false);
+                           currentTurn++;
+                        }//end if statement 1b
+                  }//end if statement checking validity.
+                  else{
+                     JOptionPane.showMessageDialog(lilypads[4][4], "Please choose a valid lilypad.");
+                  }
              }//end try block
              
              catch(ArrayIndexOutOfBoundsException aioobe){
                   JOptionPane.showMessageDialog(lilypads[4][4], "Please choose a valid lilypad.");
              }//end catch block
 
-         }//end if statement 1
+         }//end outermost if statement.
          
-         if (e.getButton() == MouseEvent.BUTTON3) { //right click
-            // do stuff
+         //Right click sinks a lilypad.
+         if (e.getButton() == MouseEvent.BUTTON3) {
+               int row = -1;
+               int column = -1;
+
          }
       }
    
