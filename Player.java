@@ -18,17 +18,11 @@ public class Player{
    private String chatColor;
    private Point currentLocation;
    
-   
    /**
-    *  This constructor makes a player based on the number that is past to it
-    *  Using this number it decides whether to give the name 'Player 1' or 'Player 2'
-    *  It also does a defult player for testing purposes
-    *  
-    *  @param person This is the int past to player that it uses to determin the player name
-      
- 
+    * Paramterized constructor for a Player object.
+    * @param playerNum The player number of the Player object.
+    * @param pName The name of the Player object.
    */
-   
    public Player(String pName, int playerNum){
       name = pName;
       turn = false;
@@ -36,19 +30,23 @@ public class Player{
       switch(playerNum){
          case 1:
             frog = new ImageIcon("red-frog.png");
-            chatColor = "blue";
+            chatColor = "red";
+            currentLocation = new Point(1,1);
             break;
          case 2:
             frog = new ImageIcon("orange-frog.png");  
             chatColor = "green";
+            currentLocation = new Point(1,8);
             break;
          case 3:
             frog = new ImageIcon("pink-frog.png"); 
-            chatColor = "blue";
+            chatColor = "pink";
+            currentLocation = new Point(8,1);
             break;
          case 4:
             frog = new ImageIcon("blue-frog.png");  
-            chatColor = "green";
+            chatColor = "blue";
+            currentLocation = new Point(8,8);
             break;
       } 
    }//end constructor 
