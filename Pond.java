@@ -130,7 +130,7 @@ public class Pond extends JPanel{
                      Point thePos = players.get(i).getCurrentLocation();
                      playerPoints.add(thePos);
                   }
-                     //if the player is not dead...
+                     //if the player is not dead and the pad doesn't already have a frog...
                   if(players.get(currentTurn).getIsDead() == false && !(playerPoints.contains(thePad))){
                      System.out.println("Player " + (currentTurn+1) + "'s turn. ");
                      lilypads[row][column].setIcon(players.get(currentTurn).getIcon());
