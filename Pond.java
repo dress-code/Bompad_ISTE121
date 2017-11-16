@@ -19,7 +19,6 @@ public class Pond extends JPanel{
    //Is there a winner of the game?
    private boolean winner = false;
    Point lilyPadCoord;
-   String action = "";
    //Whose turn is it?
    int currentTurn = 0;
    //Icon for an empty lilypad and open water spot.
@@ -98,10 +97,10 @@ public class Pond extends JPanel{
          lilypads[9][i].setValid(false);
       }
       //Sets corners of the pond.
-      lilypads[9][0].setIcon(water);
-      lilypads[9][9].setIcon(water);
-      lilypads[0][0].setIcon(water);
-      lilypads[0][9].setIcon(water);
+      lilypads[9][0].setIcon(new ImageIcon("bottom-left.png"));
+      lilypads[9][9].setIcon(new ImageIcon("bottom-right.png"));
+      lilypads[0][0].setIcon(new ImageIcon("top-left.png"));
+      lilypads[0][9].setIcon(new ImageIcon("top-right.png"));
       
    }//end constructor
    
@@ -115,58 +114,68 @@ public class Pond extends JPanel{
                
          players.get(currentTurn).setTurn(true);
          if (e.getButton() == MouseEvent.BUTTON1 && players.get(currentTurn).getTurn()) { 
-               int row = -1;
-               int column = -1;
+            int row = -1;
+            int column = -1;
                //Is there a better way to do this than going over the entire board?
                //Yes, changed to a more efficient option.
-               try{
-                 row = ((Lilypad)e.getComponent()).getRow();
-                 column = ((Lilypad)e.getComponent()).getCol();
-                 if(lilypads[row][column].isValid())
-                 {       
-                     System.out.println("Row: " + row + " Col: " + column);
-                     
+            try{
+               row = ((Lilypad)e.getComponent()).getRow();
+               column = ((Lilypad)e.getComponent()).getCol();
+               Point thePad = new Point(row, column);
+               if(lilypads[row][column].isValid())
+               {       
+                  System.out.println("Row: " + row + " Col: " + column);
+                  ArrayList<Point> playerPoints = new ArrayList<Point>();
+                  for(int i=0; i<4; i++){
+                     Point thePos = players.get(i).getCurrentLocation();
+                     playerPoints.add(thePos);
+                  }
                      //if the player is not dead...
-                        if(players.get(currentTurn).getIsDead() == false){
-                           System.out.println("Player " + (currentTurn+1) + "'s turn. ");
-                           lilypads[row][column].setIcon(players.get(currentTurn).getIcon());
+                  if(players.get(currentTurn).getIsDead() == false && !(playerPoints.contains(thePad))){
+                     System.out.println("Player " + (currentTurn+1) + "'s turn. ");
+                     lilypads[row][column].setIcon(players.get(currentTurn).getIcon());
                            
                            //Gets the position of the player before the move is made and sets the icon to the empty tile.
-                           Point oldPos = players.get(currentTurn).getCurrentLocation();
-                           int xCoor =(int) oldPos.getX();
-                           int yCoor =(int) oldPos.getY();
-                           lilypads[xCoor][yCoor].setIcon(emptyPad);
+                     Point oldPos = players.get(currentTurn).getCurrentLocation();
+                     int xCoor =(int) oldPos.getX();
+                     int yCoor =(int) oldPos.getY();
+                     lilypads[xCoor][yCoor].setIcon(emptyPad);
                            
                            //Sets the position of the player to the new location.
-                           players.get(currentTurn).setCurrentLocation(new Point(row,column));;
+                     players.get(currentTurn).setCurrentLocation(new Point(row,column));;
                    
                            //ends the turn of the player and increments the class variable so it becomes the next player's turn.
-                           players.get(currentTurn).setTurn(false);
-                           currentTurn++;
-                        }//end if statement 1b
-                  }//end if statement checking validity.
-                  else{
-                     JOptionPane.showMessageDialog(lilypads[4][4], "Please choose a valid lilypad.");
-                  }
-             }//end try block
-             
-             catch(ArrayIndexOutOfBoundsException aioobe){
+                     players.get(currentTurn).setTurn(false);
+                     currentTurn++;
+                  }//end if statement 1b
+               }//end if statement checking validity.
+               else{
                   JOptionPane.showMessageDialog(lilypads[4][4], "Please choose a valid lilypad.");
-             }//end catch block
-
+               }
+            }//end try block
+             
+            catch(ArrayIndexOutOfBoundsException aioobe){
+               JOptionPane.showMessageDialog(lilypads[4][4], "Please choose a valid lilypad.");
+            }//end catch block
+         
          }//end outermost if statement.
-   
+         
          //Right click sinks a lilypad.
          else if (e.getButton() == MouseEvent.BUTTON3 && players.get(currentTurn).getTurn()){
             int row = -1;
             int column = -1;
             row = ((Lilypad)e.getComponent()).getRow();
             column = ((Lilypad)e.getComponent()).getCol();
+            Point thePad = new Point(row, column);
             if(lilypads[row][column].isValid()){       
                System.out.println("Row: " + row + " Col: " + column);
-                     
+               ArrayList<Point> playerPoints = new ArrayList<Point>();
+               for(int i=0; i<4; i++){
+                  Point thePos = players.get(i).getCurrentLocation();
+                  playerPoints.add(thePos);
+               }
                //if the player is not dead...
-               if(players.get(currentTurn).getIsDead() == false){
+               if(players.get(currentTurn).getIsDead() == false && !(playerPoints.contains(thePad))){
                   System.out.println("Player " + (currentTurn+1) + "'s turn. ");
                   //Sinks the lilypad.
                   lilypads[row][column].setIcon(water);
@@ -175,15 +184,15 @@ public class Pond extends JPanel{
                   players.get(currentTurn).setTurn(false);
                   currentTurn++;
                }//end if
-             }//end if
-             else{
+            }//end if
+            else{
                JOptionPane.showMessageDialog(null, "Oops! That lilypads has been sunk!");
-             }
-        }//end else if
-        else{
-          JOptionPane.showMessageDialog(lilypads[4][4],"It is not your turn.");
-        }
-   }        
+            }
+         }//end else if
+         else{
+            JOptionPane.showMessageDialog(lilypads[4][4],"It is not your turn.");
+         }
+      }        
    
       public void mousePressed(MouseEvent e) {
       }
