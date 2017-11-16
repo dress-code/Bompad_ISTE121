@@ -19,7 +19,6 @@ public class Pond extends JPanel{
    //Is there a winner of the game?
    private boolean winner = false;
    Point lilyPadCoord;
-   String action = "";
    //Whose turn is it?
    int currentTurn = 0;
    //Icon for an empty lilypad and open water spot.
@@ -98,10 +97,10 @@ public class Pond extends JPanel{
          lilypads[9][i].setValid(false);
       }
       //Sets corners of the pond.
-      lilypads[9][0].setIcon(water);
-      lilypads[9][9].setIcon(water);
-      lilypads[0][0].setIcon(water);
-      lilypads[0][9].setIcon(water);
+      lilypads[9][0].setIcon(new ImageIcon("bottom-left.png"));
+      lilypads[9][9].setIcon(new ImageIcon("bottom-right.png"));
+      lilypads[0][0].setIcon(new ImageIcon("top-left.png"));
+      lilypads[0][9].setIcon(new ImageIcon("top-right.png"));
       
    }//end constructor
    
