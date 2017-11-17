@@ -104,43 +104,82 @@ public class Pond extends JPanel{
       
    }//end constructor
    
-   public boolean checkMove(Point player, int row, int col){
+   public boolean checkMove(Point plocal, int row, int col){
       boolean isGood=false;
       //north
-      if(row==(int)(player.getX()-1) && col==(int)(player.getY())){
+      if(row==(int)(plocal.getX()-1) && col==(int)(plocal.getY())){
          isGood=true;
       }
       //northeast
-      else if(row==(int)(player.getX()-1) && col==(int)(player.getY()+1)){
+      else if(row==(int)(plocal.getX()-1) && col==(int)(plocal.getY()+1)){
          isGood=true;
       }
       //east
-      else if(row==(int)(player.getX()) && col==(int)(player.getY()+1)){
+      else if(row==(int)(plocal.getX()) && col==(int)(plocal.getY()+1)){
          isGood=true;
       }
       //southeast
-      else if(row==(int)(player.getX()+1) && col==(int)(player.getY()+1)){
+      else if(row==(int)(plocal.getX()+1) && col==(int)(plocal.getY()+1)){
          isGood=true;
       }
       //south
-      else if(row==(int)(player.getX()+1) && col==(int)(player.getY())){
+      else if(row==(int)(plocal.getX()+1) && col==(int)(plocal.getY())){
          isGood=true;
       }
       //southwest
-      else if(row==(int)(player.getX()+1) && col==(int)(player.getY()-1)){
+      else if(row==(int)(plocal.getX()+1) && col==(int)(plocal.getY()-1)){
          isGood=true;
       }
       //west
-      else if(row==(int)(player.getX()) && col==(int)(player.getY()-1)){
+      else if(row==(int)(plocal.getX()) && col==(int)(plocal.getY()-1)){
          isGood=true;
       }
       //northwest
-      else if(row==(int)(player.getX()-1) && col==(int)(player.getY()-1)){
+      else if(row==(int)(plocal.getX()-1) && col==(int)(plocal.getY()-1)){
          isGood=true;
       }
      
       return isGood;
    }
+   
+    public boolean checkSurrounded(Point plocal, int row, int col){
+      boolean isGood=false;
+      //north
+      if(row==(int)(plocal.getX()-1) && col==(int)(plocal.getY())){
+         isGood=true;
+      }
+      //northeast
+      else if(row==(int)(plocal.getX()-1) && col==(int)(plocal.getY()+1)){
+         isGood=true;
+      }
+      //east
+      else if(row==(int)(plocal.getX()) && col==(int)(plocal.getY()+1)){
+         isGood=true;
+      }
+      //southeast
+      else if(row==(int)(plocal.getX()+1) && col==(int)(plocal.getY()+1)){
+         isGood=true;
+      }
+      //south
+      else if(row==(int)(plocal.getX()+1) && col==(int)(plocal.getY())){
+         isGood=true;
+      }
+      //southwest
+      else if(row==(int)(plocal.getX()+1) && col==(int)(plocal.getY()-1)){
+         isGood=true;
+      }
+      //west
+      else if(row==(int)(plocal.getX()) && col==(int)(plocal.getY()-1)){
+         isGood=true;
+      }
+      //northwest
+      else if(row==(int)(plocal.getX()-1) && col==(int)(plocal.getY()-1)){
+         isGood=true;
+      }
+     
+      return isGood;
+   }
+
    
    public class CustomMouseListener implements MouseListener {
       public void mouseClicked(MouseEvent e) {
