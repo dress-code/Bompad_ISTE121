@@ -140,13 +140,17 @@ public class Pond extends JPanel{
                      int xCoor =(int) oldPos.getX();
                      int yCoor =(int) oldPos.getY();
                      lilypads[xCoor][yCoor].setIcon(emptyPad);
-                           
-                           //Sets the position of the player to the new location.
-                     players.get(currentTurn).setCurrentLocation(new Point(row,column));;
-                   
-                           //ends the turn of the player and increments the class variable so it becomes the next player's turn.
-                     players.get(currentTurn).setTurn(false);
-                     currentTurn++;
+                     
+                     Point newPos = new Point(row, column);      
+                     //check to see if move is valid or not
+                     if(validLoc(oldPos, newPos) == true){ 
+                        //Sets the position of the player to the new location.
+                        players.get(currentTurn).setCurrentLocation(newPos);
+                      
+                        //ends the turn of the player and increments the class variable so it becomes the next player's turn.
+                        players.get(currentTurn).setTurn(false);
+                        currentTurn++;
+                     }
                   }//end if statement 1b
                }//end if statement checking validity.
                else{
@@ -192,7 +196,7 @@ public class Pond extends JPanel{
          else{
             JOptionPane.showMessageDialog(lilypads[4][4],"It is not your turn.");
          }
-      }        
+      }//end mouseClicked        
    
       public void mousePressed(MouseEvent e) {
       }
@@ -205,5 +209,55 @@ public class Pond extends JPanel{
    
       public void mouseExited(MouseEvent e) {
       }
-   }
+   }//end CustomMouseListener
+   
+   public boolean validLoc(Point currPos, Point newPos){
+      boolean = vloc;
+      
+      //return true if newLocation is the adjacent pads
+      //north
+      if(newPos.getX() == oldPos.getX() - 1 && newPos.getY() == oldPos.getY()){
+         vloc = true;
+      }
+      
+      //northeast
+      else if(newPos.getX() == oldPos.getX() - 1 && newPos.getY() == oldPos.getY() + 1){
+         vloc = true;
+      }
+      
+      //east
+      else if(newPos.getX() && newPos.getY()){
+         vloc = true;
+      }
+      
+      //southeast
+      else if(){
+         vloc = true;
+      }
+      
+      //south
+      else if(){
+         vloc = true;
+      }
+      
+      //southwest
+      else if(){
+         vloc = true;
+      }
+      
+      //west
+      else if(){
+         vloc = true;
+      }
+      
+      //northwest
+      else if(){
+         vloc = true;
+      }
+      
+      else
+         vloc = false;
+         
+      return vloc;
+   }//end validLoc
 }//end Pond class
