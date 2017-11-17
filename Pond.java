@@ -104,30 +104,37 @@ public class Pond extends JPanel{
       
    }//end constructor
    
-      public boolean checkMove(Point player, int row, int col){
+   public boolean checkMove(Point player, int row, int col){
       boolean isGood=false;
+      //north
       if(row==(int)(player.getX()-1) && col==(int)(player.getY())){
          isGood=true;
       }
+      //northeast
       else if(row==(int)(player.getX()-1) && col==(int)(player.getY()+1)){
          isGood=true;
       }
-      
+      //east
       else if(row==(int)(player.getX()) && col==(int)(player.getY()+1)){
          isGood=true;
       }
+      //southeast
       else if(row==(int)(player.getX()+1) && col==(int)(player.getY()+1)){
          isGood=true;
       }
+      //south
       else if(row==(int)(player.getX()+1) && col==(int)(player.getY())){
          isGood=true;
       }
+      //southwest
       else if(row==(int)(player.getX()+1) && col==(int)(player.getY()-1)){
          isGood=true;
       }
+      //west
       else if(row==(int)(player.getX()) && col==(int)(player.getY()-1)){
          isGood=true;
       }
+      //northwest
       else if(row==(int)(player.getX()-1) && col==(int)(player.getY()-1)){
          isGood=true;
       }
@@ -161,7 +168,7 @@ public class Pond extends JPanel{
                      Point thePos = players.get(i).getCurrentLocation();
                      playerPoints.add(thePos);
                   }
-                     boolean check = checkMove(players.get(currentTurn).getCurrentLocation(), row, column);
+                  boolean check = checkMove(players.get(currentTurn).getCurrentLocation(), row, column);
                      //if the player is not dead and the pad doesn't already have a frog...
                   if(players.get(currentTurn).getIsDead() == false && !(playerPoints.contains(thePad)) && check==true){
                      System.out.println("Player " + (currentTurn+1) + "'s turn. ");
