@@ -104,6 +104,37 @@ public class Pond extends JPanel{
       
    }//end constructor
    
+      public boolean checkMove(Point player, int row, int col){
+      boolean isGood=false;
+      if(row==(int)(player.getX()-1) && col==(int)(player.getY())){
+         isGood=true;
+      }
+      else if(row==(int)(player.getX()-1) && col==(int)(player.getY()+1)){
+         isGood=true;
+      }
+      
+      else if(row==(int)(player.getX()) && col==(int)(player.getY()+1)){
+         isGood=true;
+      }
+      else if(row==(int)(player.getX()+1) && col==(int)(player.getY()+1)){
+         isGood=true;
+      }
+      else if(row==(int)(player.getX()+1) && col==(int)(player.getY())){
+         isGood=true;
+      }
+      else if(row==(int)(player.getX()+1) && col==(int)(player.getY()-1)){
+         isGood=true;
+      }
+      else if(row==(int)(player.getX()) && col==(int)(player.getY()-1)){
+         isGood=true;
+      }
+      else if(row==(int)(player.getX()-1) && col==(int)(player.getY()-1)){
+         isGood=true;
+      }
+     
+      return isGood;
+   }
+   
    public class CustomMouseListener implements MouseListener {
       public void mouseClicked(MouseEvent e) {
          //left click moves the Player.
