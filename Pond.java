@@ -25,7 +25,7 @@ public class Pond extends JPanel{
    //Icon for an empty lilypad and open water spot.
    Icon emptyPad = new ImageIcon("empty.png");
    Icon water = new ImageIcon("water.png");
-   
+  
    /**
    * Constructor for a "pond" board of 64 LilyPads in an 8 x 8 grid layout.
    */
@@ -103,8 +103,14 @@ public class Pond extends JPanel{
       lilypads[0][0].setIcon(new ImageIcon("top-left.png"));
       lilypads[0][9].setIcon(new ImageIcon("top-right.png"));
       
+      highlightSpaces(players.get(currentTurn).getCurrentLocation());
+      
    }//end constructor
    
+   /**
+   * A method which checks the validity of a player's move.
+   * @param plocal The current location of the player.
+   */
    public boolean checkMove(Point plocal, int row, int col){
       boolean isGood=false;
       //north
@@ -142,15 +148,72 @@ public class Pond extends JPanel{
      
       return isGood;
    }
+   
+   /**
+   * A method for highlighting available moves.
+   * @param p The current location of the player.
+   */
+   public void highlightSpaces(Point p){
+      int xPos = (int)(p.getX());
+      int yPos = (int)(p.getY());
+      if(lilypads[xPos-1][yPos].isValid()){
+         lilypads[xPos-1][yPos].setBorder(BorderFactory.createMatteBorder(2,0,2,0,Color.white));
+      }
+      if(lilypads[xPos-1][yPos+1].isValid()){
+         lilypads[xPos-1][yPos+1].setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.white));
+      }
+      if(lilypads[xPos-1][yPos-1].isValid()){
+         lilypads[xPos-1][yPos-1].setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.white));
+      }
+      if(lilypads[xPos][yPos-1].isValid()){
+         lilypads[xPos][yPos-1].setBorder(BorderFactory.createMatteBorder(0,2,0,2,Color.white));
+      }
+      if(lilypads[xPos][yPos+1].isValid()){
+         lilypads[xPos][yPos+1].setBorder(BorderFactory.createMatteBorder(0,2,0,2,Color.white));
+      }
+      if(lilypads[xPos+1][yPos-1].isValid()){
+         lilypads[xPos+1][yPos-1].setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.white));
+      }
+      if(lilypads[xPos+1][yPos+1].isValid()){
+         lilypads[xPos+1][yPos+1].setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.white));
+      }
+      if(lilypads[xPos+1][yPos].isValid()){
+         lilypads[xPos+1][yPos].setBorder(BorderFactory.createMatteBorder(2,0,2,0,Color.white));
+      }
+   }
+   
+   /**
+   * A method which unhighlights spaces for a move.
+   * @param p the old position of the player before his move.
+   */
+   public void unhighlightSpaces(Point p){
+      int xPos = (int)(p.getX());
+      int yPos = (int)(p.getY());
+      lilypads[xPos-1][yPos].setBorder(null);
+      lilypads[xPos-1][yPos-1].setBorder(null);
+      lilypads[xPos-1][yPos+1].setBorder(null);
+      lilypads[xPos][yPos+1].setBorder(null);
+      lilypads[xPos][yPos-1].setBorder(null);
+      lilypads[xPos+1][yPos-1].setBorder(null);
+      lilypads[xPos+1][yPos].setBorder(null);
+      lilypads[xPos+1][yPos+1].setBorder(null);
+   }
+   
+   /**
+   * A method which changes the turns.
+   */
+   public void changeTurn(){
+      currentTurn++;
+      if(currentTurn == 4){
+         currentTurn = 0;
+      }//end if statement
+      highlightSpaces(players.get(currentTurn).getCurrentLocation());
+   }
       
    public class CustomMouseListener implements MouseListener {
       public void mouseClicked(MouseEvent e) {
-         //left click moves the Player.
-         
-         if(currentTurn == 4){
-            currentTurn = 0;
-         }//end if statement
-               
+      
+         //left click moves the Player.               
          players.get(currentTurn).setTurn(true);
          if (e.getButton() == MouseEvent.BUTTON1 && players.get(currentTurn).getTurn()) { 
             int row = -1;
@@ -161,9 +224,11 @@ public class Pond extends JPanel{
                row = ((Lilypad)e.getComponent()).getRow();
                column = ((Lilypad)e.getComponent()).getCol();
                Point thePad = new Point(row, column);
+               
                if(lilypads[row][column].isValid())
                {       
                   System.out.println("Row: " + row + " Col: " + column);
+                  
                   ArrayList<Point> playerPoints = new ArrayList<Point>();
                   for(int i=0; i<4; i++){
                      Point thePos = players.get(i).getCurrentLocation();
@@ -177,6 +242,7 @@ public class Pond extends JPanel{
                            
                            //Gets the position of the player before the move is made and sets the icon to the empty tile.
                      Point oldPos = players.get(currentTurn).getCurrentLocation();
+                     unhighlightSpaces(oldPos);
                      int xCoor =(int) oldPos.getX();
                      int yCoor =(int) oldPos.getY();
                      lilypads[xCoor][yCoor].setIcon(emptyPad);
@@ -197,7 +263,7 @@ public class Pond extends JPanel{
                    
                            //ends the turn of the player and increments the class variable so it becomes the next player's turn.
                      players.get(currentTurn).setTurn(false);
-                     currentTurn++;
+                     changeTurn();
                   }//end if statement 1b
                }//end if statement checking validity.
                else{
@@ -231,6 +297,7 @@ public class Pond extends JPanel{
                   //Sinks the lilypad.
                   lilypads[row][column].setIcon(water);
                   lilypads[row][column].setValid(false);
+                  unhighlightSpaces(players.get(currentTurn).getCurrentLocation());
                   try{
                      File backgroundSound = new File("splash_sound.au");
                      AudioInputStream ais = AudioSystem.getAudioInputStream(backgroundSound);
@@ -244,7 +311,7 @@ public class Pond extends JPanel{
 
                   //ends the turn of the player and increments the class variable so it becomes the next player's turn.
                   players.get(currentTurn).setTurn(false);
-                  currentTurn++;
+                  changeTurn();
                }//end if
             }//end if
             else{
