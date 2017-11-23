@@ -262,16 +262,18 @@ public class Pond extends JPanel{
          System.out.println("Player #" + i + " check");
          if(!(lifeStatus(players.get(i).getCurrentLocation()))){
             death(i);
-            if(currentTurn < i){
+            if(currentTurn > i){
                currentTurn--;
-            }
-            if(currentTurn >= players.size()){
-               currentTurn = 0;
+               if(currentTurn < 0){
+                  currentTurn = 0;
+               }
             }
          }
       }
-      /*if(!lifeStatus(players.get(currentTurn).getCurrentLocation())){
-      death(currentTurn);}*/
+      //Win condition.
+      if(players.size() == 1){
+         JOptionPane.showMessageDialog(null, players.get(0).getName() + " has won the game.");
+      }
       //Increments the current turn so that it jumps to the next player.
       currentTurn++;
       if(currentTurn >= players.size()){
@@ -294,9 +296,6 @@ public class Pond extends JPanel{
          lilypads[posX][posY].setEnabled(false);
          players.remove(playerNum);
          numPlayers--;
-      }
-      else{
-         JOptionPane.showMessageDialog(null, players.get(playerNum).getName() + " has won the game.");
       }
    }
       
@@ -360,7 +359,6 @@ public class Pond extends JPanel{
                JOptionPane.showMessageDialog(lilypads[4][4], "Please choose a valid lilypad.");
             }//end catch block
          }
-         
          //Right click sinks a lilypad.
          else if (e.getButton() == MouseEvent.BUTTON3 && players.get(currentTurn).getTurn()){
             int row = -1;
@@ -408,9 +406,6 @@ public class Pond extends JPanel{
                JOptionPane.showMessageDialog(null, "Oops! That lilypads has been sunk!");
             }
          }//end else if
-         else{
-            JOptionPane.showMessageDialog(lilypads[4][4],"It is not your turn.");
-         }
       }        
    
       public void mousePressed(MouseEvent e) {
