@@ -221,7 +221,18 @@ public class Pond extends JPanel{
                      lilypads[xCoor][yCoor].setIcon(emptyPad);
                            
                            //Sets the position of the player to the new location.
-                     players.get(currentTurn).setCurrentLocation(new Point(row,column));;
+                     players.get(currentTurn).setCurrentLocation(new Point(row,column));
+                     try{
+                        File backgroundSound = new File("frog-move.au");
+                        AudioInputStream ais = AudioSystem.getAudioInputStream(backgroundSound);
+                        Clip clip = AudioSystem.getClip();
+                        clip.open(ais);
+                        clip.start();
+                     }
+                     catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
+                     catch(LineUnavailableException lue){lue.printStackTrace();}
+                     catch(IOException ioe){ioe.printStackTrace();}
+
                    
                            //ends the turn of the player and increments the class variable so it becomes the next player's turn.
                      players.get(currentTurn).setTurn(false);
