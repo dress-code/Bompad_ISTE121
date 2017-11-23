@@ -26,6 +26,7 @@ public class Pond extends JPanel{
    Icon emptyPad = new ImageIcon("empty.png");
    Icon water = new ImageIcon("water.png");
    int numPlayers = 4;
+   ArrayList<Point> playerPoints;
   
    /**
    * Constructor for a "pond" board of 64 LilyPads in an 8 x 8 grid layout.
@@ -46,7 +47,7 @@ public class Pond extends JPanel{
             lp.addMouseListener(new CustomMouseListener()); 
          /*Generates a random number. If the number matches a 
          predetermined value, then the LilyPad is set as a bonus space.*/
-            if( ( 1 + (int)(Math.random() * 10)) == 1)
+            if( ( 1 + (int)(Math.random() * 7)) == 1)
             {
                lp.setBonus(true);
             }
@@ -151,6 +152,44 @@ public class Pond extends JPanel{
    }
    
    /**
+   * A method which bombs the spaces all around a bonus bomb tile.
+   * @param x the row of the bomb lily pad.
+   * @param y the column of the bomb lily pad.
+   */
+   public void bombSpaces(int x, int y){
+      int xPos = x;
+      int yPos = y;
+      ArrayList<Lilypad> explosion = new ArrayList<Lilypad>();
+      explosion.add(lilypads[xPos-1][yPos]);
+      explosion.add(lilypads[xPos-1][yPos-1]);
+      explosion.add(lilypads[xPos-1][yPos+1]);
+      explosion.add(lilypads[xPos][yPos+1]);
+      explosion.add(lilypads[xPos][yPos-1]);
+      explosion.add(lilypads[xPos][yPos]);
+      explosion.add(lilypads[xPos+1][yPos]);
+      explosion.add(lilypads[xPos+1][yPos+1]);
+      explosion.add(lilypads[xPos+1][yPos-1]);
+      for(int i = 0; i < explosion.size(); i++)
+      {
+         if(explosion.get(i).isValid()){
+            explosion.get(i).setValid(false);
+            explosion.get(i).setIcon(water);
+         }
+      }
+      try{
+         File explosionSound = new File("explosion.au");
+         AudioInputStream ais = AudioSystem.getAudioInputStream(explosionSound);
+         Clip clip = AudioSystem.getClip();
+         clip.open(ais);
+         clip.start();
+      }
+      catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
+      catch(LineUnavailableException lue){lue.printStackTrace();}
+      catch(IOException ioe){ioe.printStackTrace();}
+
+   }//end method bombSpaces()
+   
+   /**
    * A method for highlighting available moves.
    * @param p The current location of the player.
    */
@@ -213,7 +252,7 @@ public class Pond extends JPanel{
    }
    
    /**
-   * A method which figures out the life status of a player.
+   * A method which determines the life status of a player.
    */
    public void lifeStatus(){
       boolean lifeStatus = highlightSpaces(players.get(currentTurn).getCurrentLocation());
@@ -232,7 +271,7 @@ public class Pond extends JPanel{
          currentTurn = 0;
       }//end if statement
       lifeStatus();
-      highlightSpaces(players.get(currentTurn).getCurrentLocation());
+      //highlightSpaces(players.get(currentTurn).getCurrentLocation());
    }
    
    /**
@@ -248,6 +287,9 @@ public class Pond extends JPanel{
          lilypads[posX][posY].setEnabled(false);
          players.remove(playerNum);
          numPlayers--;
+      }
+      else{
+         //message to the winner.
       }
    }
       
@@ -270,7 +312,7 @@ public class Pond extends JPanel{
                {       
                   System.out.println("Row: " + row + " Col: " + column);
                   
-                  ArrayList<Point> playerPoints = new ArrayList<Point>();
+                  playerPoints = new ArrayList<Point>();
                   for(int i=0; i < numPlayers; i++){
                      Point thePos = players.get(i).getCurrentLocation();
                      playerPoints.add(thePos);
@@ -332,20 +374,26 @@ public class Pond extends JPanel{
                if(players.get(currentTurn).getIsDead() == false && !(playerPoints.contains(thePad))){
                   System.out.println("Player " + (currentTurn+1) + "'s turn. ");
                   //Sinks the lilypad.
-                  lilypads[row][column].setIcon(water);
-                  lilypads[row][column].setValid(false);
-                  unhighlightSpaces(players.get(currentTurn).getCurrentLocation());
-                  try{
-                     File backgroundSound = new File("splash_sound.au");
-                     AudioInputStream ais = AudioSystem.getAudioInputStream(backgroundSound);
-                     Clip clip = AudioSystem.getClip();
-                     clip.open(ais);
-                     clip.start();
+                  //If a lilpad is a bomb, calls the bombSpaces method.
+                  if(lilypads[row][column].isBonus()){
+                     bombSpaces(row, column);
+                     unhighlightSpaces(players.get(currentTurn).getCurrentLocation());
                   }
-                  catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
-                  catch(LineUnavailableException lue){lue.printStackTrace();}
-                  catch(IOException ioe){ioe.printStackTrace();}
-
+                  else{
+                     lilypads[row][column].setIcon(water);
+                     lilypads[row][column].setValid(false);
+                     unhighlightSpaces(players.get(currentTurn).getCurrentLocation());
+                     try{
+                        File splashSound = new File("splash_sound.au");
+                        AudioInputStream ais = AudioSystem.getAudioInputStream(splashSound);
+                        Clip clip = AudioSystem.getClip();
+                        clip.open(ais);
+                        clip.start();
+                     }
+                     catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
+                     catch(LineUnavailableException lue){lue.printStackTrace();}
+                     catch(IOException ioe){ioe.printStackTrace();}
+                  }
                   //ends the turn of the player and increments the class variable so it becomes the next player's turn.
                   changeTurn();
                }//end if
