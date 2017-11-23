@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.util.*;
 import javax.imageio.*;
 import java.io.*;
+import javax.sound.sampled.*;
 
 /**
 * A class containing the constructors and methods associated with a board of lilypads.
@@ -170,6 +171,17 @@ public class Pond extends JPanel{
                   //Sinks the lilypad.
                   lilypads[row][column].setIcon(water);
                   lilypads[row][column].setValid(false);
+                  try{
+                     File backgroundSound = new File("splash_sound.au");
+                     AudioInputStream ais = AudioSystem.getAudioInputStream(backgroundSound);
+                     Clip clip = AudioSystem.getClip();
+                     clip.open(ais);
+                     clip.start();
+                  }
+                  catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
+                  catch(LineUnavailableException lue){lue.printStackTrace();}
+                  catch(IOException ioe){ioe.printStackTrace();}
+
                   //ends the turn of the player and increments the class variable so it becomes the next player's turn.
                   players.get(currentTurn).setTurn(false);
                   currentTurn++;

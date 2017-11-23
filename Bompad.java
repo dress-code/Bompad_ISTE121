@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import sun.audio.*;
+import java.io.*;
 
 /**
 <<<<<<< HEAD
@@ -94,6 +96,8 @@ public class Bompad extends JFrame{
       //instantiate outer classes
       Pond pond = new Pond();
       Chat chat = new Chat();
+      Sound sound = new Sound();
+      sound.start();
       
       //add classes(panels) to frame
       this.add(pond, BorderLayout.CENTER);
