@@ -1,12 +1,18 @@
 import java.io.*;
 import javax.sound.sampled.*;
 import javax.swing.*;
-
+/**
+* A thread for playing the background frog sound on repeat.
+* @author Anna Jacobsen
+* @version 11/22/2017
+*/
 public class Sound extends Thread{
 
    AudioInputStream ais;
-   boolean started = false;
    
+   /**
+   * Constructor for a Sound object. Instantiates AudioInputStream.
+   */
    public Sound(){
       try{
          File backgroundSound = new File("frog_background.au");
@@ -21,6 +27,11 @@ public class Sound extends Thread{
       }
    }
    
+   /**
+   * Run method for a Sound object creates a new Clip object and then starts it in
+   * a continuous loop.
+   */
+   @Override
    public void run(){
       try{
          Clip clip = AudioSystem.getClip();
