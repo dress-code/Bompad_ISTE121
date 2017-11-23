@@ -47,7 +47,7 @@ public class Pond extends JPanel{
             lp.addMouseListener(new CustomMouseListener()); 
          /*Generates a random number. If the number matches a 
          predetermined value, then the LilyPad is set as a bonus space.*/
-            if( ( 1 + (int)(Math.random() * 7)) == 1)
+            if( ( 1 + (int)(Math.random() * 9)) == 1)
             {
                lp.setBonus(true);
             }
