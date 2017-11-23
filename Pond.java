@@ -105,7 +105,8 @@ public class Pond extends JPanel{
       lilypads[0][0].setIcon(new ImageIcon("top-left.png"));
       lilypads[0][9].setIcon(new ImageIcon("top-right.png"));
       
-      highlightSpaces(players.get(currentTurn).getCurrentLocation());
+      highlightSpaces(players.get(0).getCurrentLocation());
+      players.get(0).setTurn(true);
       
    }//end constructor
    
@@ -152,23 +153,31 @@ public class Pond extends JPanel{
    }
    
    /**
+   * A method which returns the adjacent spaces to a location in an arraylist.
+   */
+   public ArrayList<Lilypad> getAdjacent(int x, int y){
+      int xPos = x;
+      int yPos = y;
+      ArrayList<Lilypad> adjacent = new ArrayList<Lilypad>();
+      adjacent.add(lilypads[xPos-1][yPos]);
+      adjacent.add(lilypads[xPos-1][yPos-1]);
+      adjacent.add(lilypads[xPos-1][yPos+1]);
+      adjacent.add(lilypads[xPos][yPos+1]);
+      adjacent.add(lilypads[xPos][yPos-1]);
+      adjacent.add(lilypads[xPos][yPos]);
+      adjacent.add(lilypads[xPos+1][yPos]);
+      adjacent.add(lilypads[xPos+1][yPos+1]);
+      adjacent.add(lilypads[xPos+1][yPos-1]);
+      return adjacent;
+   }
+   
+   /**
    * A method which bombs the spaces all around a bonus bomb tile.
    * @param x the row of the bomb lily pad.
    * @param y the column of the bomb lily pad.
    */
    public void bombSpaces(int x, int y){
-      int xPos = x;
-      int yPos = y;
-      ArrayList<Lilypad> explosion = new ArrayList<Lilypad>();
-      explosion.add(lilypads[xPos-1][yPos]);
-      explosion.add(lilypads[xPos-1][yPos-1]);
-      explosion.add(lilypads[xPos-1][yPos+1]);
-      explosion.add(lilypads[xPos][yPos+1]);
-      explosion.add(lilypads[xPos][yPos-1]);
-      explosion.add(lilypads[xPos][yPos]);
-      explosion.add(lilypads[xPos+1][yPos]);
-      explosion.add(lilypads[xPos+1][yPos+1]);
-      explosion.add(lilypads[xPos+1][yPos-1]);
+      ArrayList<Lilypad> explosion = getAdjacent(x,y);
       for(int i = 0; i < explosion.size(); i++)
       {
          if(explosion.get(i).isValid()){
@@ -193,45 +202,18 @@ public class Pond extends JPanel{
    * A method for highlighting available moves.
    * @param p The current location of the player.
    */
-   public boolean highlightSpaces(Point p){
+   public void highlightSpaces(Point p){
       int xPos = (int)(p.getX());
       int yPos = (int)(p.getY());
       boolean isMoveable = true;
       int availableSpaces = 0;
-      if(lilypads[xPos-1][yPos].isValid()){
-         lilypads[xPos-1][yPos].setBorder(BorderFactory.createMatteBorder(2,0,2,0,Color.white));
-         availableSpaces++;
+      ArrayList<Lilypad> highlight = getAdjacent(xPos, yPos);
+      for(int i = 0; i < highlight.size(); i++)
+      {
+         if(highlight.get(i).isValid()){
+            highlight.get(i).setBorder(BorderFactory.createMatteBorder(1,1,1,1, Color.white));
+         }
       }
-      if(lilypads[xPos-1][yPos+1].isValid()){
-         lilypads[xPos-1][yPos+1].setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.white));
-         availableSpaces++;
-      }
-      if(lilypads[xPos-1][yPos-1].isValid()){
-         lilypads[xPos-1][yPos-1].setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.white));
-         availableSpaces++;
-      }
-      if(lilypads[xPos][yPos-1].isValid()){
-         lilypads[xPos][yPos-1].setBorder(BorderFactory.createMatteBorder(0,2,0,2,Color.white));
-         availableSpaces++;
-      }
-      if(lilypads[xPos][yPos+1].isValid()){
-         lilypads[xPos][yPos+1].setBorder(BorderFactory.createMatteBorder(0,2,0,2,Color.white));
-         availableSpaces++;
-      }
-      if(lilypads[xPos+1][yPos-1].isValid()){
-         lilypads[xPos+1][yPos-1].setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.white));
-         availableSpaces++;
-      }
-      if(lilypads[xPos+1][yPos+1].isValid()){
-         lilypads[xPos+1][yPos+1].setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.white));
-         availableSpaces++;
-      }
-      if(lilypads[xPos+1][yPos].isValid()){
-         lilypads[xPos+1][yPos].setBorder(BorderFactory.createMatteBorder(2,0,2,0,Color.white));
-         availableSpaces++;
-      }
-      if(availableSpaces == 0){isMoveable = false;}
-      return isMoveable;
    }
    
    /**
@@ -241,37 +223,49 @@ public class Pond extends JPanel{
    public void unhighlightSpaces(Point p){
       int xPos = (int)(p.getX());
       int yPos = (int)(p.getY());
-      lilypads[xPos-1][yPos].setBorder(null);
-      lilypads[xPos-1][yPos-1].setBorder(null);
-      lilypads[xPos-1][yPos+1].setBorder(null);
-      lilypads[xPos][yPos+1].setBorder(null);
-      lilypads[xPos][yPos-1].setBorder(null);
-      lilypads[xPos+1][yPos-1].setBorder(null);
-      lilypads[xPos+1][yPos].setBorder(null);
-      lilypads[xPos+1][yPos+1].setBorder(null);
+      ArrayList<Lilypad> unhighlight = getAdjacent(xPos, yPos);
+      for(int i = 0; i < unhighlight.size(); i++){
+         unhighlight.get(i).setBorder(null);
+      }
    }
    
    /**
    * A method which determines the life status of a player.
+   * @param p the location of the player being checked for life.
    */
-   public void lifeStatus(){
-      boolean lifeStatus = highlightSpaces(players.get(currentTurn).getCurrentLocation());
-      if(!lifeStatus){
-         death(currentTurn);
+   public boolean lifeStatus(Point p){
+      int posX = (int) p.getX();
+      int posY = (int) p.getY();
+      int availableSpace = -1;
+      boolean alive = true;
+      ArrayList<Lilypad> surrounding = getAdjacent(posX, posY);
+      for(int i = 0; i < surrounding.size(); i++){
+         if(surrounding.get(i).isValid()){
+            availableSpace++;
+         }
       }
+      if(availableSpace == 0){
+         alive = false;
+      }
+      return alive;
    }
    
    /**
    * A method which changes the turns.
    */
    public void changeTurn(){
+      for(int i = 0; i < numPlayers; i++){
+         if(!(lifeStatus(players.get(i).getCurrentLocation()))){
+            death(i);
+         }
+      }
       players.get(currentTurn).setTurn(false);
       currentTurn++;
-      if(currentTurn == numPlayers){
+      if(currentTurn >= players.size()){
          currentTurn = 0;
       }//end if statement
-      lifeStatus();
-      //highlightSpaces(players.get(currentTurn).getCurrentLocation());
+      players.get(currentTurn).setTurn(true);
+      highlightSpaces(players.get(currentTurn).getCurrentLocation());
    }
    
    /**
@@ -297,12 +291,10 @@ public class Pond extends JPanel{
       public void mouseClicked(MouseEvent e) {
       
          //left click moves the Player.               
-         players.get(currentTurn).setTurn(true);
          if (e.getButton() == MouseEvent.BUTTON1 && players.get(currentTurn).getTurn()) {
             int row = -1;
             int column = -1;
-               //Is there a better way to do this than going over the entire board?
-               //Yes, changed to a more efficient option.
+       
             try{
                row = ((Lilypad)e.getComponent()).getRow();
                column = ((Lilypad)e.getComponent()).getCol();
