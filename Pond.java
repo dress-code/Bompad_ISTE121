@@ -25,6 +25,7 @@ public class Pond extends JPanel{
    //Icon for an empty lilypad and open water spot.
    Icon emptyPad = new ImageIcon("empty.png");
    Icon water = new ImageIcon("water.png");
+   int numPlayers = 4;
   
    /**
    * Constructor for a "pond" board of 64 LilyPads in an 8 x 8 grid layout.
@@ -153,33 +154,45 @@ public class Pond extends JPanel{
    * A method for highlighting available moves.
    * @param p The current location of the player.
    */
-   public void highlightSpaces(Point p){
+   public boolean highlightSpaces(Point p){
       int xPos = (int)(p.getX());
       int yPos = (int)(p.getY());
+      boolean isMoveable = true;
+      int availableSpaces = 0;
       if(lilypads[xPos-1][yPos].isValid()){
          lilypads[xPos-1][yPos].setBorder(BorderFactory.createMatteBorder(2,0,2,0,Color.white));
+         availableSpaces++;
       }
       if(lilypads[xPos-1][yPos+1].isValid()){
          lilypads[xPos-1][yPos+1].setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.white));
+         availableSpaces++;
       }
       if(lilypads[xPos-1][yPos-1].isValid()){
          lilypads[xPos-1][yPos-1].setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.white));
+         availableSpaces++;
       }
       if(lilypads[xPos][yPos-1].isValid()){
          lilypads[xPos][yPos-1].setBorder(BorderFactory.createMatteBorder(0,2,0,2,Color.white));
+         availableSpaces++;
       }
       if(lilypads[xPos][yPos+1].isValid()){
          lilypads[xPos][yPos+1].setBorder(BorderFactory.createMatteBorder(0,2,0,2,Color.white));
+         availableSpaces++;
       }
       if(lilypads[xPos+1][yPos-1].isValid()){
          lilypads[xPos+1][yPos-1].setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.white));
+         availableSpaces++;
       }
       if(lilypads[xPos+1][yPos+1].isValid()){
          lilypads[xPos+1][yPos+1].setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.white));
+         availableSpaces++;
       }
       if(lilypads[xPos+1][yPos].isValid()){
          lilypads[xPos+1][yPos].setBorder(BorderFactory.createMatteBorder(2,0,2,0,Color.white));
+         availableSpaces++;
       }
+      if(availableSpaces == 0){isMoveable = false;}
+      return isMoveable;
    }
    
    /**
@@ -200,14 +213,42 @@ public class Pond extends JPanel{
    }
    
    /**
+   * A method which figures out the life status of a player.
+   */
+   public void lifeStatus(){
+      boolean lifeStatus = highlightSpaces(players.get(currentTurn).getCurrentLocation());
+      if(!lifeStatus){
+         death(currentTurn);
+      }
+   }
+   
+   /**
    * A method which changes the turns.
    */
    public void changeTurn(){
+      players.get(currentTurn).setTurn(false);
       currentTurn++;
-      if(currentTurn == 4){
+      if(currentTurn == numPlayers){
          currentTurn = 0;
       }//end if statement
+      lifeStatus();
       highlightSpaces(players.get(currentTurn).getCurrentLocation());
+   }
+   
+   /**
+   * A method for killing off a player.
+   * @param playerNum the number of the player to be killed.
+   */
+   public void death(int playerNum){
+      if(players.size() > 1){
+         players.get(playerNum).setIsDead(true);
+         Point p = players.get(playerNum).getCurrentLocation();
+         int posX = (int) p.getX();
+         int posY = (int) p.getY();
+         lilypads[posX][posY].setEnabled(false);
+         players.remove(playerNum);
+         numPlayers--;
+      }
    }
       
    public class CustomMouseListener implements MouseListener {
@@ -215,7 +256,7 @@ public class Pond extends JPanel{
       
          //left click moves the Player.               
          players.get(currentTurn).setTurn(true);
-         if (e.getButton() == MouseEvent.BUTTON1 && players.get(currentTurn).getTurn()) { 
+         if (e.getButton() == MouseEvent.BUTTON1 && players.get(currentTurn).getTurn()) {
             int row = -1;
             int column = -1;
                //Is there a better way to do this than going over the entire board?
@@ -224,30 +265,30 @@ public class Pond extends JPanel{
                row = ((Lilypad)e.getComponent()).getRow();
                column = ((Lilypad)e.getComponent()).getCol();
                Point thePad = new Point(row, column);
-               
+               boolean check = checkMove(players.get(currentTurn).getCurrentLocation(), row, column);
                if(lilypads[row][column].isValid())
                {       
                   System.out.println("Row: " + row + " Col: " + column);
                   
                   ArrayList<Point> playerPoints = new ArrayList<Point>();
-                  for(int i=0; i<4; i++){
+                  for(int i=0; i < numPlayers; i++){
                      Point thePos = players.get(i).getCurrentLocation();
                      playerPoints.add(thePos);
                   }
-                  boolean check = checkMove(players.get(currentTurn).getCurrentLocation(), row, column);
-                     //if the player is not dead and the pad doesn't already have a frog...
+                  
+                  //if the player is not dead and the pad doesn't already have a frog...
                   if(players.get(currentTurn).getIsDead() == false && !(playerPoints.contains(thePad)) && check==true){
                      System.out.println("Player " + (currentTurn+1) + "'s turn. ");
                      lilypads[row][column].setIcon(players.get(currentTurn).getIcon());
                            
-                           //Gets the position of the player before the move is made and sets the icon to the empty tile.
+                     //Gets the position of the player before the move is made and sets the icon to the empty tile.
                      Point oldPos = players.get(currentTurn).getCurrentLocation();
                      unhighlightSpaces(oldPos);
                      int xCoor =(int) oldPos.getX();
                      int yCoor =(int) oldPos.getY();
                      lilypads[xCoor][yCoor].setIcon(emptyPad);
                            
-                           //Sets the position of the player to the new location.
+                     //Sets the position of the player to the new location.
                      players.get(currentTurn).setCurrentLocation(new Point(row,column));
                      try{
                         File backgroundSound = new File("frog-move.au");
@@ -259,10 +300,7 @@ public class Pond extends JPanel{
                      catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
                      catch(LineUnavailableException lue){lue.printStackTrace();}
                      catch(IOException ioe){ioe.printStackTrace();}
-
-                   
-                           //ends the turn of the player and increments the class variable so it becomes the next player's turn.
-                     players.get(currentTurn).setTurn(false);
+                     //ends the turn of the player and increments the class variable so it becomes the next player's turn.
                      changeTurn();
                   }//end if statement 1b
                }//end if statement checking validity.
@@ -274,8 +312,7 @@ public class Pond extends JPanel{
             catch(ArrayIndexOutOfBoundsException aioobe){
                JOptionPane.showMessageDialog(lilypads[4][4], "Please choose a valid lilypad.");
             }//end catch block
-         
-         }//end outermost if statement.
+         }
          
          //Right click sinks a lilypad.
          else if (e.getButton() == MouseEvent.BUTTON3 && players.get(currentTurn).getTurn()){
@@ -287,7 +324,7 @@ public class Pond extends JPanel{
             if(lilypads[row][column].isValid()){       
                System.out.println("Row: " + row + " Col: " + column);
                ArrayList<Point> playerPoints = new ArrayList<Point>();
-               for(int i=0; i<4; i++){
+               for(int i=0; i < numPlayers; i++){
                   Point thePos = players.get(i).getCurrentLocation();
                   playerPoints.add(thePos);
                }
@@ -310,7 +347,6 @@ public class Pond extends JPanel{
                   catch(IOException ioe){ioe.printStackTrace();}
 
                   //ends the turn of the player and increments the class variable so it becomes the next player's turn.
-                  players.get(currentTurn).setTurn(false);
                   changeTurn();
                }//end if
             }//end if
