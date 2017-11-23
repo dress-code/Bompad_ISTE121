@@ -81,7 +81,14 @@ public class Bompad extends JFrame{
          public void actionPerformed(ActionEvent ae)
          {
             //set instructions for Bompad
-            String instruct = "";
+            String instruct = "Goal: Be the last frog able to make a valid move.\n\n"
+            + "On your turn, you may either hop to a new space or sink a lilypad.\n\n"
+            + "To sink a lilypad: Click on any space with a lilypad on it. This\n"
+            + "will remove the lilypad from play. Random lilypads will have bombs\n"
+            + "hidden underneath. Click one of these, and all of the lilypads around\n"
+            + "the clicked space will also be sunk. Click at your own risk.\n\n"
+            + "To move your frog: Click any lilypad adjacent to your frog. A lilypad occupied\n"
+            + "by another frog, a border space, or an empty water space are not valid.\n";
             JOptionPane.showMessageDialog(null, instruct);   
          }
       });
