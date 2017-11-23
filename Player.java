@@ -23,8 +23,7 @@ public class Player{
     * @param playerNum The player number of the Player object.
     * @param pName The name of the Player object.
    */
-   public Player(String pName, int playerNum){
-      name = pName;
+   public Player(int playerNum){
       turn = false;
       isDead = false;
       switch(playerNum){
@@ -32,21 +31,25 @@ public class Player{
             frog = new ImageIcon("red-frog.png");
             chatColor = "red";
             currentLocation = new Point(1,1);
+            name = "Red frog";
             break;
          case 2:
             frog = new ImageIcon("orange-frog.png");  
             chatColor = "green";
             currentLocation = new Point(1,8);
+            name = "Orange frog";
             break;
          case 3:
             frog = new ImageIcon("pink-frog.png"); 
             chatColor = "pink";
             currentLocation = new Point(8,1);
+            name = "Pink frog";
             break;
          case 4:
             frog = new ImageIcon("blue-frog.png");  
             chatColor = "blue";
             currentLocation = new Point(8,8);
+            name = "Blue frog";
             break;
       } 
    }//end constructor 
@@ -107,5 +110,13 @@ public class Player{
    public void setCurrentLocation(Point newLocation)
    {
       currentLocation = newLocation;
+   }
+   
+   /**
+   * A method which returns the name of the player.
+   * @return The name of the player.
+   */
+   public String getName(){
+      return name;
    }
 }

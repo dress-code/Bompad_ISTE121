@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.util.*;
 import javax.imageio.*;
 import java.io.*;
+import javax.sound.sampled.*;
 
 /**
 * A class containing the constructors and methods associated with a board of lilypads.
@@ -24,7 +25,8 @@ public class Pond extends JPanel{
    //Icon for an empty lilypad and open water spot.
    Icon emptyPad = new ImageIcon("empty.png");
    Icon water = new ImageIcon("water.png");
-   
+   int numPlayers = 4;
+  
    /**
    * Constructor for a "pond" board of 64 LilyPads in an 8 x 8 grid layout.
    */
@@ -33,7 +35,7 @@ public class Pond extends JPanel{
       this.setLayout(new GridLayout(10,10));
       //Creates Player objects and adds them to the ArrayList.
       for(int p = 1; p < 5; p++){
-         Player player = new Player("testing", p);
+         Player player = new Player(p);
          players.add(player);
       }
       
@@ -44,7 +46,7 @@ public class Pond extends JPanel{
             lp.addMouseListener(new CustomMouseListener()); 
          /*Generates a random number. If the number matches a 
          predetermined value, then the LilyPad is set as a bonus space.*/
-            if( ( 1 + (int)(Math.random() * 10)) == 1)
+            if( ( 1 + (int)(Math.random() * 9)) == 1)
             {
                lp.setBonus(true);
             }
@@ -102,83 +104,237 @@ public class Pond extends JPanel{
       lilypads[0][0].setIcon(new ImageIcon("top-left.png"));
       lilypads[0][9].setIcon(new ImageIcon("top-right.png"));
       
+      highlightSpaces(players.get(0).getCurrentLocation());
+      players.get(0).setTurn(true);
+      
    }//end constructor
    
-   public boolean checkMove(Point player, int row, int col){
+   /**
+   * A method which checks the validity of a player's move.
+   * @param plocal The current location of the player.
+   */
+   public boolean checkMove(Point plocal, int row, int col){
       boolean isGood=false;
       //north
-      if(row==(int)(player.getX()-1) && col==(int)(player.getY())){
+      if(row==(int)(plocal.getX()-1) && col==(int)(plocal.getY())){
          isGood=true;
       }
       //northeast
-      else if(row==(int)(player.getX()-1) && col==(int)(player.getY()+1)){
+      else if(row==(int)(plocal.getX()-1) && col==(int)(plocal.getY()+1)){
          isGood=true;
       }
       //east
-      else if(row==(int)(player.getX()) && col==(int)(player.getY()+1)){
+      else if(row==(int)(plocal.getX()) && col==(int)(plocal.getY()+1)){
          isGood=true;
       }
       //southeast
-      else if(row==(int)(player.getX()+1) && col==(int)(player.getY()+1)){
+      else if(row==(int)(plocal.getX()+1) && col==(int)(plocal.getY()+1)){
          isGood=true;
       }
       //south
-      else if(row==(int)(player.getX()+1) && col==(int)(player.getY())){
+      else if(row==(int)(plocal.getX()+1) && col==(int)(plocal.getY())){
          isGood=true;
       }
       //southwest
-      else if(row==(int)(player.getX()+1) && col==(int)(player.getY()-1)){
+      else if(row==(int)(plocal.getX()+1) && col==(int)(plocal.getY()-1)){
          isGood=true;
       }
       //west
-      else if(row==(int)(player.getX()) && col==(int)(player.getY()-1)){
+      else if(row==(int)(plocal.getX()) && col==(int)(plocal.getY()-1)){
          isGood=true;
       }
       //northwest
-      else if(row==(int)(player.getX()-1) && col==(int)(player.getY()-1)){
+      else if(row==(int)(plocal.getX()-1) && col==(int)(plocal.getY()-1)){
          isGood=true;
       }
      
       return isGood;
    }
    
+   /**
+   * A method which returns the adjacent spaces to a location in an arraylist.
+   */
+   public ArrayList<Lilypad> getAdjacent(int x, int y){
+      int xPos = x;
+      int yPos = y;
+      ArrayList<Lilypad> adjacent = new ArrayList<Lilypad>();
+      adjacent.add(lilypads[xPos-1][yPos]);
+      adjacent.add(lilypads[xPos-1][yPos-1]);
+      adjacent.add(lilypads[xPos-1][yPos+1]);
+      adjacent.add(lilypads[xPos][yPos+1]);
+      adjacent.add(lilypads[xPos][yPos-1]);
+      adjacent.add(lilypads[xPos][yPos]);
+      adjacent.add(lilypads[xPos+1][yPos]);
+      adjacent.add(lilypads[xPos+1][yPos+1]);
+      adjacent.add(lilypads[xPos+1][yPos-1]);
+      return adjacent;
+   }
+   
+   /**
+   * A method which bombs the spaces all around a bonus bomb tile.
+   * @param x the row of the bomb lily pad.
+   * @param y the column of the bomb lily pad.
+   */
+   /*public void bombSpaces(int x, int y){
+      ArrayList<Lilypad> explosion = getAdjacent(x,y);
+      for(int i = 0; i < explosion.size(); i++)
+      {
+         if(explosion.get(i).isValid()){
+            explosion.get(i).setValid(false);
+            explosion.get(i).setIcon(water);
+         }
+      }
+      try{
+         File explosionSound = new File("explosion.au");
+         AudioInputStream ais = AudioSystem.getAudioInputStream(explosionSound);
+         Clip clip = AudioSystem.getClip();
+         clip.open(ais);
+         clip.start();
+      }
+      catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
+      catch(LineUnavailableException lue){lue.printStackTrace();}
+      catch(IOException ioe){ioe.printStackTrace();}
+
+   }//end method bombSpaces()*/
+   
+   /**
+   * A method for highlighting available moves.
+   * @param p The current location of the player.
+   */
+   public void highlightSpaces(Point p){
+      int xPos = (int)(p.getX());
+      int yPos = (int)(p.getY());
+      ArrayList<Lilypad> highlight = getAdjacent(xPos, yPos);
+      for(int i = 0; i < highlight.size(); i++)
+      {
+         if(highlight.get(i).isValid()){
+            highlight.get(i).setBorder(BorderFactory.createMatteBorder(1,1,1,1, Color.white));
+         }
+      }
+   }
+   
+   /**
+   * A method which unhighlights spaces for a move.
+   * @param p the old position of the player before his move.
+   */
+   public void unhighlightSpaces(Point p){
+      int xPos = (int)(p.getX());
+      int yPos = (int)(p.getY());
+      ArrayList<Lilypad> unhighlight = getAdjacent(xPos, yPos);
+      for(int i = 0; i < unhighlight.size(); i++){
+         unhighlight.get(i).setBorder(null);
+      }
+   }
+   
+   /**
+   * A method which determines the life status of a player.
+   * @param p the location of the player being checked for life.
+   */
+   public boolean lifeStatus(Point p){
+      System.out.println("We have entered the lifeStatus method.");
+      int posX = (int) p.getX();
+      int posY = (int) p.getY();
+      int availableSpace = 0;
+      boolean alive;
+      ArrayList<Lilypad> surrounding = getAdjacent(posX, posY);
+      /*Removes the space that the frog is sitting on. Check getAdjacent method
+      for the fifth index of the array list generated.*/
+      surrounding.remove(5);
+      for(int i = 0; i < surrounding.size(); i++){
+         if(surrounding.get(i).isValid()){
+            availableSpace++;
+         }
+      }
+      if(availableSpace == 0){alive = false;}
+      else{alive = true;}
+      System.out.println("Available spaces: " + availableSpace);
+      return alive;
+   }
+   
+   /**
+   * A method which changes the turns.
+   */
+   public void changeTurn(){
+      //sets the turn of the player to false.
+      players.get(currentTurn).setTurn(false);
+      //checks life status of all players before switching turns.
+      for(int i = players.size()-1; i >= 0; i--){
+         System.out.println("Player #" + i + " check");
+         if(!(lifeStatus(players.get(i).getCurrentLocation()))){
+            death(i);
+            if(currentTurn < i){
+               currentTurn--;
+            }
+            if(currentTurn >= players.size()){
+               currentTurn = 0;
+            }
+         }
+      }
+      /*if(!lifeStatus(players.get(currentTurn).getCurrentLocation())){
+      death(currentTurn);}*/
+      //Increments the current turn so that it jumps to the next player.
+      currentTurn++;
+      if(currentTurn >= players.size()){
+         currentTurn = 0;
+      }//end if statement
+      players.get(currentTurn).setTurn(true);
+      highlightSpaces(players.get(currentTurn).getCurrentLocation());
+   }
+   
+   /**
+   * A method for killing off a player.
+   * @param playerNum the number of the player to be killed.
+   */
+   public void death(int playerNum){
+      if(players.size() > 1){
+         players.get(playerNum).setIsDead(true);
+         Point p = players.get(playerNum).getCurrentLocation();
+         int posX = (int) p.getX();
+         int posY = (int) p.getY();
+         lilypads[posX][posY].setEnabled(false);
+         players.remove(playerNum);
+         numPlayers--;
+      }
+      else{
+         JOptionPane.showMessageDialog(null, players.get(playerNum).getName() + " has won the game.");
+      }
+   }
+      
    public class CustomMouseListener implements MouseListener {
       public void mouseClicked(MouseEvent e) {
-         //left click moves the Player.
-         
-         if(currentTurn == 4){
-            currentTurn = 0;
-         }//end if statement
-               
-         players.get(currentTurn).setTurn(true);
-         if (e.getButton() == MouseEvent.BUTTON1 && players.get(currentTurn).getTurn()) { 
+      
+         //left click moves the Player.               
+         if (e.getButton() == MouseEvent.BUTTON1 && players.get(currentTurn).getTurn()) {
             int row = -1;
             int column = -1;
-               //Is there a better way to do this than going over the entire board?
-               //Yes, changed to a more efficient option.
+       
             try{
                row = ((Lilypad)e.getComponent()).getRow();
                column = ((Lilypad)e.getComponent()).getCol();
                Point thePad = new Point(row, column);
+               boolean check = checkMove(players.get(currentTurn).getCurrentLocation(), row, column);
                if(lilypads[row][column].isValid())
                {       
                   System.out.println("Row: " + row + " Col: " + column);
+                  
                   ArrayList<Point> playerPoints = new ArrayList<Point>();
-                  for(int i=0; i<4; i++){
+                  for(int i=0; i < numPlayers; i++){
                      Point thePos = players.get(i).getCurrentLocation();
                      playerPoints.add(thePos);
                   }
-                  boolean check = checkMove(players.get(currentTurn).getCurrentLocation(), row, column);
-                     //if the player is not dead and the pad doesn't already have a frog...
+                  
+                  //if the player is not dead and the pad doesn't already have a frog...
                   if(players.get(currentTurn).getIsDead() == false && !(playerPoints.contains(thePad)) && check==true){
                      System.out.println("Player " + (currentTurn+1) + "'s turn. ");
                      lilypads[row][column].setIcon(players.get(currentTurn).getIcon());
                            
-                           //Gets the position of the player before the move is made and sets the icon to the empty tile.
+                     //Gets the position of the player before the move is made and sets the icon to the empty tile.
                      Point oldPos = players.get(currentTurn).getCurrentLocation();
+                     unhighlightSpaces(oldPos);
                      int xCoor =(int) oldPos.getX();
                      int yCoor =(int) oldPos.getY();
                      lilypads[xCoor][yCoor].setIcon(emptyPad);
+<<<<<<< HEAD
                      
                      Point newPos = new Point(row, column);      
                      //check to see if move is valid or not
@@ -190,6 +346,23 @@ public class Pond extends JPanel{
                         players.get(currentTurn).setTurn(false);
                         currentTurn++;
                      }
+=======
+                           
+                     //Sets the position of the player to the new location.
+                     players.get(currentTurn).setCurrentLocation(new Point(row,column));
+                     try{
+                        File backgroundSound = new File("frog-move.au");
+                        AudioInputStream ais = AudioSystem.getAudioInputStream(backgroundSound);
+                        Clip clip = AudioSystem.getClip();
+                        clip.open(ais);
+                        clip.start();
+                     }
+                     catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
+                     catch(LineUnavailableException lue){lue.printStackTrace();}
+                     catch(IOException ioe){ioe.printStackTrace();}
+                     //ends the turn of the player and increments the class variable so it becomes the next player's turn.
+                     changeTurn();
+>>>>>>> master
                   }//end if statement 1b
                }//end if statement checking validity.
                else{
@@ -200,8 +373,7 @@ public class Pond extends JPanel{
             catch(ArrayIndexOutOfBoundsException aioobe){
                JOptionPane.showMessageDialog(lilypads[4][4], "Please choose a valid lilypad.");
             }//end catch block
-         
-         }//end outermost if statement.
+         }
          
          //Right click sinks a lilypad.
          else if (e.getButton() == MouseEvent.BUTTON3 && players.get(currentTurn).getTurn()){
@@ -213,7 +385,7 @@ public class Pond extends JPanel{
             if(lilypads[row][column].isValid()){       
                System.out.println("Row: " + row + " Col: " + column);
                ArrayList<Point> playerPoints = new ArrayList<Point>();
-               for(int i=0; i<4; i++){
+               for(int i=0; i < numPlayers; i++){
                   Point thePos = players.get(i).getCurrentLocation();
                   playerPoints.add(thePos);
                }
@@ -221,11 +393,29 @@ public class Pond extends JPanel{
                if(players.get(currentTurn).getIsDead() == false && !(playerPoints.contains(thePad))){
                   System.out.println("Player " + (currentTurn+1) + "'s turn. ");
                   //Sinks the lilypad.
-                  lilypads[row][column].setIcon(water);
-                  lilypads[row][column].setValid(false);
+                  //If a lilpad is a bomb, calls the bombSpaces method.
+                  /*if(lilypads[row][column].isBonus()){
+                     bombSpaces(row, column);
+                     unhighlightSpaces(players.get(currentTurn).getCurrentLocation());
+                  }
+                  else{*/
+                     lilypads[row][column].setIcon(water);
+                     lilypads[row][column].setValid(false);
+                     System.out.println("Lilypad at " + row + " " + column + " set as invalid.");
+                     unhighlightSpaces(players.get(currentTurn).getCurrentLocation());
+                     try{
+                        File splashSound = new File("splash_sound.au");
+                        AudioInputStream ais = AudioSystem.getAudioInputStream(splashSound);
+                        Clip clip = AudioSystem.getClip();
+                        clip.open(ais);
+                        clip.start();
+                     }
+                     catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
+                     catch(LineUnavailableException lue){lue.printStackTrace();}
+                     catch(IOException ioe){ioe.printStackTrace();}
+                  //}
                   //ends the turn of the player and increments the class variable so it becomes the next player's turn.
-                  players.get(currentTurn).setTurn(false);
-                  currentTurn++;
+                  changeTurn();
                }//end if
             }//end if
             else{
