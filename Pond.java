@@ -175,7 +175,7 @@ public class Pond extends JPanel{
    * @param x the row of the bomb lily pad.
    * @param y the column of the bomb lily pad.
    */
-   /*public void bombSpaces(int x, int y){
+   public void bombSpaces(int x, int y){
       ArrayList<Lilypad> explosion = getAdjacent(x,y);
       for(int i = 0; i < explosion.size(); i++)
       {
@@ -195,7 +195,7 @@ public class Pond extends JPanel{
       catch(LineUnavailableException lue){lue.printStackTrace();}
       catch(IOException ioe){ioe.printStackTrace();}
 
-   }//end method bombSpaces()*/
+   }//end method bombSpaces()
    
    /**
    * A method for highlighting available moves.
@@ -298,6 +298,23 @@ public class Pond extends JPanel{
          numPlayers--;
       }
    }
+   
+   /**
+   * A method which provides the sound effects for a Bompad game.
+   * @param fileName the name of the .au file containing the sound effect.
+   */
+   public void sound(String fileName){
+      try{
+         File soundFile = new File(fileName);
+         AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile);
+         Clip clip = AudioSystem.getClip();
+         clip.open(ais);
+         clip.start();
+      }
+      catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
+      catch(LineUnavailableException lue){lue.printStackTrace();}
+      catch(IOException ioe){ioe.printStackTrace();}
+   }//end method sound
       
    public class CustomMouseListener implements MouseListener {
       public void mouseClicked(MouseEvent e) {
@@ -336,16 +353,7 @@ public class Pond extends JPanel{
                            
                      //Sets the position of the player to the new location.
                      players.get(currentTurn).setCurrentLocation(new Point(row,column));
-                     try{
-                        File backgroundSound = new File("frog-move.au");
-                        AudioInputStream ais = AudioSystem.getAudioInputStream(backgroundSound);
-                        Clip clip = AudioSystem.getClip();
-                        clip.open(ais);
-                        clip.start();
-                     }
-                     catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
-                     catch(LineUnavailableException lue){lue.printStackTrace();}
-                     catch(IOException ioe){ioe.printStackTrace();}
+                     sound("frog-move.au");
                      //ends the turn of the player and increments the class variable so it becomes the next player's turn.
                      changeTurn();
                   }//end if statement 1b
@@ -378,26 +386,16 @@ public class Pond extends JPanel{
                   System.out.println("Player " + (currentTurn+1) + "'s turn. ");
                   //Sinks the lilypad.
                   //If a lilpad is a bomb, calls the bombSpaces method.
-                  /*if(lilypads[row][column].isBonus()){
+                  if(lilypads[row][column].isBonus()){
                      bombSpaces(row, column);
                      unhighlightSpaces(players.get(currentTurn).getCurrentLocation());
                   }
-                  else{*/
+                  else{
                      lilypads[row][column].setIcon(water);
                      lilypads[row][column].setValid(false);
                      System.out.println("Lilypad at " + row + " " + column + " set as invalid.");
                      unhighlightSpaces(players.get(currentTurn).getCurrentLocation());
-                     try{
-                        File splashSound = new File("splash_sound.au");
-                        AudioInputStream ais = AudioSystem.getAudioInputStream(splashSound);
-                        Clip clip = AudioSystem.getClip();
-                        clip.open(ais);
-                        clip.start();
-                     }
-                     catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
-                     catch(LineUnavailableException lue){lue.printStackTrace();}
-                     catch(IOException ioe){ioe.printStackTrace();}
-                  //}
+                     sound("splash_sound.au");                  }
                   //ends the turn of the player and increments the class variable so it becomes the next player's turn.
                   changeTurn();
                }//end if
