@@ -13,6 +13,9 @@ public class Server{
    //an ArrayList containing all of the ObjectOutputStreams associated with all of the clients.
    ArrayList<ObjectOutputStream> outputs = new ArrayList<ObjectOutputStream>();
    
+   public static void main(String [] args){
+      new Server();
+   }
    /**
    * Constructs a Server for BomPad.
    */

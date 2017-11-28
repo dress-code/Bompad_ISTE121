@@ -110,48 +110,6 @@ public class Pond extends JPanel{
    }//end constructor
    
    /**
-   * A method which checks the validity of a player's move.
-   * @param plocal The current location of the player.
-   */
-   public boolean checkMove(Point plocal, int row, int col){
-      boolean isGood=false;
-      //north
-      if(row==(int)(plocal.getX()-1) && col==(int)(plocal.getY())){
-         isGood=true;
-      }
-      //northeast
-      else if(row==(int)(plocal.getX()-1) && col==(int)(plocal.getY()+1)){
-         isGood=true;
-      }
-      //east
-      else if(row==(int)(plocal.getX()) && col==(int)(plocal.getY()+1)){
-         isGood=true;
-      }
-      //southeast
-      else if(row==(int)(plocal.getX()+1) && col==(int)(plocal.getY()+1)){
-         isGood=true;
-      }
-      //south
-      else if(row==(int)(plocal.getX()+1) && col==(int)(plocal.getY())){
-         isGood=true;
-      }
-      //southwest
-      else if(row==(int)(plocal.getX()+1) && col==(int)(plocal.getY()-1)){
-         isGood=true;
-      }
-      //west
-      else if(row==(int)(plocal.getX()) && col==(int)(plocal.getY()-1)){
-         isGood=true;
-      }
-      //northwest
-      else if(row==(int)(plocal.getX()-1) && col==(int)(plocal.getY()-1)){
-         isGood=true;
-      }
-     
-      return isGood;
-   }
-   
-   /**
    * A method which returns the adjacent spaces to a location in an arraylist.
    * @param x The x coordinate of a point (player location)
    * @param y The y coordinate of a point (player location)
@@ -330,7 +288,9 @@ public class Pond extends JPanel{
                row = ((Lilypad)e.getComponent()).getRow();
                column = ((Lilypad)e.getComponent()).getCol();
                Point thePad = new Point(row, column);
-               boolean check = checkMove(players.get(currentTurn).getCurrentLocation(), row, column);
+               int playerX = (int)players.get(currentTurn).getCurrentLocation().getX();
+               int playerY = (int)players.get(currentTurn).getCurrentLocation().getY();
+               ArrayList<Lilypad> surrounding = getAdjacent(playerX, playerY);
                if(lilypads[row][column].isValid())
                {       
                   System.out.println("Row: " + row + " Col: " + column);
@@ -342,7 +302,7 @@ public class Pond extends JPanel{
                   }
                   
                   //if the player is not dead and the pad doesn't already have a frog...
-                  if(players.get(currentTurn).getIsDead() == false && !(playerPoints.contains(thePad)) && check==true){
+                  if(players.get(currentTurn).getIsDead() == false && !(playerPoints.contains(thePad)) && surrounding.indexOf((Lilypad)e.getComponent())!=-1){
                      System.out.println("Player " + (currentTurn+1) + "'s turn. ");
                      lilypads[row][column].setIcon(players.get(currentTurn).getIcon());
                            
