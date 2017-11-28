@@ -1,106 +1,168 @@
+import java.util.*;
 import java.io.*;
 import java.net.*;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
-/**
-* The server for BomPad. 
-* @author Team 2
-* @version 11/9/2017
-*/
-public class Server{
+/*
+ * The chat client thread. This client thread opens the input and the output
+ * streams for a particular client, ask the client's name, informs all the
+ * clients connected to the server about the fact that a new client has joined
+ * the chat room, and as long as it receive data, echos that data back to all
+ * other clients. The thread broadcast the incoming messages to all clients and
+ * routes the private message to the particular client. When a client leaves the
+ * chat room this thread informs also all the clients about that and terminates.
+ */
+public class Server {
 
-   //an ArrayList containing all of the ObjectOutputStreams associated with all of the clients.
-   ArrayList<ObjectOutputStream> outputs = new ArrayList<ObjectOutputStream>();
+   // The server socket.
+   private static ServerSocket serverSocket = null;
+   // The client socket.
+   private static Socket clientSocket = null;
+
+   // This chat server can accept up to maxClientsCount clients' connections.
+   private static final int maxClientsCount = 10;
+   private static final clientThread[] threads = new clientThread[maxClientsCount];
+
+   public static void main(String args[]) {
    
-   /**
-   * Constructs a Server for BomPad.
-   */
-   public Server(){
-   
-      try{
-         ServerSocket ss = new ServerSocket(16789);
-         Socket cs = null;
-         
-         while(true){
-            System.out.println("Waiting for a player to connect...");
-            cs = ss.accept();
-            System.out.println("Have a player: " + cs);
-            
-            ThreadedServer ts = new ThreadedServer( cs );
-            ts.start();
-
-         }//end while loop
-      }//end try
-      
-      catch( BindException be ){
-         System.out.println("Server already running.");
+      // The default port number.
+      int portNumber = 2222;
+      if (args.length < 1) {
+         System.out.println("Usage: java ChatServer <portNumber>\n"
+              + "Now using port number=" + portNumber);
+      } else {
+         portNumber = Integer.valueOf(args[0]).intValue();
       }
-      
-      catch( IOException ioe ){
-         ioe.printStackTrace();
-      } // end catch blocks
-
-   }//end constructor 
    
-   class ThreadedServer extends Thread {
+      /*
+       * Open a server socket on the portNumber (default 2222). Note that we can
+       * not choose a port less than 1023 if we are not privileged users (root).
+       */
+      try {
+         serverSocket = new ServerSocket(portNumber);
+      } catch (IOException e) {
+         System.out.println(e);
+      }
    
-      private Socket cs = null;
-      
-      /**
-      * Constuctor for a ThreadedServer thread.
-      * @param clientSocket The client socket being connected.
-      */
-      public ThreadedServer( Socket clientSocket ){
-         cs = clientSocket;
-         
-         try{
-            OutputStream out = cs.getOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(out);
-            outputs.add(oos);
-         }
-         catch( IOException ioe ){
-            ioe.printStackTrace();
-         } // end out try/catch
-      }//end ThreadedServer constructor.
-      
-      /**
-      * The run method for the ThreadedServer class listens for input from the client.
-      */
-      @Override
-      public void run(){
-                  
-            try{
-               InputStream in = cs.getInputStream();
-               ObjectInputStream oins = new ObjectInputStream(in);
-            
-               while ( oins.available() > 0 ){
-                  Object unidentifiedObject = oins.readObject();
-                  
-                  //How do we determine if what was received was a String or a Player?
-                  
-                  //Writes objects back out to all of the clients.
-                  for(int i = 0; i < outputs.size(); i++){
-                     outputs.get(i).writeObject(unidentifiedObject);
-                     outputs.get(i).flush();
-                  }//end for loop writing objects out to all clients.
-               }//end while loop listening for input.
-               
-               //Close everything with all of the client connections.
-               for(int i = 0; i < outputs.size(); i++){
-                  outputs.get(i).close();
-               }//end for loop closing all of the output streams.
-               oins.close();
-               cs.close();
+      /*
+       * Create a client socket for each connection and pass it to a new client
+       * thread.
+       */
+      while (true) {
+         try {
+            clientSocket = serverSocket.accept();
+            int i = 0;
+            for (i = 0; i < maxClientsCount; i++) {
+               if (threads[i] == null) {
+                  (threads[i] = new clientThread(clientSocket, threads)).start();
+                  break;
+               }
             }
-            catch(ClassNotFoundException cnfe){
-               cnfe.printStackTrace();
-            }//end inner try/catch 
-            catch(IOException ioe){
-               ioe.printStackTrace();
-            }//end IOE catch block
+            if (i == maxClientsCount) {
+               PrintStream os = new PrintStream(clientSocket.getOutputStream());
+               os.println("Server too busy. Try later.");
+               os.close();
+               clientSocket.close();
+            }
+         } catch (IOException e) {
+            System.out.println(e);
+         }
+      }
+   }
+}
 
-      }//end run method.
 
-   }//end class ThreadedServer
-}//end class
+class clientThread extends Thread {
+
+   private String clientName = null;
+   private DataInputStream is = null;
+   private PrintStream os = null;
+   private Socket clientSocket = null;
+   private final clientThread[] threads;
+   private int maxClientsCount;
+
+   public clientThread(Socket clientSocket, clientThread[] threads) {
+      this.clientSocket = clientSocket;
+      this.threads = threads;
+      maxClientsCount = threads.length;
+   }
+
+   public void run() {
+      int maxClientsCount = this.maxClientsCount;
+      clientThread[] threads = this.threads;
+   
+      try {
+         /*
+          * Create input and output streams for this client.
+          */
+         is = new DataInputStream(clientSocket.getInputStream());
+         os = new PrintStream(clientSocket.getOutputStream());
+         String name;
+         
+            name = is.readLine().trim();
+           
+         
+      
+         /* Welcome the new the client. */
+         os.println("Welcome " + name
+              + " to our chat room.");
+         synchronized (this) {
+            for (int i = 0; i < maxClientsCount; i++) {
+               if (threads[i] != null && threads[i] == this) {
+                  clientName = "@" + name;
+                  break;
+               }
+            }
+            for (int i = 0; i < maxClientsCount; i++) {
+               if (threads[i] != null && threads[i] != this) {
+                  threads[i].os.println("*** A new user " + name
+                       + " entered the chat room !!! ***");
+               }
+            }
+         }
+         /* Start the conversation. */
+         while (true) {
+            String line = is.readLine();
+            if (line.startsWith("/quit")) {
+               break;
+            }
+               /* The message is public, broadcast it to all other clients. */
+               synchronized (this) {
+                  for (int i = 0; i < maxClientsCount; i++) {
+                     if (threads[i] != null && threads[i].clientName != null) {
+                        threads[i].os.println("<" + name + "> " + line);
+                     }
+                  }
+               }
+         }
+         synchronized (this) {
+            for (int i = 0; i < maxClientsCount; i++) {
+               if (threads[i] != null && threads[i] != this
+                    && threads[i].clientName != null) {
+                  threads[i].os.println("*** The user " + name
+                       + " is leaving the chat room !!! ***");
+               }
+            }
+         }
+         os.println("*** Bye " + name + " ***");
+      
+         /*
+          * Clean up. Set the current thread variable to null so that a new client
+          * could be accepted by the server.
+          */
+         synchronized (this) {
+            for (int i = 0; i < maxClientsCount; i++) {
+               if (threads[i] == this) {
+                  threads[i] = null;
+               }
+            }
+         }
+         /*
+          * Close the output stream, close the input stream, close the socket.
+          */
+         is.close();
+         os.close();
+         clientSocket.close();
+      } catch (IOException e) {
+      }
+   }
+}
