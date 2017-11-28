@@ -153,6 +153,8 @@ public class Pond extends JPanel{
    
    /**
    * A method which returns the adjacent spaces to a location in an arraylist.
+   * @param x The x coordinate of a point (player location)
+   * @param y The y coordinate of a point (player location)
    */
    public ArrayList<Lilypad> getAdjacent(int x, int y){
       int xPos = x;
