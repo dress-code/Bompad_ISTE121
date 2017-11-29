@@ -258,6 +258,34 @@ public class Pond extends JPanel{
    }
    
    /**
+   *A method which moves a player
+   */
+   public void move(Player p){
+      Point playerPoint = p.getCurrentLocation();
+      int row = (int)playerPoint.getX();
+      int col = (int)playerPoint.getY();
+      lilypads[row][col].setIcon(p.getIcon());
+      lilypads[row][col].setValid(false);
+   }
+   
+   /**
+   *A method which updates the board
+   */
+   public void update(){
+      for(int i=0; i<players.size(); i++){
+         move(players.get(i));
+      }
+      for(int i=0; i<lilypads.length; i++){
+         for(int j=0; j<lilypads.length; j++){
+            //iterate through lilypads
+            if(lilypads[i][j].isValid()==true){
+               lilypads[i][j].setIcon(emptyPad);
+            }
+         }
+      }
+   }
+   
+   /**
    * A method which provides the sound effects for a Bompad game.
    * @param fileName the name of the .au file containing the sound effect.
    */

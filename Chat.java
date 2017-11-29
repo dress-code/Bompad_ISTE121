@@ -14,8 +14,8 @@ public class Chat extends JPanel implements ActionListener {
    private JTextArea jtaChat;
    private JTextField jtfMsg; 
    private static Socket clientSocket = null;
-   private static PrintStream os = null;
-   private static DataInputStream is = null;
+   private static ObjectOutputStream os = null;
+   private static ObjectInputStream is = null;
    private static BufferedReader inputLine = null;
    private static boolean closed = false;
    
@@ -52,8 +52,8 @@ public class Chat extends JPanel implements ActionListener {
       try {
          clientSocket = new Socket(host, portNumber);
          inputLine = new BufferedReader(new InputStreamReader(System.in));
-         os = new PrintStream(clientSocket.getOutputStream());
-         is = new DataInputStream(clientSocket.getInputStream());
+         ObjectOutputStream os = new ObjectOutputStream(clientSocket.getOutputStream());
+         ObjectInputStream is = new ObjectInputStream(clientSocket.getInputStream());
       } catch (UnknownHostException uke) {
          System.err.println("Don't know about host " + host);
       } catch (IOException ioe) {
@@ -91,7 +91,7 @@ public class Chat extends JPanel implements ActionListener {
       */
          String responseLine;
          try {
-            while ((responseLine = is.readLine()) != null) {
+            while ((responseLine = (String)is.readObject()) != null) {
                jtaChat.append(responseLine + '\n');
                if (responseLine.indexOf("*** Bye") != -1)
                   break;
