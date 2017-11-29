@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.sound.sampled.*;
 import java.io.*;
 import java.net.*;
+import java.text.SimpleDateFormat;
 
 /**
 <<<<<<< HEAD
@@ -31,6 +32,7 @@ public class Bompad extends JFrame{
    private String outgoing;
    private String ipAddress;
    private String playerName;
+   private String timeStamp;
    
    //Main method calls the constructor for a new BomPad game.
    public static void main(String [] args)
@@ -118,7 +120,8 @@ public class Bompad extends JFrame{
       jtaChat.append("You have entered the chat.\n");
       jbSend.addActionListener(new ActionListener(){
          public void actionPerformed(ActionEvent ae){
-            outgoing = playerName + ": " + jtfMsg.getText();
+            timeStamp = new SimpleDateFormat("hh.mm.ss").format(new java.util.Date());
+            outgoing = timeStamp + " " + playerName + ": " + jtfMsg.getText();
             jtfMsg.setText("");
             System.out.println(outgoing);
             cc.write(outgoing);
@@ -189,7 +192,6 @@ public class Bompad extends JFrame{
                catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
                catch(LineUnavailableException lue){lue.printStackTrace();}
                catch(IOException ioe){ioe.printStackTrace();}
-         
                jtaChat.append(msg + "\n");
             }
          }
