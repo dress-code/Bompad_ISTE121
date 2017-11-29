@@ -266,7 +266,7 @@ public class Pond extends JPanel{
       int col = (int)playerPoint.getY();
       lilypads[row][col].setIcon(p.getIcon());
       lilypads[row][col].setValid(false);
-   }
+   }//end move
    
    /**
    *A method which updates the board
@@ -283,7 +283,7 @@ public class Pond extends JPanel{
             }
          }
       }
-   }
+   }//end update
    
    /**
    * A method which provides the sound effects for a Bompad game.
