@@ -235,36 +235,36 @@ public class Bompad extends JFrame{
    */
    class Chat extends JPanel implements ActionListener {
    
-   /**
-   * Constructor for a chat object.
-   */
-   public Chat()
-   {
-      this.setLayout(new GridLayout(2,1));
-      
-      //displays all the messages
-      jtaChat = new JTextArea(10,30);
-      JScrollPane scrollPane = new JScrollPane(jtaChat);
-      scrollPane.setViewportView(jtaChat);
-      jtaChat.setEditable(false);
-      jtaChat.setLineWrap(true);
-
-      
-      JPanel jpSend = new JPanel(new FlowLayout());
-      jtfMsg = new JTextField(10);
-      jpSend.add(jtfMsg);
-      jbSend = new JButton("Send");
-      jpSend.add(jbSend);
-      
-      this.add(scrollPane);
-      this.add(jpSend);
-      this.setSize(200,100);
-      
+      /**
+      * Constructor for a chat object.
+      */
+      public Chat()
+      {
+         this.setLayout(new GridLayout(2,1));
+         
+         //displays all the messages
+         jtaChat = new JTextArea(10,30);
+         JScrollPane scrollPane = new JScrollPane(jtaChat);
+         scrollPane.setViewportView(jtaChat);
+         jtaChat.setEditable(false);
+         jtaChat.setLineWrap(true);
+   
+         
+         JPanel jpSend = new JPanel(new FlowLayout());
+         jtfMsg = new JTextField(10);
+         jpSend.add(jtfMsg);
+         jbSend = new JButton("Send");
+         jpSend.add(jbSend);
+         
+         this.add(scrollPane);
+         this.add(jpSend);
+         this.setSize(200,100);
+         
       }//end constructor for the Chat.
       
-      //just to get the compiler to shut up.
+      //just to get the compiler to be quiet.
       public void actionPerformed(ActionEvent ae){};
       
-}//end class Chat.
+   }//end class Chat.
 
 }//end Bompad class

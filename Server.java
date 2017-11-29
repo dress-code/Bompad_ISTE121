@@ -9,7 +9,8 @@ import java.util.*;
 * @version 11/9/2017
 */
 public class Server{
-
+   //Keeps track of number of players/turns
+   int turnTracker = 0;
    //an ArrayList containing all of the ObjectOutputStreams associated with all of the clients.
    ArrayList<ObjectOutputStream> outputs = new ArrayList<ObjectOutputStream>();
    
@@ -50,7 +51,7 @@ public class Server{
    * Inner classs creates a Thread for the Threaded server.
    */
    class ThreadedServer extends Thread {
-   
+      private int turn;
       private Socket cs = null;
       
       /**
@@ -59,6 +60,9 @@ public class Server{
       */
       public ThreadedServer( Socket clientSocket ){
          cs = clientSocket;
+         //Sets the turn of this thread.
+         turnTracker++;
+         turn = turnTracker;
          
          try{
             OutputStream out = cs.getOutputStream();
@@ -75,28 +79,38 @@ public class Server{
       */
       @Override
       public void run(){
-               System.out.println("entered run");   
+            System.out.println("entered run");   
             try{
                InputStream in = cs.getInputStream();
                ObjectInputStream oins = new ObjectInputStream(in);
             
                do{
-                  System.out.println("entered do");
                   Object unidentifiedObject = (String)oins.readObject();
-                  System.out.println("hi");
-                  System.out.println(unidentifiedObject);
-                  //How do we determine if what was received was a String or a Player?
+                  //Checks if the received object is a String or an ArrayList.
+                  if(unidentifiedObject instanceof String){
+                     //If it is, Server writes objects back out to all of the clients without question.
+                     for(int i = 0; i < outputs.size(); i++){
+                        outputs.get(i).writeObject(unidentifiedObject);
+                        outputs.get(i).flush();
+                     }
+                  }
                   
-                  //Writes objects back out to all of the clients.
-                  for(int i = 0; i < outputs.size(); i++){
-                     outputs.get(i).writeObject(unidentifiedObject);
-                     outputs.get(i).flush();
-                  }//end for loop writing objects out to all clients.
+                  //Checks if the received object is an arraylist AND only does something if it is the proper turn...
+                  if(unidentifiedObject instanceof ArrayList && turnTracker == turn){
+                     //If it is, write the ArrayList back out to all of the clients.
+                     for(int i = 0; i < outputs.size(); i++){
+                        outputs.get(i).writeObject(unidentifiedObject);
+                        outputs.get(i).flush();
+                        turnTracker++;
+                     }
+                  }
                }while ( oins!=null);//end while loop listening for input.
+               
                //Close everything with all of the client connections.
                for(int i = 0; i < outputs.size(); i++){
                   outputs.get(i).close();
-               }//end for loop closing all of the output streams.
+               }
+               
                oins.close();
                cs.close();
             }
