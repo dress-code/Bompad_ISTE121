@@ -30,6 +30,7 @@ public class Bompad extends JFrame{
    private JTextField jtfMsg; 
    private String outgoing;
    private String ipAddress;
+   private String playerName;
    
    //Main method calls the constructor for a new BomPad game.
    public static void main(String [] args)
@@ -51,6 +52,7 @@ public class Bompad extends JFrame{
    public Bompad()
    {
       ipAddress = JOptionPane.showInputDialog(null, "What is the IP address of your server?");
+      playerName = JOptionPane.showInputDialog(null, "What is your name?");
       //MENUS
       JMenuBar jmb = new JMenuBar();
       setJMenuBar(jmb);
@@ -116,7 +118,8 @@ public class Bompad extends JFrame{
       jtaChat.append("You have entered the chat.\n");
       jbSend.addActionListener(new ActionListener(){
          public void actionPerformed(ActionEvent ae){
-            outgoing = jtfMsg.getText();
+            outgoing = playerName + ": " + jtfMsg.getText();
+            jtfMsg.setText("");
             System.out.println(outgoing);
             cc.write(outgoing);
          }
