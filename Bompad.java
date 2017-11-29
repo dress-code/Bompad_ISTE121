@@ -3,6 +3,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import sun.audio.*;
 import java.io.*;
+import java.net.*;
 
 /**
 <<<<<<< HEAD
@@ -23,6 +24,12 @@ import java.io.*;
 */
 
 public class Bompad extends JFrame{
+
+   private JButton jbSend;
+   private JTextArea jtaChat;
+   private JTextField jtfMsg; 
+   private String outgoing;
+   private String ipAddress;
    
    //Main method calls the constructor for a new BomPad game.
    public static void main(String [] args)
@@ -43,6 +50,7 @@ public class Bompad extends JFrame{
    */
    public Bompad()
    {
+      ipAddress = JOptionPane.showInputDialog(null, "What is the IP address of your server?");
       //MENUS
       JMenuBar jmb = new JMenuBar();
       setJMenuBar(jmb);
@@ -70,7 +78,7 @@ public class Bompad extends JFrame{
          public void actionPerformed(ActionEvent ae)
          {
             //details on version, authors
-            //JOptionPane.showMessageDialog(null, );
+            JOptionPane.showMessageDialog(null, "Bompad was created by Anna Jacobsen, Doug Kaelin, Zach Georges, & Alexa Lewis.");
          }
       });
       
@@ -121,25 +129,61 @@ public class Bompad extends JFrame{
    
    class ClientConnection extends Thread
    {
-      private Player player;
-      //private Socket s;
+      private Socket s;
+      private OutputStream os;
+      private InputStream is;
+      private ObjectOutputStream oos;
+      private ObjectInputStream ois;
       
       /**
       * ClientConnection constructor.
       */
-      public ClientConnection(Player p)
+      public ClientConnection()
       {
-         player = p;
-         //code for the client connection constructor
+         try{
+            s = new Socket(ipAddress, 16789);
+            os = s.getOutputStream();
+            is = s.getInputStream();
+            oos = new ObjectOutputStream(os);
+            ois = new ObjectInputStream(is);
+         }
+         catch(UnknownHostException uhe){
+            uhe.printStackTrace();
+         }
+         catch(IOException ioe){
+            ioe.printStackTrace();
+         }
       }
       
       /**
       * Run method for ClientConnection objects.
       */
       @Override
-      public void run()
-      {
+      public void run(){
          //code for the run method.
+         
+         jbSend.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae){
+               outgoing = jtfMsg.getText();
+               try{
+               oos.writeObject(outgoing);
+               oos.flush();
+               }
+               catch(IOException ioe){
+                  ioe.printStackTrace();
+               }
+            }
+         }); 
+
+         try{
+         while(ois.available() > 0){
+            System.out.println("We have received something.");
+            String msg = (String) ois.readObject();
+            System.out.println(msg);
+         }
+         }
+         catch(IOException ioe){ioe.printStackTrace();}
+         catch(ClassNotFoundException cnfe){cnfe.printStackTrace();}
       }
    }
    
@@ -147,10 +191,6 @@ public class Bompad extends JFrame{
    * Inner class Chat creates the chat and has methods for updating.
    */
    class Chat extends JPanel implements ActionListener {
-   
-   private JTextArea jtaChat;
-   private JTextField jtfMsg; 
-   private String outgoing;
    
    /**
    * Constructor for a chat object.
@@ -170,13 +210,7 @@ public class Bompad extends JFrame{
       JPanel jpSend = new JPanel(new FlowLayout());
       jtfMsg = new JTextField(10);
       jpSend.add(jtfMsg);
-      JButton jbSend = new JButton("Send");
-      jbSend.addActionListener(new ActionListener(){
-         public void actionPerformed(ActionEvent ae){
-            outgoing = jtfMsg.getText();
-         }
-      }); 
-      
+      jbSend = new JButton("Send");
       jpSend.add(jbSend);
       
       this.add(scrollPane);
