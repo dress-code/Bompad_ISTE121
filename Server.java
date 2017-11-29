@@ -46,6 +46,9 @@ public class Server{
 
    }//end constructor 
    
+   /**
+   * Inner classs creates a Thread for the Threaded server.
+   */
    class ThreadedServer extends Thread {
    
       private Socket cs = null;
