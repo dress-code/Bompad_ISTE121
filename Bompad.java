@@ -111,6 +111,8 @@ public class Bompad extends JFrame{
       //instantiate outer classes
       Pond pond = new Pond();
       Chat chat = new Chat();
+      ClientConnection cc = new ClientConnection();
+      cc.start();
       Sound sound = new Sound();
       sound.start();
       
