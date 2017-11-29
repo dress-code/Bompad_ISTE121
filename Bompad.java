@@ -174,26 +174,7 @@ public class Bompad extends JFrame{
       @Override
       public void run(){
          //code for the run method.
-         
-         jbSend.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent ae){
-               outgoing = jtfMsg.getText();
-               try{
-               oos.writeObject(outgoing);
-               oos.flush();
-               }
-               catch(IOException ioe){
-                  ioe.printStackTrace();
-               }
-            }
-         }); 
-
          try{
-         while(ois.available() > 0){
-            System.out.println("We have received something.");
-            String msg = (String) ois.readObject();
-            System.out.println(msg);
-         }
             while(ois != null){
                System.out.println("We have received something.");
                String msg = (String) ois.readObject();
