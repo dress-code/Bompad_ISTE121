@@ -24,6 +24,7 @@ public class Server {
 
    public static void main(String args[]) {
    
+<<<<<<< HEAD
       // The default port number.
       int portNumber = 2222;
       if (args.length < 1) {
@@ -32,6 +33,15 @@ public class Server {
       } else {
          portNumber = Integer.valueOf(args[0]).intValue();
       }
+=======
+   public static void main(String [] args){
+      new Server();
+   }
+   /**
+   * Constructs a Server for BomPad.
+   */
+   public Server(){
+>>>>>>> master
    
       /*
        * Open a server socket on the portNumber (default 2222). Note that we can
@@ -43,6 +53,7 @@ public class Server {
          System.out.println(e);
       }
    
+<<<<<<< HEAD
       /*
        * Create a client socket for each connection and pass it to a new client
        * thread.
@@ -89,6 +100,12 @@ class clientThread extends Thread {
    public void run() {
       int maxClientsCount = this.maxClientsCount;
       clientThread[] threads = this.threads;
+=======
+   /**
+   * Inner classs creates a Thread for the Threaded server.
+   */
+   class ThreadedServer extends Thread {
+>>>>>>> master
    
       try {
          /*

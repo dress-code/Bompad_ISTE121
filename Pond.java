@@ -111,6 +111,8 @@ public class Pond extends JPanel{
    
    /**
    * A method which returns the adjacent spaces to a location in an arraylist.
+   * @param x The x coordinate of a point (player location)
+   * @param y The y coordinate of a point (player location)
    */
    public ArrayList<Lilypad> getAdjacent(int x, int y){
       int xPos = x;
@@ -142,6 +144,7 @@ public class Pond extends JPanel{
             explosion.get(i).setIcon(water);
          }
       }
+<<<<<<< HEAD
       try{
          File explosionSound = new File("sounds/explosion.au");
          AudioInputStream ais = AudioSystem.getAudioInputStream(explosionSound);
@@ -152,6 +155,9 @@ public class Pond extends JPanel{
       catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
       catch(LineUnavailableException lue){lue.printStackTrace();}
       catch(IOException ioe){ioe.printStackTrace();}
+=======
+      sound("explosion.au");
+>>>>>>> master
 
    }//end method bombSpaces()
    

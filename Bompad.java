@@ -122,4 +122,52 @@ public class Bompad extends JFrame{
          //code for the run method.
       }
    }
+   
+   /**
+   * Inner class Chat creates the chat and has methods for updating.
+   */
+   class Chat extends JPanel implements ActionListener {
+   
+   private JTextArea jtaChat;
+   private JTextField jtfMsg; 
+   private String outgoing;
+   
+   /**
+   * Constructor for a chat object.
+   */
+   public Chat()
+   {
+      this.setLayout(new GridLayout(2,1));
+      
+      //displays all the messages
+      jtaChat = new JTextArea(10,0);
+      JScrollPane scrollPane = new JScrollPane(jtaChat);
+      scrollPane.setViewportView(jtaChat);
+      jtaChat.setEditable(false);
+      jtaChat.setLineWrap(true);
+
+      
+      JPanel jpSend = new JPanel(new FlowLayout());
+      jtfMsg = new JTextField(10);
+      jpSend.add(jtfMsg);
+      JButton jbSend = new JButton("Send");
+      jbSend.addActionListener(new ActionListener(){
+         public void actionPerformed(ActionEvent ae){
+            outgoing = jtfMsg.getText();
+         }
+      }); 
+      
+      jpSend.add(jbSend);
+      
+      this.add(scrollPane);
+      this.add(jpSend);
+      this.setSize(200,100);
+      
+      }//end constructor for the Chat.
+      
+      //just to get the compiler to shut up.
+      public void actionPerformed(ActionEvent ae){};
+      
+}//end class Chat.
+
 }//end Bompad class
