@@ -234,7 +234,7 @@ public class Bompad extends JFrame{
       this.setLayout(new GridLayout(2,1));
       
       //displays all the messages
-      jtaChat = new JTextArea(10,0);
+      jtaChat = new JTextArea(10,30);
       JScrollPane scrollPane = new JScrollPane(jtaChat);
       scrollPane.setViewportView(jtaChat);
       jtaChat.setEditable(false);
