@@ -144,7 +144,6 @@ public class Pond extends JPanel{
             explosion.get(i).setIcon(water);
          }
       }
-<<<<<<< HEAD
       try{
          File explosionSound = new File("sounds/explosion.au");
          AudioInputStream ais = AudioSystem.getAudioInputStream(explosionSound);
@@ -155,9 +154,6 @@ public class Pond extends JPanel{
       catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
       catch(LineUnavailableException lue){lue.printStackTrace();}
       catch(IOException ioe){ioe.printStackTrace();}
-=======
-      sound("explosion.au");
->>>>>>> master
 
    }//end method bombSpaces()
    

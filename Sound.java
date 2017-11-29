@@ -15,11 +15,8 @@ public class Sound extends Thread{
    */
    public Sound(){
       try{
-<<<<<<< HEAD
-         File backgroundSound = new File("sounds/frog_background.au");
-=======
-         File backgroundSound = new File("GroovyBeat.wav");
->>>>>>> master
+
+         File backgroundSound = new File("sounds/GroovyBeat.wav");
          ais = AudioSystem.getAudioInputStream(backgroundSound);
       }
       catch(FileNotFoundException fnfe){

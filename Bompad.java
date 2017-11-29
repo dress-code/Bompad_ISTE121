@@ -166,7 +166,8 @@ public class Bompad extends JFrame{
       }//end constructor for the Chat.
       
       //just to get the compiler to shut up.
-      public void actionPerformed(ActionEvent ae){};
+      public void actionPerforme
+      d(ActionEvent ae){};
       
 }//end class Chat.
 
