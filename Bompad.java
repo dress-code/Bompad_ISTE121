@@ -5,6 +5,7 @@ import javax.sound.sampled.*;
 import java.io.*;
 import java.net.*;
 import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
 <<<<<<< HEAD
@@ -33,6 +34,7 @@ public class Bompad extends JFrame{
    private String ipAddress;
    private String playerName;
    private String timeStamp;
+   private ArrayList<Player> players;
    
    //Main method calls the constructor for a new BomPad game.
    public static void main(String [] args)
@@ -180,24 +182,37 @@ public class Bompad extends JFrame{
          try{
             while(ois != null){
                System.out.println("We have received something.");
-               String msg = (String) ois.readObject();
-               System.out.println(msg);
-               try{
-                  File msgSound = new File("msgSound.au");
-                  AudioInputStream ais = AudioSystem.getAudioInputStream(msgSound);
-                  Clip clip = AudioSystem.getClip();
-                  clip.open(ais);
-                  clip.start();
-               }
-               catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
-               catch(LineUnavailableException lue){lue.printStackTrace();}
-               catch(IOException ioe){ioe.printStackTrace();}
-               jtaChat.append(msg + "\n");
-            }
-         }
+               //Reads the object in, assigning it to a generic Object
+               Object object = ois.readObject();
+               //If statement checks if the object received is a String or an ArrayList.
+               if(object instanceof String){
+                  String msg = (String) object;
+                  System.out.println(msg);
+                  jtaChat.append(msg + "\n");
+                  try{
+                     File msgSound = new File("msgSound.au");
+                     AudioInputStream ais = AudioSystem.getAudioInputStream(msgSound);
+                     Clip clip = AudioSystem.getClip();
+                     clip.open(ais);
+                     clip.start();
+                  }
+                  catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
+                  catch(LineUnavailableException lue){lue.printStackTrace();}
+                  catch(IOException ioe){ioe.printStackTrace();}
+               }//end if statement using instanceof to determine object type
+               
+               /*if the object is an instance of an arraylist, set the class variable
+               ArrayList<Player> to the received ArrayList.*/
+               if(object instanceof ArrayList){
+                  players = (ArrayList<Player>) object;
+                  System.out.println(players);
+               }//end if statement using instanceof to determine object type.
+               
+            }//end while loop
+         }//end try block
          catch(IOException ioe){ioe.printStackTrace();}
          catch(ClassNotFoundException cnfe){cnfe.printStackTrace();}
-      }
+      }//end run method.
       
       /**
       * A method for writing objects to the server.
