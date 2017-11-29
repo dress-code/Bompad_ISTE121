@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import sun.audio.*;
+import javax.sound.sampled.*;
 import java.io.*;
 import java.net.*;
 
@@ -179,6 +179,17 @@ public class Bompad extends JFrame{
                System.out.println("We have received something.");
                String msg = (String) ois.readObject();
                System.out.println(msg);
+               try{
+                  File msgSound = new File("msgSound.au");
+                  AudioInputStream ais = AudioSystem.getAudioInputStream(msgSound);
+                  Clip clip = AudioSystem.getClip();
+                  clip.open(ais);
+                  clip.start();
+               }
+               catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
+               catch(LineUnavailableException lue){lue.printStackTrace();}
+               catch(IOException ioe){ioe.printStackTrace();}
+         
                jtaChat.append(msg + "\n");
             }
          }
