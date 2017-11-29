@@ -79,8 +79,8 @@ public class Server{
             try{
                InputStream in = cs.getInputStream();
                ObjectInputStream oins = new ObjectInputStream(in);
-            
-               while ( oins.available() > 0 ){
+              
+               while( oins.available() > 0){
                   Object unidentifiedObject = oins.readObject();
                   
                   //How do we determine if what was received was a String or a Player?
@@ -91,7 +91,6 @@ public class Server{
                      outputs.get(i).flush();
                   }//end for loop writing objects out to all clients.
                }//end while loop listening for input.
-               
                //Close everything with all of the client connections.
                for(int i = 0; i < outputs.size(); i++){
                   outputs.get(i).close();

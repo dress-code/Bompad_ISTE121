@@ -113,6 +113,14 @@ public class Bompad extends JFrame{
       Chat chat = new Chat();
       ClientConnection cc = new ClientConnection();
       cc.start();
+      jtaChat.append("You have entered the chat.\n");
+      jbSend.addActionListener(new ActionListener(){
+         public void actionPerformed(ActionEvent ae){
+            outgoing = jtfMsg.getText();
+            System.out.println(outgoing);
+            cc.write(outgoing);
+         }
+      }); 
       Sound sound = new Sound();
       sound.start();
       
@@ -163,29 +171,31 @@ public class Bompad extends JFrame{
       @Override
       public void run(){
          //code for the run method.
-         
-         jbSend.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent ae){
-               outgoing = jtfMsg.getText();
-               try{
-               oos.writeObject(outgoing);
-               oos.flush();
-               }
-               catch(IOException ioe){
-                  ioe.printStackTrace();
-               }
-            }
-         }); 
-
          try{
-         while(ois.available() > 0){
-            System.out.println("We have received something.");
-            String msg = (String) ois.readObject();
-            System.out.println(msg);
-         }
+            while(ois != null){
+               System.out.println("We have received something.");
+               String msg = (String) ois.readObject();
+               System.out.println(msg);
+               jtaChat.append(msg + "\n");
+            }
          }
          catch(IOException ioe){ioe.printStackTrace();}
          catch(ClassNotFoundException cnfe){cnfe.printStackTrace();}
+      }
+      
+      /**
+      * A method for writing objects to the server.
+      */
+      public void write(Object o){
+         try{
+            System.out.println("We are about to write the object.");
+            oos.writeObject(outgoing);
+            oos.flush();
+            System.out.println("We have written the object.");
+         }
+         catch(IOException ioe){
+            ioe.printStackTrace();
+         }
       }
    }
    
