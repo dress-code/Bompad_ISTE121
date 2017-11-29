@@ -28,25 +28,25 @@ public class Player{
       isDead = false;
       switch(playerNum){
          case 1:
-            frog = new ImageIcon("red-frog.png");
+            frog = new ImageIcon("img/red-frog.png");
             chatColor = "red";
             currentLocation = new Point(1,1);
             name = "Red frog";
             break;
          case 2:
-            frog = new ImageIcon("orange-frog.png");  
+            frog = new ImageIcon("img/orange-frog.png");  
             chatColor = "green";
             currentLocation = new Point(1,8);
             name = "Orange frog";
             break;
          case 3:
-            frog = new ImageIcon("pink-frog.png"); 
+            frog = new ImageIcon("img/pink-frog.png"); 
             chatColor = "pink";
             currentLocation = new Point(8,1);
             name = "Pink frog";
             break;
          case 4:
-            frog = new ImageIcon("blue-frog.png");  
+            frog = new ImageIcon("img/blue-frog.png");  
             chatColor = "blue";
             currentLocation = new Point(8,8);
             name = "Blue frog";
