@@ -26,12 +26,14 @@ public class Pond extends JPanel{
    Icon emptyPad = new ImageIcon("empty.png");
    Icon water = new ImageIcon("water.png");
    int numPlayers = 4;
+   private ClientConnection connection;
   
    /**
    * Constructor for a "pond" board of 64 LilyPads in an 8 x 8 grid layout.
    */
-   public Pond(){
+   public Pond(ClientConnection cc){
    
+      connection = cc;
       this.setLayout(new GridLayout(10,10));
       //Creates Player objects and adds them to the ArrayList.
       for(int p = 1; p < 5; p++){

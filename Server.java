@@ -1,6 +1,5 @@
 import java.io.*;
 import java.net.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -63,6 +62,7 @@ public class Server{
          //Sets the turn of this thread.
          turnTracker++;
          turn = turnTracker;
+         System.out.println(turn);
          
          try{
             OutputStream out = cs.getOutputStream();
@@ -83,7 +83,7 @@ public class Server{
             try{
                InputStream in = cs.getInputStream();
                ObjectInputStream oins = new ObjectInputStream(in);
-            
+               
                do{
                   Object unidentifiedObject = (String)oins.readObject();
                   //Checks if the received object is a String or an ArrayList.
