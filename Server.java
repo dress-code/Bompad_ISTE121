@@ -75,14 +75,16 @@ public class Server{
       */
       @Override
       public void run(){
-                  
+               System.out.println("entered run");   
             try{
                InputStream in = cs.getInputStream();
                ObjectInputStream oins = new ObjectInputStream(in);
             
-               while ( oins.available() > 0 ){
-                  Object unidentifiedObject = oins.readObject();
-                  
+               do{
+                  System.out.println("entered do");
+                  Object unidentifiedObject = (String)oins.readObject();
+                  System.out.println("hi");
+                  System.out.println(unidentifiedObject);
                   //How do we determine if what was received was a String or a Player?
                   
                   //Writes objects back out to all of the clients.
@@ -90,7 +92,7 @@ public class Server{
                      outputs.get(i).writeObject(unidentifiedObject);
                      outputs.get(i).flush();
                   }//end for loop writing objects out to all clients.
-               }//end while loop listening for input.
+               }while ( oins!=null);//end while loop listening for input.
                
                //Close everything with all of the client connections.
                for(int i = 0; i < outputs.size(); i++){
