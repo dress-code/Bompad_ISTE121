@@ -7,6 +7,13 @@ import java.awt.event.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 
+/**
+* Class ClientConnection contains the necessary code for 
+* establishing a connection with a server and then communicate
+* back and forth, always listening for input from the server.
+* @author Team 2
+* @version 11/29/2017
+*/
 public class ClientConnection extends JPanel implements Runnable
    {
       private Socket s;
@@ -24,8 +31,11 @@ public class ClientConnection extends JPanel implements Runnable
       */
       public ClientConnection(String ipAddress, String playerName)
       {
+         //instantiates the chat class variable to a new chat.
          clientChat = new Chat(playerName);
+         //adds the client chat to this, a JPanel.
          this.add(clientChat);
+         //Tries to establish a connection with a server.
          try{
             s = new Socket(ipAddress, 16789);
             os = s.getOutputStream();
@@ -46,17 +56,15 @@ public class ClientConnection extends JPanel implements Runnable
       */
       @Override
       public void run(){
-         //code for the run method.
          try{
+            //while the object input stream is not null...
             while(ois != null){
-               System.out.println("We have received something.");
                //Reads the object in, assigning it to a generic Object
                Object object = ois.readObject();
                //If statement checks if the object received is a String or an ArrayList.
                if(object instanceof String){
                   String msg = (String) object;
                   System.out.println(msg);
-                  //jtaChat.append(msg + "\n");
                   clientChat.updateChat(msg + "\n");
                   try{
                      File msgSound = new File("msgSound.au");
@@ -131,7 +139,7 @@ class Chat extends JPanel implements ActionListener {
       jpSend.add(jbSend);
       jbSend.addActionListener(new ActionListener(){
          public void actionPerformed(ActionEvent ae){
-            timeStamp = new SimpleDateFormat("hh.mm.ss").format(new java.util.Date());
+            timeStamp = new SimpleDateFormat("hh:mm:ss a").format(new java.util.Date());
             String outgoing = getMsg();
             System.out.println(outgoing);
             ClientConnection.this.write(outgoing); //make chat srv inner class of CC?, then call this.
