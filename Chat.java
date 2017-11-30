@@ -5,6 +5,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+<<<<<<< HEAD
 /**
    JAVADOCS
    
@@ -112,4 +113,7 @@ public class Chat extends JPanel implements ActionListener {
          }
       }
    }
-}//end Chat class
+}//end Chat class}//end Chat class
+=======
+
+>>>>>>> Anna's-branch.-
