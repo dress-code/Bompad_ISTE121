@@ -120,9 +120,13 @@ public class ClientConnection extends JPanel implements Runnable
             oos.flush();
             System.out.println("We have written the object.");
          }
+         catch(NotSerializableException nse){
+            System.out.println("We may have fucked up.");
+         }
          catch(IOException ioe){
             ioe.printStackTrace();
          }
+         
       }
       
       /**
