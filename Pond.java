@@ -251,14 +251,6 @@ public class Pond extends JPanel{
    /**
    *A method which moves a player
    */
-<<<<<<< HEAD
-   public void move(Player p){
-      Point playerPoint = p.getCurrentLocation();
-      int row = (int)playerPoint.getX();
-      int col = (int)playerPoint.getY();
-      lilypads[row][col].setIcon(p.getIcon());
-      lilypads[row][col].setValid(false);
-=======
    public void move(Point newPoint, Player player){
    
       /*Takes the old location of the frog and changes 
@@ -276,33 +268,26 @@ public class Pond extends JPanel{
       lilypads[newRow][newCol].setValid(false);
       player.setCurrentLocation(newPoint);
       sound("frog-move.au");
->>>>>>> Anna's-branch.-
    }//end move
    
    /**
    *A method which updates the board
    */
-<<<<<<< HEAD
    public void update(){
-=======
-   /*public void update(){
->>>>>>> Anna's-branch.-
+      ArrayList<Player> newPlayer = connection.getPlayer();
       for(int i=0; i<players.size(); i++){
-         move(players.get(i));
+         move(newPlayer.get(i).getCurrentLocation(), players.get(i));
       }
-      for(int i=0; i<lilypads.length; i++){
-         for(int j=0; j<lilypads.length; j++){
-            //iterate through lilypads
-            if(lilypads[i][j].isValid()==true){
-               lilypads[i][j].setIcon(emptyPad);
-            }
-         }
-      }
-<<<<<<< HEAD
+//       for(int i=0; i<lilypads.length; i++){
+//          for(int j=0; j<lilypads.length; j++){
+//             iterate through lilypads
+//             if(lilypads[i][j].isValid()==true){
+//                lilypads[i][j].setIcon(emptyPad);
+//             }
+//          }
+//       }
    }//end update
-=======
-   }//end update*/
->>>>>>> Anna's-branch.-
+   
    
    /**
    * A method which provides the sound effects for a Bompad game.

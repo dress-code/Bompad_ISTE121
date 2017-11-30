@@ -31,8 +31,7 @@ public class ClientConnection extends JPanel implements Runnable
       /**
       * Paramterized ClientConnection constructor.
       */
-      public ClientConnection(String ipAddress, String playerName)
-      {
+      public ClientConnection(String ipAddress, String playerName){
          //instantiates the chat class variable to a new chat.
          clientChat = new Chat(playerName);
          //adds the client chat to this, a JPanel.
@@ -51,6 +50,13 @@ public class ClientConnection extends JPanel implements Runnable
          catch(IOException ioe){
             ioe.printStackTrace();
          }
+      }
+      
+      /**
+      *Gets and returns the player arraylist
+      */
+      public ArrayList<Player> getPlayer(){
+         return players;
       }
       
       /**
