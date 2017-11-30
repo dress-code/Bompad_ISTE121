@@ -21,12 +21,8 @@ public class Pond extends JPanel{
    private boolean winner = false;
    Point lilyPadCoord;
    //Whose turn is it?
-   int currentTurn = 0;
    private int myTurn;
    //Icon for an empty lilypad and open water spot.
-   Icon emptyPad = new ImageIcon("empty.png");
-   Icon water = new ImageIcon("water.png");
-   int numPlayers = 4;
    private Icon emptyPad = new ImageIcon("empty.png");
    private Icon water = new ImageIcon("water.png");
    private int numPlayers = 4;
@@ -35,7 +31,6 @@ public class Pond extends JPanel{
    /**
    * Constructor for a "pond" board of 64 LilyPads in an 8 x 8 grid layout.
    */
-   public Pond(){
    public Pond(ClientConnection cc){
    
       connection = cc;
@@ -112,7 +107,6 @@ public class Pond extends JPanel{
       lilypads[0][9].setIcon(new ImageIcon("top-right.png"));
       
       highlightSpaces(players.get(0).getCurrentLocation());
-      players.get(0).setTurn(true);
       //players.get(0).setTurn(true);
       myTurn = connection.getTurn();
       System.out.println("My turn is: " + myTurn);
@@ -124,9 +118,6 @@ public class Pond extends JPanel{
    * @param x The x coordinate of a point (player location)
    * @param y The y coordinate of a point (player location)
    */
-   public ArrayList<Lilypad> getAdjacent(int x, int y){
-      int xPos = x;
-      int yPos = y;
    public ArrayList<Lilypad> getAdjacent(Point p){
       int xPos = (int)p.getX();
       int yPos = (int)p.getY();
@@ -148,8 +139,6 @@ public class Pond extends JPanel{
    * @param x the row of the bomb lily pad.
    * @param y the column of the bomb lily pad.
    */
-   public void bombSpaces(int x, int y){
-      ArrayList<Lilypad> explosion = getAdjacent(x,y);
    public void bombSpaces(Point p){
       ArrayList<Lilypad> explosion = getAdjacent(p);
       for(int i = 0; i < explosion.size(); i++)
@@ -159,16 +148,6 @@ public class Pond extends JPanel{
             explosion.get(i).setIcon(water);
          }
       }
-      try{
-         File explosionSound = new File("explosion.au");
-         AudioInputStream ais = AudioSystem.getAudioInputStream(explosionSound);
-         Clip clip = AudioSystem.getClip();
-         clip.open(ais);
-         clip.start();
-      }
-      catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
-      catch(LineUnavailableException lue){lue.printStackTrace();}
-      catch(IOException ioe){ioe.printStackTrace();}
       sound("explosion.au");
 
    }//end method bombSpaces()
@@ -178,9 +157,6 @@ public class Pond extends JPanel{
    * @param p The current location of the player.
    */
    public void highlightSpaces(Point p){
-      int xPos = (int)(p.getX());
-      int yPos = (int)(p.getY());
-      ArrayList<Lilypad> highlight = getAdjacent(xPos, yPos);
       ArrayList<Lilypad> highlight = getAdjacent(p);
       for(int i = 0; i < highlight.size(); i++)
       {
@@ -195,9 +171,6 @@ public class Pond extends JPanel{
    * @param p the old position of the player before his move.
    */
    public void unhighlightSpaces(Point p){
-      int xPos = (int)(p.getX());
-      int yPos = (int)(p.getY());
-      ArrayList<Lilypad> unhighlight = getAdjacent(xPos, yPos);
       ArrayList<Lilypad> unhighlight = getAdjacent(p);
       for(int i = 0; i < unhighlight.size(); i++){
          unhighlight.get(i).setBorder(null);
@@ -210,11 +183,8 @@ public class Pond extends JPanel{
    */
    public boolean lifeStatus(Point p){
       System.out.println("We have entered the lifeStatus method.");
-      int posX = (int) p.getX();
-      int posY = (int) p.getY();
       int availableSpace = 0;
       boolean alive;
-      ArrayList<Lilypad> surrounding = getAdjacent(posX, posY);
       ArrayList<Lilypad> surrounding = getAdjacent(p);
       /*Removes the space that the frog is sitting on. Check getAdjacent method
       for the fifth index of the array list generated.*/
@@ -233,10 +203,8 @@ public class Pond extends JPanel{
    /**
    * A method which changes the turns.
    */
-   public void changeTurn(){
    /*public void changeTurn(){
       //sets the turn of the player to false.
-      players.get(currentTurn).setTurn(false);
       players.get(myTurn).setTurn(false);
       //checks life status of all players before switching turns.
       for(int i = players.size()-1; i >= 0; i--){
@@ -262,7 +230,6 @@ public class Pond extends JPanel{
       }//end if statement
       players.get(currentTurn).setTurn(true);
       highlightSpaces(players.get(currentTurn).getCurrentLocation());
-   }
    }*/
    
    /**
@@ -357,17 +324,12 @@ public class Pond extends JPanel{
    public class CustomMouseListener implements MouseListener {
    
       public void mouseClicked(MouseEvent e) {
-      
          //left click moves the Player.               
-         if (e.getButton() == MouseEvent.BUTTON1 && players.get(currentTurn).getTurn()) {
          if (e.getButton() == MouseEvent.BUTTON1 && connection.getTurn() == myTurn) {
             int row = -1;
             int column = -1;
        
             try{
-               row = ((Lilypad)e.getComponent()).getRow();
-               column = ((Lilypad)e.getComponent()).getCol();
-               Point thePad = new Point(row, column);
             
                Lilypad clicked = (Lilypad) e.getComponent();
                row = clicked.getRow();
@@ -423,7 +385,6 @@ public class Pond extends JPanel{
                }//end if statement checking validity.
                else{
                   JOptionPane.showMessageDialog(lilypads[4][4], "Please choose a valid lilypad.");
-               }
                }*/
                
             }//end try block
@@ -434,8 +395,6 @@ public class Pond extends JPanel{
          }
          
          //Right click sinks a lilypad.
-         else if (e.getButton() == MouseEvent.BUTTON3 && players.get(currentTurn).getTurn()){
-            int row = -1;
          else if (e.getButton() == MouseEvent.BUTTON3 && connection.getTurn() == myTurn){
             /*int row = -1;
             int column = -1;
@@ -455,7 +414,6 @@ public class Pond extends JPanel{
                   //Sinks the lilypad.
                   //If a lilpad is a bomb, calls the bombSpaces method.
                   if(lilypads[row][column].isBonus()){
-                     bombSpaces(row, column);
                      bombSpaces(thePad);
                      unhighlightSpaces(players.get(currentTurn).getCurrentLocation());
                   }
@@ -471,10 +429,8 @@ public class Pond extends JPanel{
             }//end if
             else{
                JOptionPane.showMessageDialog(null, "Oops! That lilypads has been sunk!");
-            }
             }*/
          }//end else if
-      }        
       }       
    
       public void mousePressed(MouseEvent e) {

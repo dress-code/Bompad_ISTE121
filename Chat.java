@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
 <<<<<<< HEAD
@@ -113,7 +112,7 @@ public class Chat extends JPanel implements ActionListener {
          }
       }
    }
-}//end Chat class}//end Chat class
+}//end Chat class
 =======
 
 >>>>>>> Anna's-branch.-
