@@ -23,7 +23,7 @@ public class ClientConnection extends JPanel implements Runnable
       private ObjectInputStream ois;
       private Chat clientChat;
       private Pond board;
-      private ArrayList<Player> players;
+      private ArrayList<Player> players = new ArrayList<Player>();;
       private JButton jbSend;
       private int turn;
     
