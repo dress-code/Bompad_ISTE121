@@ -149,7 +149,7 @@ public class Pond extends JPanel{
          }
       }
       sound("explosion.au");
-
+   
    }//end method bombSpaces()
    
    /**
@@ -275,17 +275,22 @@ public class Pond extends JPanel{
    */
    public void update(){
       ArrayList<Player> newPlayer = connection.getPlayer();
-      for(int i=0; i<players.size(); i++){
-         move(newPlayer.get(i).getCurrentLocation(), players.get(i));
+      if(newPlayer.size()==0){
+         System.out.println("It's the first turn so the arraylist is empty");
       }
-//       for(int i=0; i<lilypads.length; i++){
-//          for(int j=0; j<lilypads.length; j++){
-//             iterate through lilypads
-//             if(lilypads[i][j].isValid()==true){
-//                lilypads[i][j].setIcon(emptyPad);
-//             }
-//          }
-//       }
+      else{
+         for(int i=0; i<players.size(); i++){
+            move(newPlayer.get(i).getCurrentLocation(), players.get(i));
+         }
+      }
+   //       for(int i=0; i<lilypads.length; i++){
+   //          for(int j=0; j<lilypads.length; j++){
+   //             iterate through lilypads
+   //             if(lilypads[i][j].isValid()==true){
+   //                lilypads[i][j].setIcon(emptyPad);
+   //             }
+   //          }
+   //       }
    }//end update
    
    
@@ -309,11 +314,12 @@ public class Pond extends JPanel{
    public class CustomMouseListener implements MouseListener {
    
       public void mouseClicked(MouseEvent e) {
+         update();
          //left click moves the Player.               
          if (e.getButton() == MouseEvent.BUTTON1 && connection.getTurn() == myTurn) {
             int row = -1;
             int column = -1;
-       
+         
             try{
             
                Lilypad clicked = (Lilypad) e.getComponent();
@@ -333,6 +339,7 @@ public class Pond extends JPanel{
                      move(newLoc, players.get(myTurn));
                   }
                }
+               connection.write(players);
                
                
                /*Point thePad = new Point(row, column);
