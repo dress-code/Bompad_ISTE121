@@ -1,48 +1,35 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import sun.audio.*;
 import java.io.*;
+import java.net.*;
+import java.util.*;
 
 /**
-<<<<<<< HEAD
-* Class Bompad constructs all of the necessary components for a game of Bompad.
+* Bompad class contains all of the necessary constructors and methods for a game of Bompad.
 * @author Team 2
-* @version 11/9/2017
-=======
-<<<<<<< HEAD
-* Class Bompad constructs all of the necessary components for a game of Bompad.
-* @author Team 2
-* @version 11/9/2017
-=======
-* A class containing the constructor for a BomPad game.
-* @author - Team 2
-* @version 10/31/2017
->>>>>>> Doug
->>>>>>> Anna's-branch.-
+* @version 11/29/2017
 */
-
 public class Bompad extends JFrame{
+
+   private String outgoing;
+   private String ipAddress;
+   private String playerName;
    
    //Main method calls the constructor for a new BomPad game.
    public static void main(String [] args)
    {
       new Bompad();
    }//end main
-   
+
    /**
-<<<<<<< HEAD
-   * Construcots a game of Bompad.
-=======
-<<<<<<< HEAD
-   * Construcots a game of Bompad.
-=======
-   * Constructor for a BomPad game.
->>>>>>> Doug
->>>>>>> Anna's-branch.-
+   * Constructor for a game of Bompad. Calls all necessary components and creates
+   * the client server connection.
    */
    public Bompad()
    {
+      ipAddress = JOptionPane.showInputDialog(null, "What is the IP address of your server?");
+      playerName = JOptionPane.showInputDialog(null, "What is your name?");
       //MENUS
       JMenuBar jmb = new JMenuBar();
       setJMenuBar(jmb);
@@ -70,7 +57,7 @@ public class Bompad extends JFrame{
          public void actionPerformed(ActionEvent ae)
          {
             //details on version, authors
-            //JOptionPane.showMessageDialog(null, );
+            JOptionPane.showMessageDialog(null, "Bompad was created by Anna Jacobsen, Doug Kaelin, Zach Georges, & Alexa Lewis.");
          }
       });
       
@@ -101,14 +88,17 @@ public class Bompad extends JFrame{
       jmHelp.add(jmiInstruct);
       
       //instantiate outer classes
-      Pond pond = new Pond();
-      Chat chat = new Chat();
+      ClientConnection cc = new ClientConnection(ipAddress, playerName);
+      Thread thread = new Thread(cc);
+      thread.start();
+      Pond pond = new Pond(cc);
+      //jtaChat.append("You have entered the chat.\n");
       Sound sound = new Sound();
       sound.start();
       
       //add classes(panels) to frame
       this.add(pond, BorderLayout.CENTER);
-      this.add(chat, BorderLayout.WEST);
+      this.add(cc, BorderLayout.WEST);
       
       //sets frame
       this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -118,28 +108,4 @@ public class Bompad extends JFrame{
       this.setTitle("Bompad");
       this.setVisible(true);
    }//end constructor
-   
-   class ClientConnection extends Thread
-   {
-      private Player player;
-      //private Socket s;
-      
-      /**
-      * ClientConnection constructor.
-      */
-      public ClientConnection(Player p)
-      {
-         player = p;
-         //code for the client connection constructor
-      }
-      
-      /**
-      * Run method for ClientConnection objects.
-      */
-      @Override
-      public void run()
-      {
-         //code for the run method.
-      }
-   }
 }//end Bompad class
