@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 * @version 11/29/2017
 */
 public class ClientConnection extends JPanel implements Runnable
-   {
+{
       private Socket s;
       private OutputStream os;
       private InputStream is;
@@ -25,6 +25,8 @@ public class ClientConnection extends JPanel implements Runnable
       private Pond board;
       private ArrayList<Player> players;
       private JButton jbSend;
+      private int turn;
+    
       
       /**
       * Paramterized ClientConnection constructor.
@@ -39,8 +41,8 @@ public class ClientConnection extends JPanel implements Runnable
          try{
             s = new Socket(ipAddress, 16789);
             os = s.getOutputStream();
-            is = s.getInputStream();
             oos = new ObjectOutputStream(os);
+            is = s.getInputStream();
             ois = new ObjectInputStream(is);
          }
          catch(UnknownHostException uhe){
@@ -58,11 +60,14 @@ public class ClientConnection extends JPanel implements Runnable
       public void run(){
          try{
             //while the object input stream is not null...
-            while(ois != null){
+            do {
+               System.out.println("we are in the do loop!");
                //Reads the object in, assigning it to a generic Object
                Object object = ois.readObject();
+               System.out.println("Client has received an object.");
                //If statement checks if the object received is a String or an ArrayList.
                if(object instanceof String){
+                  System.out.println("Client has determined the object to be a String.");
                   String msg = (String) object;
                   System.out.println(msg);
                   clientChat.updateChat(msg + "\n");
@@ -85,7 +90,15 @@ public class ClientConnection extends JPanel implements Runnable
                   System.out.println(players);
                }//end if statement using instanceof to determine object type.
                
-            }//end while loop
+               // If the object is an Integer, determine the turn.
+               if(object instanceof Integer){
+                  System.out.println("We have received an Integer.");
+                  Integer turnReceived = (Integer) object;
+                  turn = turnReceived.intValue();
+                  System.out.println("The turn received in the CLientConnection was: " + turn);
+               }
+               
+            }while(ois != null);//end while loop
          }//end try block
          catch(IOException ioe){ioe.printStackTrace();}
          catch(ClassNotFoundException cnfe){cnfe.printStackTrace();}
@@ -105,73 +118,81 @@ public class ClientConnection extends JPanel implements Runnable
             ioe.printStackTrace();
          }
       }
-   
-/**
-* Class Chat creates the chat and has methods for updating.
-*/
-class Chat extends JPanel implements ActionListener {
-   
-   private String timeStamp;
-   private JTextArea jtaChat;
-   private JTextField jtfMsg; 
-   private String playerName;
-   
-   /**
-   * Constructor for a chat object.
-   * @param playerName The name of the player in the chat.
-   */
-   public Chat(String name)
-   {
-      this.setLayout(new GridLayout(2,1));
-      playerName = name;
-      //displays all the messages
-      jtaChat = new JTextArea(25,30);
-      JScrollPane scrollPane = new JScrollPane(jtaChat);
-      scrollPane.setViewportView(jtaChat);
-      jtaChat.setEditable(false);
-      jtaChat.setLineWrap(true);
-   
-         
-      JPanel jpSend = new JPanel(new FlowLayout());
-      jtfMsg = new JTextField(10);
-      jpSend.add(jtfMsg);
-      jbSend = new JButton("Send");
-      jpSend.add(jbSend);
-      jbSend.addActionListener(new ActionListener(){
-         public void actionPerformed(ActionEvent ae){
-            timeStamp = new SimpleDateFormat("hh:mm:ss a").format(new java.util.Date());
-            String outgoing = getMsg();
-            System.out.println(outgoing);
-            ClientConnection.this.write(outgoing); //make chat srv inner class of CC?, then call this.
-         }
-      }); 
-         
-      this.add(scrollPane);
-      this.add(jpSend);
-      this.setSize(200,100);
-         
-   }//end constructor for the Chat.
       
-   /**
-   * A method for updating the chat.
-   * @param The message to be appended to the chat.
-   */
-   public void updateChat(String msg){
-      jtaChat.append(msg);
-   }
+      /**
+      * An accessor method for the turn read in.
+      * @return The current turn.
+      */
+      public int getTurn(){
+         return turn;
+      }//end method getTurn
    
    /**
-   * An accessor method for getting the message from the JTextField.
-   * @return The message to be sent to the server.
+   * Inner lass Chat creates the chat and has methods for updating.
    */
-   public String getMsg(){
-      String msg = timeStamp + " " + playerName + ": " + jtfMsg.getText();
-      jtfMsg.setText("");
-      return msg;
-   }
-   
-      //just to get the compiler to be quiet.
-      public void actionPerformed(ActionEvent ae){};
+   class Chat extends JPanel implements ActionListener {
       
-}//end class Chat.
+      private String timeStamp;
+      private JTextArea jtaChat;
+      private JTextField jtfMsg; 
+      private String playerName;
+      
+      /**
+      * Constructor for a chat object.
+      * @param playerName The name of the player in the chat.
+      */
+      public Chat(String name)
+      {
+         this.setLayout(new GridLayout(2,1));
+         playerName = name;
+         //displays all the messages
+         jtaChat = new JTextArea(25,30);
+         JScrollPane scrollPane = new JScrollPane(jtaChat);
+         scrollPane.setViewportView(jtaChat);
+         jtaChat.setEditable(false);
+         jtaChat.setLineWrap(true);
+      
+            
+         JPanel jpSend = new JPanel(new FlowLayout());
+         jtfMsg = new JTextField(10);
+         jpSend.add(jtfMsg);
+         jbSend = new JButton("Send");
+         jpSend.add(jbSend);
+         jbSend.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae){
+               timeStamp = new SimpleDateFormat("hh:mm:ss a").format(new java.util.Date());
+               String outgoing = getMsg();
+               System.out.println(outgoing);
+               ClientConnection.this.write(outgoing); //make chat srv inner class of CC?, then call this.
+            }
+         }); 
+            
+         this.add(scrollPane);
+         this.add(jpSend);
+         this.setSize(200,100);
+            
+      }//end constructor for the Chat.
+         
+      /**
+      * A method for updating the chat.
+      * @param The message to be appended to the chat.
+      */
+      public void updateChat(String msg){
+         jtaChat.append(msg);
+      }
+      
+      /**
+      * An accessor method for getting the message from the JTextField.
+      * @return The message to be sent to the server.
+      */
+      public String getMsg(){
+         String msg = timeStamp + " " + playerName + ": " + jtfMsg.getText();
+         jtfMsg.setText("");
+         return msg;
+      }
+      
+         //just to get the compiler to be quiet.
+         public void actionPerformed(ActionEvent ae){};
+         
+   }//end class Chat.
 }//end class ClientConnection

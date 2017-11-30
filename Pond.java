@@ -21,11 +21,11 @@ public class Pond extends JPanel{
    private boolean winner = false;
    Point lilyPadCoord;
    //Whose turn is it?
-   int currentTurn = 0;
+   private int myTurn;
    //Icon for an empty lilypad and open water spot.
-   Icon emptyPad = new ImageIcon("empty.png");
-   Icon water = new ImageIcon("water.png");
-   int numPlayers = 4;
+   private Icon emptyPad = new ImageIcon("empty.png");
+   private Icon water = new ImageIcon("water.png");
+   private int numPlayers = 4;
    private ClientConnection connection;
   
    /**
@@ -107,7 +107,9 @@ public class Pond extends JPanel{
       lilypads[0][9].setIcon(new ImageIcon("top-right.png"));
       
       highlightSpaces(players.get(0).getCurrentLocation());
-      players.get(0).setTurn(true);
+      //players.get(0).setTurn(true);
+      myTurn = connection.getTurn();
+      System.out.println("My turn is: " + myTurn);
       
    }//end constructor
    
@@ -201,9 +203,9 @@ public class Pond extends JPanel{
    /**
    * A method which changes the turns.
    */
-   public void changeTurn(){
+   /*public void changeTurn(){
       //sets the turn of the player to false.
-      players.get(currentTurn).setTurn(false);
+      players.get(myTurn).setTurn(false);
       //checks life status of all players before switching turns.
       for(int i = players.size()-1; i >= 0; i--){
          System.out.println("Player #" + i + " check");
@@ -228,7 +230,7 @@ public class Pond extends JPanel{
       }//end if statement
       players.get(currentTurn).setTurn(true);
       highlightSpaces(players.get(currentTurn).getCurrentLocation());
-   }
+   }*/
    
    /**
    * A method for killing off a player.
@@ -306,7 +308,7 @@ public class Pond extends JPanel{
    
       public void mouseClicked(MouseEvent e) {
          //left click moves the Player.               
-         if (e.getButton() == MouseEvent.BUTTON1 && players.get(currentTurn).getTurn()) {
+         if (e.getButton() == MouseEvent.BUTTON1 && connection.getTurn() == myTurn) {
             int row = -1;
             int column = -1;
        
@@ -317,7 +319,7 @@ public class Pond extends JPanel{
                column = clicked.getCol();
                Point newLoc = new Point(row, column);
                //Gets the location of the player before a move is made.
-               Point oldLoc = players.get(currentTurn).getCurrentLocation();
+               Point oldLoc = players.get(myTurn).getCurrentLocation();
                int oldRow = (int)oldLoc.getX();
                int oldCol = (int)oldLoc.getY();
                //Gets an array list of adjacent lilypads.
@@ -326,7 +328,7 @@ public class Pond extends JPanel{
                for(int i = 0; i < alpads.size(); i++){
                   Point compare = alpads.get(i).getPoint();
                   if( (compare.getX() == newLoc.getX()) && (compare.getY() == newLoc.getY())){
-                     move(newLoc, players.get(currentTurn));
+                     move(newLoc, players.get(myTurn));
                   }
                }
                
@@ -376,8 +378,8 @@ public class Pond extends JPanel{
          }
          
          //Right click sinks a lilypad.
-         else if (e.getButton() == MouseEvent.BUTTON3 && players.get(currentTurn).getTurn()){
-            int row = -1;
+         else if (e.getButton() == MouseEvent.BUTTON3 && connection.getTurn() == myTurn){
+            /*int row = -1;
             int column = -1;
             row = ((Lilypad)e.getComponent()).getRow();
             column = ((Lilypad)e.getComponent()).getCol();
@@ -410,9 +412,9 @@ public class Pond extends JPanel{
             }//end if
             else{
                JOptionPane.showMessageDialog(null, "Oops! That lilypads has been sunk!");
-            }
+            }*/
          }//end else if
-      }        
+      }       
    
       public void mousePressed(MouseEvent e) {
       }
