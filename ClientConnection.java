@@ -114,6 +114,7 @@ public class ClientConnection extends JPanel implements Runnable
       * A method for writing objects to the server.
       */
       public void write(Object o){
+         players = (ArrayList<Player>) o;
          try{
             System.out.println("We are about to write the object.");
             oos.writeObject(o);
