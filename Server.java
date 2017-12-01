@@ -10,8 +10,10 @@ import java.util.*;
 public class Server{
    //Keeps track of number of players/turns
    private int turnTracker = 0;
+   private int numAssignment = 0;
    //an ArrayList containing all of the ObjectOutputStreams associated with all of the clients.
    private ArrayList<ObjectOutputStream> outputs = new ArrayList<ObjectOutputStream>();
+   private ArrayList<Player> gamePlayers;
    
    public static void main(String [] args){
       new Server();
@@ -59,8 +61,8 @@ public class Server{
       public ThreadedServer( Socket clientSocket ){
          cs = clientSocket;
          //Sets the turn of this thread.
-         turn = turnTracker;
-         turnTracker++;
+         turn = numAssignment;
+         numAssignment++;
          System.out.println("The turn assigned to this player is: " + turn);
       }//end ThreadedServer constructor.
       
@@ -97,12 +99,37 @@ public class Server{
                   }
                   
                   //Checks if the received object is an arraylist AND only does something if it is the proper turn...
-                  if(unidentifiedObject instanceof ArrayList && turnTracker == turn){
+                  if(unidentifiedObject instanceof ArrayList){
                      //If it is, write the ArrayList back out to all of the clients.
                      for(int i = 0; i < outputs.size(); i++){
+                        gamePlayers = (ArrayList<Player>) unidentifiedObject;
                         outputs.get(i).writeObject(unidentifiedObject);
                         outputs.get(i).flush();
+                     }
+                     if(turnTracker < 4){
                         turnTracker++;
+                        System.out.println("Server 111: turn is now" + turnTracker);
+                     }
+                     else{
+                        turnTracker = 0;
+                     }
+
+                  }
+                  //If object is determined to be an Integer, the server knows it is a turn request
+                  if(unidentifiedObject instanceof Integer){
+                     Integer intObject = (Integer) unidentifiedObject;
+                     if (intObject.intValue() == -1){
+                        for(int i = 0; i < outputs.size(); i++){
+                           System.out.println("Server 121: Current turn is: " + turnTracker); 
+                           outputs.get(i).writeObject(Integer.valueOf(turnTracker));
+                           outputs.get(i).flush();
+                        }
+                     }
+                     if(intObject.intValue() == -2) {
+                         for(int i = 0; i < outputs.size(); i++){
+                           outputs.get(i).writeObject(gamePlayers);
+                           outputs.get(i).flush();
+                        }
                      }
                   }
                }while ( oins!=null);//end while loop listening for input.

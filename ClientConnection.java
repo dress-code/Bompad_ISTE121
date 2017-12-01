@@ -25,6 +25,7 @@ public class ClientConnection extends JPanel implements Runnable
       private Pond board;
       private ArrayList<Player> players;
       private JButton jbSend;
+      //The current turn of a player.
       private int turn;
     
       
@@ -61,13 +62,10 @@ public class ClientConnection extends JPanel implements Runnable
          try{
             //while the object input stream is not null...
             do {
-               System.out.println("we are in the do loop!");
                //Reads the object in, assigning it to a generic Object
                Object object = ois.readObject();
-               System.out.println("Client has received an object.");
                //If statement checks if the object received is a String or an ArrayList.
                if(object instanceof String){
-                  System.out.println("Client has determined the object to be a String.");
                   String msg = (String) object;
                   System.out.println(msg);
                   clientChat.updateChat(msg + "\n");
@@ -87,12 +85,10 @@ public class ClientConnection extends JPanel implements Runnable
                ArrayList<Player> to the received ArrayList.*/
                if(object instanceof ArrayList){
                   players = (ArrayList<Player>) object;
-                  System.out.println(players);
                }//end if statement using instanceof to determine object type.
                
                // If the object is an Integer, determine the turn.
                if(object instanceof Integer){
-                  System.out.println("We have received an Integer.");
                   Integer turnReceived = (Integer) object;
                   turn = turnReceived.intValue();
                   System.out.println("The turn received in the CLientConnection was: " + turn);
@@ -126,6 +122,26 @@ public class ClientConnection extends JPanel implements Runnable
       public int getTurn(){
          return turn;
       }//end method getTurn
+      
+      /**
+      * A method which requests the server to send over whose turn it currently is.
+      * @return The current turn.
+      */
+      public void turnRequest(){
+         Integer turnRequest = -1;
+         write(turnRequest);
+         System.out.println("We have requested the turn from the server.");
+      }
+      
+      /**
+      * A method which gets the updated list of players after a turn is made.
+      * @return The updated array list of players.
+      */
+      public void playerRequest(){
+         Integer playerRequest = -2;
+         write(playerRequest);
+         System.out.println("CC 148 - We have requested the array list of players from the server.");
+      }
    
    /**
    * Inner lass Chat creates the chat and has methods for updating.
