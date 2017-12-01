@@ -35,13 +35,15 @@ public class Pond extends JPanel{
    public Pond(ClientConnection cc){
    
       connection = cc;
+      myTurn = connection.getTurn();
+      System.out.println("My turn is: " + myTurn);
       this.setLayout(new GridLayout(10,10));
       //Creates Player objects and adds them to the ArrayList.
       for(int p = 1; p < 5; p++){
          Player player = new Player(p);
          players.add(player);
       }
-      
+      //connection.write(players.get(myTurn));
       //Creates lilypads and adds them to the 2-D array.
       for(int i = 0; i < 10; i++){
          for(int j = 0; j < 10; j++){
@@ -108,10 +110,6 @@ public class Pond extends JPanel{
       lilypads[0][9].setIcon(new ImageIcon("top-right.png"));
       
       highlightSpaces(players.get(0).getCurrentLocation());
-      //players.get(0).setTurn(true);
-      myTurn = connection.getTurn();
-      System.out.println("My turn is: " + myTurn);
-      
    }//end constructor
    
    /**

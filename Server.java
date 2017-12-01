@@ -53,6 +53,7 @@ public class Server{
    class ThreadedServer extends Thread {
       private int turn;
       private Socket cs = null;
+      private String welcomeMsg;
       
       /**
       * Constuctor for a ThreadedServer thread.
@@ -62,6 +63,7 @@ public class Server{
          cs = clientSocket;
          //Sets the turn of this thread.
          turn = numAssignment;
+         welcomeMsg = "You have connected to the chat.";
          numAssignment++;
          System.out.println("The turn assigned to this player is: " + turn);
       }//end ThreadedServer constructor.
@@ -79,6 +81,7 @@ public class Server{
                Integer turnMsg = Integer.valueOf(turn);
                oos.writeObject(turnMsg);
                oos.flush();
+               oos.writeObject(welcomeMsg);
                System.out.println("We have written turn to client.");
                InputStream in = cs.getInputStream();
                ObjectInputStream oins = new ObjectInputStream(in);
@@ -131,6 +134,11 @@ public class Server{
                            outputs.get(i).flush();
                         }
                      }
+                  }
+                  //if unidentified object is a Player, add it to the array list of players.
+                  if(unidentifiedObject instanceof Player){
+                     Player p = (Player) unidentifiedObject;
+                     gamePlayers.add(p);
                   }
                }while ( oins!=null);//end while loop listening for input.
                
