@@ -305,33 +305,39 @@ public class Pond extends JPanel{
    public class CustomMouseListener implements MouseListener {
    
       public void mouseClicked(MouseEvent e) {
-         //left click moves the Player.               
+         //left click moves the Player.         
+         connection.turnRequest();      
          if (e.getButton() == MouseEvent.BUTTON1 && connection.getTurn() == myTurn) {
             int row = -1;
             int column = -1;
        
             try{
-               connection.turnRequest();
-               whoseTurn = connection.getTurn();
-               System.out.println("Line 319, Pond- The current turn is: " + whoseTurn);
+               //connection.turnRequest();
+               //whoseTurn = connection.getTurn();
+               System.out.println("Line 318, Pond - My turn equals: " + myTurn);
+               System.out.println("Line 319, Pond- Step 1 for move - The current turn is: " + whoseTurn);
                if(myTurn == whoseTurn){
+               System.out.println("Line 321, Pond - step 2 for move - It is the players turn.");
                   Lilypad clicked = (Lilypad) e.getComponent();
                   row = clicked.getRow();
                   column = clicked.getCol();
+                  System.out.println("The coordinates of the lilypad clicked are: " + row + " " + column);
                   Point newLoc = new Point(row, column);
                   //Gets the location of the player before a move is made.
                   Point oldLoc = players.get(myTurn).getCurrentLocation();
+                  System.out.println("The old/current location of the player is: " + oldLoc);
                   int oldRow = (int)oldLoc.getX();
                   int oldCol = (int)oldLoc.getY();
                   //Gets an array list of adjacent lilypads.
                   ArrayList<Lilypad> alpads = getAdjacent(oldLoc);
+                  for(int i = 0; i < alpads.size(); i++)
+                  {
+                     System.out.println("The adjacent spaces for the move are: " + alpads.get(i).getPoint());
+                  }
                   //Iterates through the adjacent lilypads and checks if any of them matches the clicked lilypad.
                   for(int i = 0; i < alpads.size(); i++){
                      Point compare = alpads.get(i).getPoint();
                      if( (compare.getX() == newLoc.getX()) && (compare.getY() == newLoc.getY())){
-                        for(int k = 0 ; k < players.size(); k++){
-                           System.out.println("Player " + k + " before move" + players.get(i).getCurrentLocation());
-                        }
                         move(newLoc, players.get(myTurn));
                      }
                   }

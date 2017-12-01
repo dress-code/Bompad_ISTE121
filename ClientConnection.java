@@ -27,6 +27,8 @@ public class ClientConnection extends JPanel implements Runnable
       private JButton jbSend;
       //The current turn of a player.
       private int turn;
+      //The assigned number of the player.
+      private int assignedTurn;
     
       
       /**
@@ -91,7 +93,6 @@ public class ClientConnection extends JPanel implements Runnable
                if(object instanceof Integer){
                   Integer turnReceived = (Integer) object;
                   turn = turnReceived.intValue();
-                  System.out.println("The turn received in the CLientConnection was: " + turn);
                }
                
             }while(ois != null);//end while loop
@@ -129,8 +130,8 @@ public class ClientConnection extends JPanel implements Runnable
       */
       public void turnRequest(){
          Integer turnRequest = -1;
+         System.out.println("We are requesting the turn from the server.");
          write(turnRequest);
-         System.out.println("We have requested the turn from the server.");
       }
       
       /**

@@ -10,7 +10,7 @@ import java.util.*;
 public class Server{
    //Keeps track of number of players/turns
    private int turnTracker = 0;
-   private int numAssignment = 0;
+   private Integer numAssignment = 0;
    //an ArrayList containing all of the ObjectOutputStreams associated with all of the clients.
    private ArrayList<ObjectOutputStream> outputs = new ArrayList<ObjectOutputStream>();
    private ArrayList<Player> gamePlayers;
@@ -134,6 +134,7 @@ public class Server{
                            outputs.get(i).flush();
                         }
                      }
+
                   }
                   //if unidentified object is a Player, add it to the array list of players.
                   if(unidentifiedObject instanceof Player){
