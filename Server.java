@@ -14,6 +14,9 @@ public class Server{
    //an ArrayList containing all of the ObjectOutputStreams associated with all of the clients.
    private ArrayList<ObjectOutputStream> outputs = new ArrayList<ObjectOutputStream>();
    private ArrayList<Player> gamePlayers;
+   private Vector<ObjectOutputStream> outputs = new Vector<ObjectOutputStream>();
+   private Vector<Player> gamePlayers;
+   private boolean startGame = false;
    
    public static void main(String [] args){
       new Server();
@@ -86,6 +89,16 @@ public class Server{
                InputStream in = cs.getInputStream();
                ObjectInputStream oins = new ObjectInputStream(in);
     
+               //Wait for four players before starting.
+               while(startGame == false){
+                  if(outputs.size() == 4){
+                     startGame = true;
+                  }
+               }
+               System.out.print("Go run client "+turn);
+               oos.writeObject(Boolean.valueOf(startGame));
+               oos.flush();
+               System.out.println(" Waiting to receive from you");
                do{
                   Object unidentifiedObject = oins.readObject();
                   System.out.println("Server has read something.");
@@ -103,9 +116,11 @@ public class Server{
                   
                   //Checks if the received object is an arraylist AND only does something if it is the proper turn...
                   if(unidentifiedObject instanceof ArrayList){
+                  if(unidentifiedObject instanceof Vector){
                      //If it is, write the ArrayList back out to all of the clients.
                      for(int i = 0; i < outputs.size(); i++){
                         gamePlayers = (ArrayList<Player>) unidentifiedObject;
+                        gamePlayers = (Vector<Player>) unidentifiedObject;
                         outputs.get(i).writeObject(unidentifiedObject);
                         outputs.get(i).flush();
                      }
