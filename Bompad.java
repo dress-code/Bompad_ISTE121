@@ -36,7 +36,9 @@ public class Bompad extends JFrame{
       thread.start();
       while(start == false){
          start = cc.getStartUpdate();
+         System.out.println(start);
       }
+      System.out.println("Bompad 40: " + start);
       //MENUS
       JMenuBar jmb = new JMenuBar();
       setJMenuBar(jmb);
