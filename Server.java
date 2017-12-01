@@ -90,6 +90,7 @@ public class Server{
                   }
                }
                oos.writeObject(Boolean.valueOf(startGame));
+               oos.flush();
                do{
                   Object unidentifiedObject = oins.readObject();
                   System.out.println("Server has read something.");
