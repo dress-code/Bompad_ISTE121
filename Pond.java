@@ -314,6 +314,7 @@ public class Pond extends JPanel{
    public class CustomMouseListener implements MouseListener {
    
       public void mouseClicked(MouseEvent e) {
+         connection.write(players);
          update();
          //left click moves the Player.               
          if (e.getButton() == MouseEvent.BUTTON1 && connection.getTurn() == myTurn) {
