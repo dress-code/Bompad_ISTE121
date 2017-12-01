@@ -27,6 +27,8 @@ public class ClientConnection extends JPanel implements Runnable
       private JButton jbSend;
       //The current turn of a player.
       private int turn;
+      //Should the game start?
+      private boolean startGame = false;
     
       
       /**
@@ -93,6 +95,11 @@ public class ClientConnection extends JPanel implements Runnable
                   turn = turnReceived.intValue();
                   System.out.println("The turn received in the CLientConnection was: " + turn);
                }
+               //If the object is a Boolean, determine whether the game should start
+               if(object instanceof Boolean){
+                  startGame = (Boolean) object;
+                  System.out.println("We have received a boolean. Should the game start? " + startGame);
+               }
                
             }while(ois != null);//end while loop
          }//end try block
@@ -141,6 +148,11 @@ public class ClientConnection extends JPanel implements Runnable
          Integer playerRequest = -2;
          write(playerRequest);
          System.out.println("CC 148 - We have requested the array list of players from the server.");
+      }
+      
+      public boolean getStartUpdate()
+      {
+         return startGame;
       }
    
    /**

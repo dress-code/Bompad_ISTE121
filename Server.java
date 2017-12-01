@@ -14,6 +14,7 @@ public class Server{
    //an ArrayList containing all of the ObjectOutputStreams associated with all of the clients.
    private ArrayList<ObjectOutputStream> outputs = new ArrayList<ObjectOutputStream>();
    private ArrayList<Player> gamePlayers;
+   private boolean startGame = false;
    
    public static void main(String [] args){
       new Server();
@@ -82,7 +83,13 @@ public class Server{
                System.out.println("We have written turn to client.");
                InputStream in = cs.getInputStream();
                ObjectInputStream oins = new ObjectInputStream(in);
-    
+               //Wait for four players before starting.
+               while(startGame == false){
+                  if(outputs.size() == 4){
+                     startGame = true;
+                  }
+               }
+               oos.writeObject(Boolean.valueOf(startGame));
                do{
                   Object unidentifiedObject = oins.readObject();
                   System.out.println("Server has read something.");
