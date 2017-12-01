@@ -1,6 +1,5 @@
 import java.io.*;
 import java.net.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -9,9 +8,10 @@ import java.util.*;
 * @version 11/9/2017
 */
 public class Server{
-
+   //Keeps track of number of players/turns
+   private int turnTracker = 0;
    //an ArrayList containing all of the ObjectOutputStreams associated with all of the clients.
-   ArrayList<ObjectOutputStream> outputs = new ArrayList<ObjectOutputStream>();
+   private ArrayList<ObjectOutputStream> outputs = new ArrayList<ObjectOutputStream>();
    
    public static void main(String [] args){
       new Server();
@@ -25,14 +25,13 @@ public class Server{
          ServerSocket ss = new ServerSocket(16789);
          Socket cs = null;
          
-         while(true){
+         while(outputs.size() < 4){
             System.out.println("Waiting for a player to connect...");
             cs = ss.accept();
             System.out.println("Have a player: " + cs);
             
             ThreadedServer ts = new ThreadedServer( cs );
             ts.start();
-
          }//end while loop
       }//end try
       
@@ -50,7 +49,7 @@ public class Server{
    * Inner classs creates a Thread for the Threaded server.
    */
    class ThreadedServer extends Thread {
-   
+      private int turn;
       private Socket cs = null;
       
       /**
@@ -59,15 +58,10 @@ public class Server{
       */
       public ThreadedServer( Socket clientSocket ){
          cs = clientSocket;
-         
-         try{
-            OutputStream out = cs.getOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(out);
-            outputs.add(oos);
-         }
-         catch( IOException ioe ){
-            ioe.printStackTrace();
-         } // end out try/catch
+         //Sets the turn of this thread.
+         turn = turnTracker;
+         turnTracker++;
+         System.out.println("The turn assigned to this player is: " + turn);
       }//end ThreadedServer constructor.
       
       /**
@@ -75,34 +69,56 @@ public class Server{
       */
       @Override
       public void run(){
-               System.out.println("entered run");   
+            System.out.println("entered run");   
             try{
+               OutputStream out = cs.getOutputStream();
+               ObjectOutputStream oos = new ObjectOutputStream(out);
+               outputs.add(oos);
+               Integer turnMsg = Integer.valueOf(turn);
+               oos.writeObject(turnMsg);
+               oos.flush();
+               System.out.println("We have written turn to client.");
                InputStream in = cs.getInputStream();
                ObjectInputStream oins = new ObjectInputStream(in);
-            
+    
                do{
-                  System.out.println("entered do");
-                  Object unidentifiedObject = (String)oins.readObject();
-                  System.out.println("hi");
-                  System.out.println(unidentifiedObject);
-                  //How do we determine if what was received was a String or a Player?
+                  Object unidentifiedObject = oins.readObject();
+                  System.out.println("Server has read something.");
+                  //Checks if the received object is a String or an ArrayList.
+                  if(unidentifiedObject instanceof String){
+                     System.out.println("Server has determined it read a String.");
+                     //If it is, Server writes objects back out to all of the clients without question.
+                     for(int i = 0; i < outputs.size(); i++){
+                        System.out.println("Server is going to send String to all clients.");
+                        outputs.get(i).writeObject(unidentifiedObject);
+                        outputs.get(i).flush();
+                     }
+                     System.out.println("Server has sent String to all clients.");
+                  }
                   
-                  //Writes objects back out to all of the clients.
-                  for(int i = 0; i < outputs.size(); i++){
-                     outputs.get(i).writeObject(unidentifiedObject);
-                     outputs.get(i).flush();
-                  }//end for loop writing objects out to all clients.
+                  //Checks if the received object is an arraylist AND only does something if it is the proper turn...
+                  if(unidentifiedObject instanceof ArrayList && turnTracker == turn){
+                     //If it is, write the ArrayList back out to all of the clients.
+                     for(int i = 0; i < outputs.size(); i++){
+                        outputs.get(i).writeObject(unidentifiedObject);
+                        outputs.get(i).flush();
+                        turnTracker++;
+                     }
+                  }
                }while ( oins!=null);//end while loop listening for input.
+               
                //Close everything with all of the client connections.
                for(int i = 0; i < outputs.size(); i++){
                   outputs.get(i).close();
-               }//end for loop closing all of the output streams.
+               }
                oins.close();
                cs.close();
             }
+            
             catch(ClassNotFoundException cnfe){
                cnfe.printStackTrace();
             }//end inner try/catch 
+            
             catch(IOException ioe){
                ioe.printStackTrace();
             }//end IOE catch block
@@ -110,4 +126,5 @@ public class Server{
       }//end run method.
 
    }//end class ThreadedServer
+   
 }//end class

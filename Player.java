@@ -9,7 +9,7 @@ import javax.swing.*;
    Authors: Douglas Kaelin, Zacharry Georges, Anna Jacobsen, Alexa Lewis
    Version: 0.0.2
 */
-public class Player{
+public class Player implements Serializable{
    
    private String name;
    private boolean turn;

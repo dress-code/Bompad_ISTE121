@@ -30,6 +30,15 @@ public class Lilypad extends JButton
    }//end constructor
    
    /**
+   * An accessor method for the point of a lilypad object.
+   * @return the point location of a lilypad object.
+   */
+   public Point getPoint(){
+      Point point = new Point(row, col);
+      return point;
+   }
+   
+   /**
    * Accessor method for the vaid attribute.
    * @return True if the LilyPad is a valid false if not.
    */

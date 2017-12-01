@@ -1,35 +1,40 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.sound.sampled.*;
 import java.io.*;
 import java.net.*;
-import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
+<<<<<<< HEAD
 * Class Bompad constructs all of the necessary components for a game of Bompad.
 * @author Team 2
 * @version 11/9/2017
+=======
+* Bompad class contains all of the necessary constructors and methods for a game of Bompad.
+* @author Team 2
+* @version 11/29/2017
+>>>>>>> Doug's-new-new-Branch
 */
-
 public class Bompad extends JFrame{
 
-   private JButton jbSend;
-   private JTextArea jtaChat;
-   private JTextField jtfMsg; 
    private String outgoing;
    private String ipAddress;
    private String playerName;
-   private String timeStamp;
    
    //Main method calls the constructor for a new BomPad game.
    public static void main(String [] args)
    {
       new Bompad();
    }//end main
-   
+
    /**
+<<<<<<< HEAD
    * Constructor for a BomPad game.
+=======
+   * Constructor for a game of Bompad. Calls all necessary components and creates
+   * the client server connection.
+>>>>>>> Doug's-new-new-Branch
    */
    public Bompad()
    {
@@ -93,26 +98,17 @@ public class Bompad extends JFrame{
       jmHelp.add(jmiInstruct);
       
       //instantiate outer classes
-      Pond pond = new Pond();
-      Chat chat = new Chat();
-      ClientConnection cc = new ClientConnection();
-      cc.start();
-      jtaChat.append("You have entered the chat.\n");
-      jbSend.addActionListener(new ActionListener(){
-         public void actionPerformed(ActionEvent ae){
-            timeStamp = new SimpleDateFormat("hh.mm.ss").format(new java.util.Date());
-            outgoing = timeStamp + " " + playerName + ": " + jtfMsg.getText();
-            jtfMsg.setText("");
-            System.out.println(outgoing);
-            cc.write(outgoing);
-         }
-      }); 
+      ClientConnection cc = new ClientConnection(ipAddress, playerName);
+      Thread thread = new Thread(cc);
+      thread.start();
+      Pond pond = new Pond(cc);
+      //jtaChat.append("You have entered the chat.\n");
       Sound sound = new Sound();
       sound.start();
       
       //add classes(panels) to frame
       this.add(pond, BorderLayout.CENTER);
-      this.add(chat, BorderLayout.WEST);
+      this.add(cc, BorderLayout.WEST);
       
       //sets frame
       this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -122,114 +118,4 @@ public class Bompad extends JFrame{
       this.setTitle("Bompad");
       this.setVisible(true);
    }//end constructor
-   
-   class ClientConnection extends Thread
-   {
-      private Socket s;
-      private OutputStream os;
-      private InputStream is;
-      private ObjectOutputStream oos;
-      private ObjectInputStream ois;
-      
-      /**
-      * ClientConnection constructor.
-      */
-      public ClientConnection()
-      {
-         try{
-            s = new Socket(ipAddress, 16789);
-            os = s.getOutputStream();
-            is = s.getInputStream();
-            oos = new ObjectOutputStream(os);
-            ois = new ObjectInputStream(is);
-         }
-         catch(UnknownHostException uhe){
-            uhe.printStackTrace();
-         }
-         catch(IOException ioe){
-            ioe.printStackTrace();
-         }
-      }
-      
-      /**
-      * Run method for ClientConnection objects.
-      */
-      @Override
-      public void run(){
-         //code for the run method.
-         try{
-            while(ois != null){
-               System.out.println("We have received something.");
-               String msg = (String) ois.readObject();
-               System.out.println(msg);
-               try{
-                  File msgSound = new File("msgSound.au");
-                  AudioInputStream ais = AudioSystem.getAudioInputStream(msgSound);
-                  Clip clip = AudioSystem.getClip();
-                  clip.open(ais);
-                  clip.start();
-               }
-               catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
-               catch(LineUnavailableException lue){lue.printStackTrace();}
-               catch(IOException ioe){ioe.printStackTrace();}
-               jtaChat.append(msg + "\n");
-            }
-         }
-         catch(IOException ioe){ioe.printStackTrace();}
-         catch(ClassNotFoundException cnfe){cnfe.printStackTrace();}
-      }
-      
-      /**
-      * A method for writing objects to the server.
-      */
-      public void write(Object o){
-         try{
-            System.out.println("We are about to write the object.");
-            oos.writeObject(outgoing);
-            oos.flush();
-            System.out.println("We have written the object.");
-         }
-         catch(IOException ioe){
-            ioe.printStackTrace();
-         }
-      }
-   }
-   
-   /**
-   * Inner class Chat creates the chat and has methods for updating.
-   */
-   class Chat extends JPanel implements ActionListener {
-   
-   /**
-   * Constructor for a chat object.
-   */
-   public Chat()
-   {
-      this.setLayout(new GridLayout(2,1));
-      
-      //displays all the messages
-      jtaChat = new JTextArea(10,30);
-      JScrollPane scrollPane = new JScrollPane(jtaChat);
-      scrollPane.setViewportView(jtaChat);
-      jtaChat.setEditable(false);
-      jtaChat.setLineWrap(true);
-
-      
-      JPanel jpSend = new JPanel(new FlowLayout());
-      jtfMsg = new JTextField(10);
-      jpSend.add(jtfMsg);
-      jbSend = new JButton("Send");
-      jpSend.add(jbSend);
-      
-      this.add(scrollPane);
-      this.add(jpSend);
-      this.setSize(200,100);
-      
-      }//end constructor for the Chat.
-      
-      //just to get the compiler to shut up.
-      public void actionPerformed(ActionEvent ae){};
-      
-}//end class Chat.
-
 }//end Bompad class
