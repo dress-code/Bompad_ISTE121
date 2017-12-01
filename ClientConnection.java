@@ -23,17 +23,14 @@ public class ClientConnection extends JPanel implements Runnable
       private ObjectInputStream ois;
       private Chat clientChat;
       private Pond board;
-      private ArrayList<Player> players;
+      private Vector<Player> players;
       private JButton jbSend;
       //The current turn of a player.
       private int turn;
-<<<<<<< HEAD
       //The assigned number of the player.
       private int assignedTurn;
-=======
       //Should the game start?
       private boolean startGame = false;
->>>>>>> Anna's-branch.-
     
       
       /**
@@ -90,8 +87,8 @@ public class ClientConnection extends JPanel implements Runnable
                
                /*if the object is an instance of an arraylist, set the class variable
                ArrayList<Player> to the received ArrayList.*/
-               if(object instanceof ArrayList){
-                  players = (ArrayList<Player>) object;
+               if(object instanceof Vector){
+                  players = (Vector<Player>) object;
                }//end if statement using instanceof to determine object type.
                
                // If the object is an Integer, determine the turn.

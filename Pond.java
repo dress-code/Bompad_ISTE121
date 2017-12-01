@@ -16,7 +16,7 @@ public class Pond extends JPanel{
    //Declares and instantiates a 2-D array of LilyPads.
    private Lilypad[][] lilypads = new Lilypad[10][10];
    //Declares and insntantiates an ArrayList of Player objects.
-   private ArrayList<Player> players = new ArrayList<Player>();
+   private Vector<Player> players = new Vector<Player>();
    //Is there a winner of the game?
    private boolean winner = false;
    Point lilyPadCoord;
