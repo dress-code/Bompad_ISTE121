@@ -23,16 +23,10 @@ public class Pond extends JPanel{
    //Whose turn is it?
    private int myTurn;
    //Icon for an empty lilypad and open water spot.
-<<<<<<< HEAD
-   Icon emptyPad = new ImageIcon("img/empty.png");
-   Icon water = new ImageIcon("img/water.png");
-   int numPlayers = 4;
-=======
-   private Icon emptyPad = new ImageIcon("empty.png");
-   private Icon water = new ImageIcon("water.png");
+   private Icon emptyPad = new ImageIcon("img/empty.png");
+   private Icon water = new ImageIcon("img/water.png");
    private int numPlayers = 4;
    private ClientConnection connection;
->>>>>>> Doug's-new-new-Branch
   
    /**
    * Constructor for a "pond" board of 64 LilyPads in an 8 x 8 grid layout.
@@ -84,33 +78,33 @@ public class Pond extends JPanel{
       }
       //sets border on left side.
       for(int i = 0; i < 10; i++){
-         Icon borderLeft = new ImageIcon("img/border-left.png");
+         Icon borderLeft = new ImageIcon("border-left.png");
          lilypads[i][0].setIcon(borderLeft);
          lilypads[i][0].setValid(false);
       }
       //sets border on top.
       for(int i = 0; i < 10; i++){
-         Icon borderTop = new ImageIcon("img/border-top.png");
+         Icon borderTop = new ImageIcon("border-top.png");
          lilypads[0][i].setIcon(borderTop);
          lilypads[0][i].setValid(false);
       }
       //sets border on right side.
       for(int i = 0; i < 10; i++){
-         Icon borderRight = new ImageIcon("img/border-right.png");
+         Icon borderRight = new ImageIcon("border-right.png");
          lilypads[i][9].setIcon(borderRight);
          lilypads[i][9].setValid(false);
       }
       //Sets border on bottom.
       for(int i = 0; i < 10; i++){
-         Icon borderBottom = new ImageIcon("img/border-bottom.png");
+         Icon borderBottom = new ImageIcon("border-bottom.png");
          lilypads[9][i].setIcon(borderBottom);
          lilypads[9][i].setValid(false);
       }
       //Sets corners of the pond.
-      lilypads[9][0].setIcon(new ImageIcon("img/bottom-left.png"));
-      lilypads[9][9].setIcon(new ImageIcon("img/bottom-right.png"));
-      lilypads[0][0].setIcon(new ImageIcon("img/top-left.png"));
-      lilypads[0][9].setIcon(new ImageIcon("img/top-right.png"));
+      lilypads[9][0].setIcon(new ImageIcon("bottom-left.png"));
+      lilypads[9][9].setIcon(new ImageIcon("bottom-right.png"));
+      lilypads[0][0].setIcon(new ImageIcon("top-left.png"));
+      lilypads[0][9].setIcon(new ImageIcon("top-right.png"));
       
       highlightSpaces(players.get(0).getCurrentLocation());
       //players.get(0).setTurn(true);
@@ -154,22 +148,8 @@ public class Pond extends JPanel{
             explosion.get(i).setIcon(water);
          }
       }
-<<<<<<< HEAD
-      try{
-         File explosionSound = new File("sounds/explosion.au");
-         AudioInputStream ais = AudioSystem.getAudioInputStream(explosionSound);
-         Clip clip = AudioSystem.getClip();
-         clip.open(ais);
-         clip.start();
-      }
-      catch(UnsupportedAudioFileException uafe){uafe.printStackTrace();}
-      catch(LineUnavailableException lue){lue.printStackTrace();}
-      catch(IOException ioe){ioe.printStackTrace();}
-
-=======
       sound("explosion.au");
    
->>>>>>> Doug's-new-new-Branch
    }//end method bombSpaces()
    
    /**
@@ -390,7 +370,7 @@ public class Pond extends JPanel{
                            
                      //Sets the position of the player to the new location.
                      players.get(currentTurn).setCurrentLocation(new Point(row,column));
-                     sound("sounds/frog-move.au");
+                     sound("frog-move.au");
                      //ends the turn of the player and increments the class variable so it becomes the next player's turn.
                      changeTurn();
                   }//end if statement 1b
