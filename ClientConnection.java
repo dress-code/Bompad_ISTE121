@@ -465,7 +465,15 @@ public class ClientConnection extends JPanel implements Runnable
                try{
                      Lilypad clicked = (Lilypad) e.getComponent();
                      MoveRequestPacket mrp = new MoveRequestPacket(clicked.getPoint());
-                     //Sends move request to server, where it will check validity.                     
+                     try{
+                        oos.writeObject(mrp);
+                        oos.flush();
+                        Thread wait = new Thread();
+                        wait.sleep(1000);
+                        wait.join();
+                     }
+                     catch(IOException ioe){ioe.printStackTrace();}   
+                     catch(InterruptedException ie){ie.printStackTrace();}                
                      if(moveResponse == true){
                         move(clicked.getPoint(), players.get(myTurn));
                         ClientConnection.this.write(players);
