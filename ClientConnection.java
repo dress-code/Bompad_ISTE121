@@ -104,8 +104,9 @@ public class ClientConnection extends JPanel implements Runnable
                   players.get(currentTurn).setTurn(true);
                }
                //If the object is a Boolean, determine whether the game should start
-               if(object instanceof Boolean){
-                  startGame = (Boolean) object;
+               if(object instanceof GameStartPacket){
+                  GameStartPacket gspIn = (GameStartPacket) object;
+                  startGame = gspIn.shouldStartGame();
                   if(startGame == true){
                      //instantiates the chat class variable to a new chat.
                      clientChat = new Chat(playerName);
@@ -116,14 +117,17 @@ public class ClientConnection extends JPanel implements Runnable
                      Sound sound = new Sound();
                      sound.start();
                   }
-                  GameStartPacket gsp = new GameStartPacket(players);
-                  oos.writeObject(gsp);
-                  oos.writeObject(Boolean.valueOf(startGame));
+                  BoardPacket bp = new BoardPacket(lilypads);
+                  oos.writeObject(bp);
+                  oos.flush();
+                  GameStartPacket gspOut = new GameStartPacket(players, true);
+                  oos.writeObject(gspOut);
                   oos.flush();
                }
                if(object instanceof MoveResponsePacket){
                   MoveResponsePacket mrp = (MoveResponsePacket) object;
                   moveResponse = mrp.getResponse();
+                  System.out.println("The client has received a MoveResponsePacket of " + moveResponse);
                }
                if(object instanceof AssignedNumber){
                   AssignedNumber an = (AssignedNumber) object;
