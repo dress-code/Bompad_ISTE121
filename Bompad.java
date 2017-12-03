@@ -15,7 +15,6 @@ public class Bompad extends JFrame{
    private String outgoing;
    private String ipAddress;
    private String playerName;
-   private boolean start = false;
    
    //Main method calls the constructor for a new BomPad game.
    public static void main(String [] args)
@@ -34,11 +33,10 @@ public class Bompad extends JFrame{
       ClientConnection cc = new ClientConnection(ipAddress, playerName);
       Thread thread = new Thread(cc);
       thread.start();
-      while(start == false){
+      /*while(start == false){
          start = cc.getStartUpdate();
          System.out.println(start);
-      }
-      System.out.println("Bompad 40: " + start);
+      }*/
       //MENUS
       JMenuBar jmb = new JMenuBar();
       setJMenuBar(jmb);
@@ -97,20 +95,18 @@ public class Bompad extends JFrame{
       jmHelp.add(jmiInstruct);
       
       //instantiate outer classes
-      Pond pond = new Pond(cc);
+      //Pond pond = new Pond(cc);
       //jtaChat.append("You have entered the chat.\n");
-      Sound sound = new Sound();
-      sound.start();
       
       //add classes(panels) to frame
-      this.add(pond, BorderLayout.CENTER);
-      this.add(cc, BorderLayout.WEST);
+      //this.add(pond, BorderLayout.CENTER);
+      this.add(cc, BorderLayout.CENTER);
       
       //sets frame
       this.setDefaultCloseOperation(EXIT_ON_CLOSE);
       this.pack();
       this.setLocationRelativeTo(null);
-      this.setResizable(false);
+      //this.setResizable(false);
       this.setTitle("Bompad");
       this.setVisible(true);
    }//end constructor
