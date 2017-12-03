@@ -78,33 +78,33 @@ public class Pond extends JPanel{
       }
       //sets border on left side.
       for(int i = 0; i < 10; i++){
-         Icon borderLeft = new ImageIcon("border-left.png");
+         Icon borderLeft = new ImageIcon("img/border-left.png");
          lilypads[i][0].setIcon(borderLeft);
          lilypads[i][0].setValid(false);
       }
       //sets border on top.
       for(int i = 0; i < 10; i++){
-         Icon borderTop = new ImageIcon("border-top.png");
+         Icon borderTop = new ImageIcon("img/border-top.png");
          lilypads[0][i].setIcon(borderTop);
          lilypads[0][i].setValid(false);
       }
       //sets border on right side.
       for(int i = 0; i < 10; i++){
-         Icon borderRight = new ImageIcon("border-right.png");
+         Icon borderRight = new ImageIcon("img/border-right.png");
          lilypads[i][9].setIcon(borderRight);
          lilypads[i][9].setValid(false);
       }
       //Sets border on bottom.
       for(int i = 0; i < 10; i++){
-         Icon borderBottom = new ImageIcon("border-bottom.png");
+         Icon borderBottom = new ImageIcon("img/border-bottom.png");
          lilypads[9][i].setIcon(borderBottom);
          lilypads[9][i].setValid(false);
       }
       //Sets corners of the pond.
-      lilypads[9][0].setIcon(new ImageIcon("bottom-left.png"));
-      lilypads[9][9].setIcon(new ImageIcon("bottom-right.png"));
-      lilypads[0][0].setIcon(new ImageIcon("top-left.png"));
-      lilypads[0][9].setIcon(new ImageIcon("top-right.png"));
+      lilypads[9][0].setIcon(new ImageIcon("img/bottom-left.png"));
+      lilypads[9][9].setIcon(new ImageIcon("img/bottom-right.png"));
+      lilypads[0][0].setIcon(new ImageIcon("img/top-left.png"));
+      lilypads[0][9].setIcon(new ImageIcon("img/top-right.png"));
       
       highlightSpaces(players.get(0).getCurrentLocation());
       //players.get(0).setTurn(true);
@@ -148,7 +148,7 @@ public class Pond extends JPanel{
             explosion.get(i).setIcon(water);
          }
       }
-      sound("explosion.au");
+      sound("sounds/explosion.au");
    
    }//end method bombSpaces()
    
@@ -267,7 +267,7 @@ public class Pond extends JPanel{
       lilypads[newRow][newCol].setIcon(player.getIcon());
       lilypads[newRow][newCol].setValid(false);
       player.setCurrentLocation(newPoint);
-      sound("frog-move.au");
+      sound("sounds/frog-move.au");
    }//end move
    
    /**
