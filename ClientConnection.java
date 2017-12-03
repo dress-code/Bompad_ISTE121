@@ -23,7 +23,10 @@ public class ClientConnection extends JPanel implements Runnable
       private ObjectInputStream ois;
       private Chat clientChat;
       private Pond board;
+<<<<<<< HEAD
       private Vector<Player> players;
+=======
+>>>>>>> Anna's-branch.-
       private JButton jbSend;
       private String playerName;
       //The current turn of a player.
@@ -103,9 +106,12 @@ public class ClientConnection extends JPanel implements Runnable
                // If the object is an Integer, determine the turn.
                if(object instanceof Integer){
                   Integer turnReceived = (Integer) object;
+<<<<<<< HEAD
                   turn = turnReceived.intValue();
+=======
                   currentTurn = turnReceived.intValue();
                   players.get(currentTurn).setTurn(true);
+>>>>>>> Anna's-branch.-
                }
                //If the object is a Boolean, determine whether the game should start
                if(object instanceof GameStartPacket){

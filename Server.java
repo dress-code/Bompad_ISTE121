@@ -66,7 +66,7 @@ public class Server{
       public ThreadedServer( Socket clientSocket ){
          cs = clientSocket;
          //Sets the turn of this thread.
-         turn = numAssignment;
+         assignedNum = numAssignment;
          welcomeMsg = "You have connected to the chat.";
          assignedNum = numAssignment;
          numAssignment++;
