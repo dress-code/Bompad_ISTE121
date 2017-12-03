@@ -97,9 +97,6 @@ public class Bompad extends JFrame{
       jmHelp.add(jmiInstruct);
       
       //instantiate outer classes
-      ClientConnection cc = new ClientConnection(ipAddress, playerName);
-      Thread thread = new Thread(cc);
-      thread.start();
       Pond pond = new Pond(cc);
       //jtaChat.append("You have entered the chat.\n");
       Sound sound = new Sound();
