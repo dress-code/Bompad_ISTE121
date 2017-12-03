@@ -33,18 +33,12 @@ public class Bompad extends JFrame{
       ClientConnection cc = new ClientConnection(ipAddress, playerName);
       Thread thread = new Thread(cc);
       thread.start();
-      /*while(start == false){
-         start = cc.getStartUpdate();
-         System.out.println(start);
-      }*/
       //MENUS
       JMenuBar jmb = new JMenuBar();
       setJMenuBar(jmb);
       
       JMenu jmFile = new JMenu("File");
       JMenu jmHelp = new JMenu("Help");
-      
-      //menu items and actionlisteners
       //EXIT
       JMenuItem jmiExit = new JMenuItem("Exit");
       jmiExit.addActionListener(new ActionListener()
@@ -93,12 +87,6 @@ public class Bompad extends JFrame{
       jmFile.add(jmiExit);
       jmHelp.add(jmiAbout);
       jmHelp.add(jmiInstruct);
-      
-      //instantiate outer classes
-      //Pond pond = new Pond(cc);
-      //jtaChat.append("You have entered the chat.\n");
-      
-      //add classes(panels) to frame
       //this.add(pond, BorderLayout.CENTER);
       this.add(cc, BorderLayout.CENTER);
       
