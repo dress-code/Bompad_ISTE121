@@ -83,11 +83,7 @@ public class Server{
                OutputStream out = cs.getOutputStream();
                ObjectOutputStream oos = new ObjectOutputStream(out);
                outputs.add(oos);
-               Integer turnMsg = Integer.valueOf(turn);
-               oos.writeObject(turnMsg);
-               oos.flush();
                oos.writeObject(welcomeMsg);
-               System.out.println("We have written turn to client.");
                InputStream in = cs.getInputStream();
                ObjectInputStream oins = new ObjectInputStream(in);
                AssignedNumber assigned = new AssignedNumber(assignedNum);
