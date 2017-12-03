@@ -91,6 +91,7 @@ public class Server{
                   }
                
                AssignedNumber assigned = new AssignedNumber(assignedNum);
+               System.out.println("Server line 94 is assigning turn " + assigned.getAssigned() + " to the client.");
                oos.writeObject(assigned);
                oos.flush();
                System.out.print("Go run client "+ assignedNum);

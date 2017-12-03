@@ -128,6 +128,7 @@ public class ClientConnection extends JPanel implements Runnable
                if(object instanceof AssignedNumber){
                   AssignedNumber an = (AssignedNumber) object;
                   myTurn = an.getAssigned();
+                  System.out.println("131 Client - This client's assigned turn is: " + myTurn);
                }
                
             }while(ois != null);//end while loop
@@ -332,8 +333,7 @@ public class ClientConnection extends JPanel implements Runnable
          lilypads[0][0].setIcon(new ImageIcon("top-left.png"));
          lilypads[0][9].setIcon(new ImageIcon("top-right.png"));
          //players.get(0).setTurn(true);
-         myTurn = ClientConnection.this.getTurn();
-         System.out.println("Step 1, 113: My assigned turn is: " + myTurn);
+         //myTurn = ClientConnection.this.getTurn();
          
       }//end constructor
       
