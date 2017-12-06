@@ -139,12 +139,6 @@ public class Server{
                            outputs.get(i).flush();
                         }
                      }
-                     if(intObject.intValue() == -2) {
-                         for(int i = 0; i < outputs.size(); i++){
-                           outputs.get(i).writeObject(gamePlayers);
-                           outputs.get(i).flush();
-                        }
-                     }
                   }
                //If unidentified object is a Boolean, start the game.
                   if(unidentifiedObject instanceof Boolean){
