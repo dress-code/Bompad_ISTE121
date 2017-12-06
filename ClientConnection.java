@@ -42,6 +42,8 @@ public class ClientConnection extends JPanel implements Runnable
       
       /**
       * Paramterized ClientConnection constructor.
+      * @param ipAddress the ip address of the server to use
+      * @param _playerName the name of the layer to set
       */
       public ClientConnection(String ipAddress, String _playerName)
       {

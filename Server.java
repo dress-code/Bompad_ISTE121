@@ -185,6 +185,7 @@ public class Server{
                   System.out.println("Server has determined it received a move request.");
                      MoveRequestPacket mrp = (MoveRequestPacket) unidentifiedObject;
                      MoveResponsePacket mRespPack = isValidMove(mrp.getNewLoc());
+                     System.out.println(mRespPack.getResponse());
                      for(int i = 0; i < outputs.size(); i++){
                            outputs.get(i).writeObject(mRespPack);
                            outputs.get(i).flush();
