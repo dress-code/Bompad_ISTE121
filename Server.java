@@ -11,7 +11,7 @@ import java.awt.*;
 public class Server{
    //Keeps track of number of players/turns
    private int turnTracker = 0;
-   private Integer numAssignment = 0;
+   private int numAssignment = 0;
    //an ArrayList containing all of the ObjectOutputStreams associated with all of the clients.
    private Vector<ObjectOutputStream> outputs = new Vector<ObjectOutputStream>();
    private Vector<Player> gamePlayers;
@@ -57,7 +57,6 @@ public class Server{
    class ThreadedServer extends Thread {
       private int assignedNum;
       private Socket cs = null;
-      private String welcomeMsg;
       
       /**
       * Constuctor for a ThreadedServer thread.
@@ -66,8 +65,6 @@ public class Server{
       public ThreadedServer( Socket clientSocket ){
          cs = clientSocket;
          //Sets the turn of this thread.
-         assignedNum = numAssignment;
-         welcomeMsg = "You have connected to the chat.";
          assignedNum = numAssignment;
          numAssignment++;
          System.out.println("The turn assigned to this player is: " + assignedNum);
@@ -83,7 +80,6 @@ public class Server{
                OutputStream out = cs.getOutputStream();
                ObjectOutputStream oos = new ObjectOutputStream(out);
                outputs.add(oos);
-               oos.writeObject(welcomeMsg);
                InputStream in = cs.getInputStream();
                ObjectInputStream oins = new ObjectInputStream(in);
                AssignedNumber assigned = new AssignedNumber(assignedNum);
@@ -102,8 +98,6 @@ public class Server{
                System.out.println(" Waiting to receive from you");
                do{
                   Object unidentifiedObject = oins.readObject();
-                  System.out.println("Server has read something." + unidentifiedObject);
-                  //Checks if the received object is a String or an ArrayList.
                   System.out.println("Server has read something");
                //Checks if the received object is a String or an ArrayList.
                   if(unidentifiedObject instanceof String){
@@ -151,12 +145,6 @@ public class Server{
                            outputs.get(i).flush();
                         }
                      }
-
-                  }
-                  //if unidentified object is a Player, add it to the array list of players.
-                  if(unidentifiedObject instanceof Player){
-                     Player p = (Player) unidentifiedObject;
-                     gamePlayers.add(p);
                   }
                //If unidentified object is a Boolean, start the game.
                   if(unidentifiedObject instanceof Boolean){
@@ -185,7 +173,6 @@ public class Server{
                   System.out.println("Server has determined it received a move request.");
                      MoveRequestPacket mrp = (MoveRequestPacket) unidentifiedObject;
                      MoveResponsePacket mRespPack = isValidMove(mrp.getNewLoc());
-                     System.out.println(mRespPack.getResponse());
                      for(int i = 0; i < outputs.size(); i++){
                            outputs.get(i).writeObject(mRespPack);
                            outputs.get(i).flush();
@@ -320,7 +307,6 @@ public class Server{
             }
          }
          System.out.println("Server has returned the response packet.");
-         System.out.println(alpads);
          return mrp;
       }
    }//end class ThreadedServer
