@@ -173,6 +173,7 @@ public class Server{
                   System.out.println("Server has determined it received a move request.");
                      MoveRequestPacket mrp = (MoveRequestPacket) unidentifiedObject;
                      MoveResponsePacket mRespPack = isValidMove(mrp.getNewLoc());
+                     System.out.println("this is mrp in the instance of part: " + mRespPack);
                      for(int i = 0; i < outputs.size(); i++){
                            outputs.get(i).writeObject(mRespPack);
                            outputs.get(i).flush();
@@ -307,6 +308,7 @@ public class Server{
             }
          }
          System.out.println("Server has returned the response packet.");
+         System.out.println(alpads);
          return mrp;
       }
    }//end class ThreadedServer
