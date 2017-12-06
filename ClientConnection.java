@@ -27,8 +27,6 @@ public class ClientConnection extends JPanel implements Runnable
       private String playerName;
       //The current turn of a player.
       private int turn;
-      //The assigned number of the player.
-      private int assignedTurn;
       //Should the game start?
       private boolean startGame = false;
       //Declares and instantiates a 2-D array of LilyPads.
@@ -42,8 +40,6 @@ public class ClientConnection extends JPanel implements Runnable
       
       /**
       * Paramterized ClientConnection constructor.
-      * @param ipAddress the ip address of the server to use
-      * @param _playerName the name of the layer to set
       */
       public ClientConnection(String ipAddress, String _playerName)
       {
@@ -104,7 +100,6 @@ public class ClientConnection extends JPanel implements Runnable
                // If the object is an Integer, determine the turn.
                if(object instanceof Integer){
                   Integer turnReceived = (Integer) object;
-                  turn = turnReceived.intValue();
                   currentTurn = turnReceived.intValue();
                   players.get(currentTurn).setTurn(true);
                }
@@ -173,7 +168,6 @@ public class ClientConnection extends JPanel implements Runnable
       */
       public void turnRequest(){
          Integer turnRequest = -1;
-         System.out.println("We are requesting the turn from the server.");
          write(turnRequest);
       }
       
