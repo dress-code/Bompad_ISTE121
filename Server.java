@@ -212,7 +212,6 @@ public class Server{
          adjacent.add(lilypads[xPos-1][yPos+1]);
          adjacent.add(lilypads[xPos][yPos+1]);
          adjacent.add(lilypads[xPos][yPos-1]);
-         adjacent.add(lilypads[xPos][yPos]);
          adjacent.add(lilypads[xPos+1][yPos]);
          adjacent.add(lilypads[xPos+1][yPos+1]);
          adjacent.add(lilypads[xPos+1][yPos-1]);
@@ -299,9 +298,10 @@ public class Server{
          System.out.println("Server has created a new response packet.");
          Point oldLoc = gamePlayers.get(turnTracker).getCurrentLocation();
          ArrayList<Lilypad> alpads = getAdjacent(oldLoc);
+         System.out.println(alpads);
          for(int i = 0; i < alpads.size(); i++)
          {
-            if(alpads.get(i).getPoint() == p){
+            if(alpads.get(i).getPoint().equals(p)){
                mrp.setResponse(true);
                System.out.println("Server has set the response to true.");
             }
@@ -310,5 +310,4 @@ public class Server{
          return mrp;
       }
    }//end class ThreadedServer
-   
 }//end class
