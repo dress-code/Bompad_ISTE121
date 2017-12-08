@@ -301,7 +301,7 @@ public class Server{
          ArrayList<Lilypad> alpads = getAdjacent(oldLoc);
          for(int i = 0; i < alpads.size(); i++)
          {
-            if(alpads.get(i).getPoint() == p){
+            if(alpads.get(i).getPoint().equals(p)){
                mrp.setResponse(true);
                System.out.println("Server has set the response to true.");
             }
