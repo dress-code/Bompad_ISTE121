@@ -94,7 +94,9 @@ public class ClientConnection extends JPanel implements Runnable
                /*if the object is an instance of an arraylist, set the class variable
                ArrayList<Player> to the received ArrayList.*/
                if(object instanceof Vector){
+                  Vector<Player> oldPlayers = players;
                   players = (Vector<Player>) object;
+                  board.update(oldPlayers);
                }//end if statement using instanceof to determine object type.
                
                // If the object is an Integer, determine the turn.
@@ -429,20 +431,13 @@ public class ClientConnection extends JPanel implements Runnable
       
       /**
       *A method which updates the board
+      * @param oldPlayers This is a vector of all the old player objects. this is used to geth the old postitions
       */
-      /*public void update(){
+      public void update(Vector<Player> oldPlayers){
          for(int i=0; i<players.size(); i++){
-            move(players.get(i));
+            move(players.get(i).getCurrentLocation(), oldPlayers.get(i));
          }
-         for(int i=0; i<lilypads.length; i++){
-            for(int j=0; j<lilypads.length; j++){
-               //iterate through lilypads
-               if(lilypads[i][j].isValid()==true){
-                  lilypads[i][j].setIcon(emptyPad);
-               }
-            }
-         }
-      }//end update*/
+      }//end update
       
       /**
       * A method which provides the sound effects for a Bompad game.
