@@ -40,14 +40,15 @@ public class Bompad extends JFrame{
    {
       ipAddress = JOptionPane.showInputDialog(null, "What is the IP address of your server?");
       playerName = JOptionPane.showInputDialog(null, "What is your name?");
+      ClientConnection cc = new ClientConnection(ipAddress, playerName);
+      Thread thread = new Thread(cc);
+      thread.start();
       //MENUS
       JMenuBar jmb = new JMenuBar();
       setJMenuBar(jmb);
       
       JMenu jmFile = new JMenu("File");
       JMenu jmHelp = new JMenu("Help");
-      
-      //menu items and actionlisteners
       //EXIT
       JMenuItem jmiExit = new JMenuItem("Exit");
       jmiExit.addActionListener(new ActionListener()
@@ -96,25 +97,14 @@ public class Bompad extends JFrame{
       jmFile.add(jmiExit);
       jmHelp.add(jmiAbout);
       jmHelp.add(jmiInstruct);
-      
-      //instantiate outer classes
-      ClientConnection cc = new ClientConnection(ipAddress, playerName);
-      Thread thread = new Thread(cc);
-      thread.start();
-      Pond pond = new Pond(cc);
-      //jtaChat.append("You have entered the chat.\n");
-      Sound sound = new Sound();
-      sound.start();
-      
-      //add classes(panels) to frame
-      this.add(pond, BorderLayout.CENTER);
-      this.add(cc, BorderLayout.WEST);
+      //this.add(pond, BorderLayout.CENTER);
+      this.add(cc, BorderLayout.CENTER);
       
       //sets frame
       this.setDefaultCloseOperation(EXIT_ON_CLOSE);
       this.pack();
       this.setLocationRelativeTo(null);
-      this.setResizable(false);
+      //this.setResizable(false);
       this.setTitle("Bompad");
       this.setVisible(true);
    }//end constructor

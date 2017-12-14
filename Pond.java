@@ -16,12 +16,13 @@ public class Pond extends JPanel{
    //Declares and instantiates a 2-D array of LilyPads.
    private Lilypad[][] lilypads = new Lilypad[10][10];
    //Declares and insntantiates an ArrayList of Player objects.
-   private ArrayList<Player> players = new ArrayList<Player>();
+   private Vector<Player> players = new Vector<Player>();
    //Is there a winner of the game?
    private boolean winner = false;
    Point lilyPadCoord;
    //Whose turn is it?
    private int myTurn;
+   private int whoseTurn;
    //Icon for an empty lilypad and open water spot.
    private Icon emptyPad = new ImageIcon("img/empty.png");
    private Icon water = new ImageIcon("img/water.png");
@@ -34,13 +35,15 @@ public class Pond extends JPanel{
    public Pond(ClientConnection cc){
    
       connection = cc;
+      myTurn = connection.getTurn();
+      System.out.println("My turn is: " + myTurn);
       this.setLayout(new GridLayout(10,10));
       //Creates Player objects and adds them to the ArrayList.
       for(int p = 1; p < 5; p++){
          Player player = new Player(p);
          players.add(player);
       }
-      
+      //connection.write(players.get(myTurn));
       //Creates lilypads and adds them to the 2-D array.
       for(int i = 0; i < 10; i++){
          for(int j = 0; j < 10; j++){
@@ -107,10 +110,6 @@ public class Pond extends JPanel{
       lilypads[0][9].setIcon(new ImageIcon("img/top-right.png"));
       
       highlightSpaces(players.get(0).getCurrentLocation());
-      //players.get(0).setTurn(true);
-      myTurn = connection.getTurn();
-      System.out.println("My turn is: " + myTurn);
-      
    }//end constructor
    
    /**
@@ -267,7 +266,10 @@ public class Pond extends JPanel{
       lilypads[newRow][newCol].setIcon(player.getIcon());
       lilypads[newRow][newCol].setValid(false);
       player.setCurrentLocation(newPoint);
+<<<<<<< HEAD
       sound("sounds/frog-move.au");
+=======
+>>>>>>> master
    }//end move
    
    /**
@@ -314,33 +316,58 @@ public class Pond extends JPanel{
    public class CustomMouseListener implements MouseListener {
    
       public void mouseClicked(MouseEvent e) {
+<<<<<<< HEAD
          update();
          //left click moves the Player.               
+=======
+         //left click moves the Player.         
+         connection.turnRequest();      
+>>>>>>> master
          if (e.getButton() == MouseEvent.BUTTON1 && connection.getTurn() == myTurn) {
             int row = -1;
             int column = -1;
          
             try{
-            
-               Lilypad clicked = (Lilypad) e.getComponent();
-               row = clicked.getRow();
-               column = clicked.getCol();
-               Point newLoc = new Point(row, column);
-               //Gets the location of the player before a move is made.
-               Point oldLoc = players.get(myTurn).getCurrentLocation();
-               int oldRow = (int)oldLoc.getX();
-               int oldCol = (int)oldLoc.getY();
-               //Gets an array list of adjacent lilypads.
-               ArrayList<Lilypad> alpads = getAdjacent(oldLoc);
-               //Iterates through the adjacent lilypads and checks if any of them matches the clicked lilypad.
-               for(int i = 0; i < alpads.size(); i++){
-                  Point compare = alpads.get(i).getPoint();
-                  if( (compare.getX() == newLoc.getX()) && (compare.getY() == newLoc.getY())){
-                     move(newLoc, players.get(myTurn));
+               //connection.turnRequest();
+               //whoseTurn = connection.getTurn();
+               System.out.println("Line 318, Pond - My turn equals: " + myTurn);
+               System.out.println("Line 319, Pond- Step 1 for move - The current turn is: " + whoseTurn);
+               if(myTurn == whoseTurn){
+               System.out.println("Line 321, Pond - step 2 for move - It is the players turn.");
+                  Lilypad clicked = (Lilypad) e.getComponent();
+                  row = clicked.getRow();
+                  column = clicked.getCol();
+                  System.out.println("The coordinates of the lilypad clicked are: " + row + " " + column);
+                  Point newLoc = new Point(row, column);
+                  //Gets the location of the player before a move is made.
+                  Point oldLoc = players.get(myTurn).getCurrentLocation();
+                  System.out.println("The old/current location of the player is: " + oldLoc);
+                  int oldRow = (int)oldLoc.getX();
+                  int oldCol = (int)oldLoc.getY();
+                  //Gets an array list of adjacent lilypads.
+                  ArrayList<Lilypad> alpads = getAdjacent(oldLoc);
+                  for(int i = 0; i < alpads.size(); i++)
+                  {
+                     System.out.println("The adjacent spaces for the move are: " + alpads.get(i).getPoint());
                   }
+                  //Iterates through the adjacent lilypads and checks if any of them matches the clicked lilypad.
+                  for(int i = 0; i < alpads.size(); i++){
+                     Point compare = alpads.get(i).getPoint();
+                     if( (compare.getX() == newLoc.getX()) && (compare.getY() == newLoc.getY())){
+                        move(newLoc, players.get(myTurn));
+                     }
+                  }
+                  for(int i = 0 ; i < players.size(); i++){
+                     System.out.println("Player" + i + " after move" + players.get(i).getCurrentLocation());
+                  }
+                  connection.write(players);
+                  connection.playerRequest();
+                  for(int i = 0 ; i < players.size(); i++){
+                     System.out.println("Player " + i + " after received from server" + players.get(i).getCurrentLocation());
+                  }
+                  sound("frog-move.au");
                }
                connection.write(players);
-               
                
                /*Point thePad = new Point(row, column);
                int playerX = (int)players.get(currentTurn).getCurrentLocation().getX();
@@ -384,7 +411,7 @@ public class Pond extends JPanel{
             catch(ArrayIndexOutOfBoundsException aioobe){
                JOptionPane.showMessageDialog(lilypads[4][4], "Please choose a valid lilypad.");
             }//end catch block
-         }
+         }//end left click.
          
          //Right click sinks a lilypad.
          else if (e.getButton() == MouseEvent.BUTTON3 && connection.getTurn() == myTurn){

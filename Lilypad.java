@@ -15,18 +15,17 @@ public class Lilypad extends JButton
    private boolean valid = true;
    private int row;
    private int col;
-   //private Icon empty = new ImageIcon(/*filepath to empty icon*/);
    
    /**
    * Constructor for a LilyPad object.
+   * @param _row the row location of the lilypad
+   * @param _col the colum location of the liypad
    */
 
    public Lilypad(int _row, int _col){
       row = _row;
       col = _col;
       this.setPreferredSize(new Dimension(75,75));
-      //Sets the new LilyPad icon to the empty space.
-      //jbPad.setIcon(empty);
    }//end constructor
    
    /**
