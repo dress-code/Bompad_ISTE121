@@ -3,7 +3,7 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 /**
 * A thread for playing the background frog sound on repeat.
-* @author Anna Jacobsen
+* @author Anna Jacobsen (of Team 2)
 * @version 11/22/2017
 */
 public class Sound extends Thread{
