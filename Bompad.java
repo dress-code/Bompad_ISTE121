@@ -88,7 +88,7 @@ public class Bompad extends JFrame{
       jmHelp.add(jmiAbout);
       jmHelp.add(jmiInstruct);
       //this.add(pond, BorderLayout.CENTER);
-      this.add(cc, BorderLayout.CENTER);
+      this.add(cc, BorderLayout.CENTER); //adds chat and board to the frame
       
       //sets frame
       this.setDefaultCloseOperation(EXIT_ON_CLOSE);

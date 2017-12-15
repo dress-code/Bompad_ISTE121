@@ -4,10 +4,9 @@ import javax.imageio.*;
 import javax.swing.*;
 
 /**
-	Player.java
-	A class that create a playable character
-   Authors: Douglas Kaelin, Zacharry Georges, Anna Jacobsen, Alexa Lewis
-   Version: 0.0.2
+*	A class that creates a playable character
+*  Authors: Douglas Kaelin, Zacharry Georges, Anna Jacobsen, Alexa Lewis
+*  Version: 0.0.2
 */
 public class Player implements Serializable{
    
@@ -19,9 +18,8 @@ public class Player implements Serializable{
    private Point currentLocation;
    
    /**
-    * Paramterized constructor for a Player object.
-    * @param playerNum The player number of the Player object.
-    * @param pName The name of the Player object.
+    * Parameterized constructor for a Player object.
+    * @param playerNum - The player number of the Player object.
    */
    public Player(int playerNum){
       turn = false;
@@ -52,7 +50,7 @@ public class Player implements Serializable{
    }//end constructor 
    
    /**
-   * This method gets whether or not it's the player object's turn
+   * This method determines whether or not it's the player object's turn
    * @return boolean If it is ture then it is the players turn, otherwise it is not
    */
    public boolean getTurn(){
@@ -61,23 +59,23 @@ public class Player implements Serializable{
    
    /**
    * This method sets the turn of the player object
-   * @param _turn Is a boolean to set the turns to
+   * @param _turn Is a boolean to set the turns of a player
    */
    public void setTurn(boolean _turn){
       turn = _turn;
    }
    
    /**
-   * This method gets whether or not it's the player object's is dead
-   * @return boolean If it is ture then it is the players turn, otherwise it is not
+   * This method determines whether or not if the player object is dead
+   * @return boolean If it is true then it the player is dead, otherwise the player is alive
    */
    public boolean getIsDead(){
       return isDead;
    }
    
    /**
-   * This method sets the turn of the player object
-   * @param _turn Is a boolean to set the turns to
+   * This method sets the lifestatus of the player object
+   * @param _isDead Is a boolean to set the player lifestatus
    */
    public void setIsDead(boolean _isDead){
       isDead = _isDead;
@@ -119,7 +117,7 @@ public class Player implements Serializable{
    
    /**
    * A mutator method which sets the name of the player.
-   * @param The name of the Player object.
+   * @param username - The name of the Player object.
    */
    public void setName(String username){
       name = username;

@@ -4,7 +4,7 @@ import java.util.*;
 import java.awt.*;
 
 /**
-* The server for BomPad. 
+* A Server class for Bompad that accepts clients to start a game displaying a game board for all clients to see. 
 * @author Team 2
 * @version 11/9/2017
 */
@@ -86,7 +86,7 @@ public class Server{
                System.out.println("Server line 86 is assigning turn " + assigned.getAssigned() + " to the client.");
                oos.writeObject(assigned);
                oos.flush();
-               //Wait for four players before starting.
+               //Waits for four players before starting.
                   if(outputs.size() == 4){
                      GameStartPacket gsp = new GameStartPacket(null, true);
                      for(int i = 0; i < outputs.size(); i++){
@@ -172,7 +172,7 @@ public class Server{
                            outputs.get(i).flush();
                      }
                   }
-               }while ( oins!=null);//end while loop listening for input.
+               }while (oins!=null);//end while loop listening for input.
                
                //Close everything with all of the client connections.
                for(int i = 0; i < outputs.size(); i++){
@@ -194,27 +194,28 @@ public class Server{
       
       /**
       * A method which returns the adjacent spaces to a location in an arraylist.
-      * @param x The x coordinate of a point (player location)
-      * @param y The y coordinate of a point (player location)
+      * @param p - the location of a player object
+      * @return an arraylist of Lilypad objects that are adjacent to the given point
       */
       public ArrayList<Lilypad> getAdjacent(Point p){
-         int xPos = (int)p.getX();
-         int yPos = (int)p.getY();
+         int xPos = (int)p.getX(); //x The x coordinate of a point (player location)
+         int yPos = (int)p.getY(); //y The y coordinate of a point (player location)
          ArrayList<Lilypad> adjacent = new ArrayList<Lilypad>();
-         adjacent.add(lilypads[xPos-1][yPos]);
-         adjacent.add(lilypads[xPos-1][yPos-1]);
-         adjacent.add(lilypads[xPos-1][yPos+1]);
-         adjacent.add(lilypads[xPos][yPos+1]);
-         adjacent.add(lilypads[xPos][yPos-1]);
-         adjacent.add(lilypads[xPos+1][yPos]);
-         adjacent.add(lilypads[xPos+1][yPos+1]);
-         adjacent.add(lilypads[xPos+1][yPos-1]);
+         adjacent.add(lilypads[xPos-1][yPos]); //west
+         adjacent.add(lilypads[xPos-1][yPos-1]); //southwest
+         adjacent.add(lilypads[xPos-1][yPos+1]); //northwest
+         adjacent.add(lilypads[xPos][yPos+1]); //north
+         adjacent.add(lilypads[xPos][yPos-1]); //south
+         adjacent.add(lilypads[xPos+1][yPos]); //east
+         adjacent.add(lilypads[xPos+1][yPos+1]); //northwest
+         adjacent.add(lilypads[xPos+1][yPos-1]); //northeast
          return adjacent;
       }
       
       /**
       * A method which determines the life status of a player.
-      * @param p the location of the player being checked for life.
+      * @param p - the location of the player being checked for life.
+      * @return boolean true if a player is alive, false if not
       */
       public boolean lifeStatus(Point p){
          int availableSpace = 0;
@@ -267,7 +268,7 @@ public class Server{
       
       /**
       * A method for killing off a player.
-      * @param playerNum the number of the player to be killed.
+      * @param playerNum - the number of the player to be killed.
       */
       public void death(int playerNum){
          if(gamePlayers.size() > 1){
@@ -283,8 +284,8 @@ public class Server{
       }
       
       /**
-      * A metho which checks the validity of a requested move.
-      * @param p The point of the requested location.
+      * A method which checks the validity of a requested move.
+      * @param p - The point of the requested location.
       * @return A MoveResponsePacket with answer of whether or not a move is a valid one.
       */
       public MoveResponsePacket isValidMove(Point p){

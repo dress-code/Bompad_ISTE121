@@ -40,6 +40,8 @@ public class ClientConnection extends JPanel implements Runnable
       
       /**
       * Paramterized ClientConnection constructor.
+      * @param ipAddress - the Internet Protocol address that is used to connect to a network
+      * @param _playerName - the name of a player 
       */
       public ClientConnection(String ipAddress, String _playerName)
       {
@@ -119,9 +121,11 @@ public class ClientConnection extends JPanel implements Runnable
                      Sound sound = new Sound();
                      sound.start();
                   }
+                  //Writes a boardpacket containing lilypad objects to the server
                   BoardPacket bp = new BoardPacket(lilypads);
                   oos.writeObject(bp);
                   oos.flush();
+                  //Tells the server the game should start and sends the list of players
                   GameStartPacket gspOut = new GameStartPacket(players, true);
                   oos.writeObject(gspOut);
                   oos.flush();
@@ -145,6 +149,7 @@ public class ClientConnection extends JPanel implements Runnable
       
       /**
       * A method for writing objects to the server.
+      * @param o - an object (could be anything)
       */
       public void write(Object o){
          try{
@@ -166,7 +171,6 @@ public class ClientConnection extends JPanel implements Runnable
       
       /**
       * A method which requests the server to send over whose turn it currently is.
-      * @return The current turn.
       */
       public void turnRequest(){
          Integer turnRequest = -1;
@@ -174,8 +178,7 @@ public class ClientConnection extends JPanel implements Runnable
       }
       
       /**
-      * A method which gets the updated list of players after a turn is made.
-      * @return The updated array list of players.
+      * A method which requests the server to send over a player number.
       */
       public void playerRequest(){
          Integer playerRequest = -2;
@@ -194,7 +197,7 @@ public class ClientConnection extends JPanel implements Runnable
       
       /**
       * Constructor for a chat object.
-      * @param playerName The name of the player in the chat.
+      * @param name The name of the player in the chat.
       */
       public Chat(String name)
       {

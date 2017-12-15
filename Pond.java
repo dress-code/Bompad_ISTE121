@@ -31,6 +31,7 @@ public class Pond extends JPanel{
   
    /**
    * Constructor for a "pond" board of 64 LilyPads in an 8 x 8 grid layout.
+   * @param cc - a ClientConnection object which represents a connected player
    */
    public Pond(ClientConnection cc){
    
@@ -114,29 +115,27 @@ public class Pond extends JPanel{
    
    /**
    * A method which returns the adjacent spaces to a location in an arraylist.
-   * @param x The x coordinate of a point (player location)
-   * @param y The y coordinate of a point (player location)
+   * @param p - the location of a player object
+   * @return an arraylist of Lilypad objects that are adjacent to the given point
    */
    public ArrayList<Lilypad> getAdjacent(Point p){
-      int xPos = (int)p.getX();
-      int yPos = (int)p.getY();
+      int xPos = (int)p.getX(); //x The x coordinate of a point (player location)
+      int yPos = (int)p.getY(); //y The y coordinate of a point (player location)
       ArrayList<Lilypad> adjacent = new ArrayList<Lilypad>();
-      adjacent.add(lilypads[xPos-1][yPos]);
-      adjacent.add(lilypads[xPos-1][yPos-1]);
-      adjacent.add(lilypads[xPos-1][yPos+1]);
-      adjacent.add(lilypads[xPos][yPos+1]);
-      adjacent.add(lilypads[xPos][yPos-1]);
-      adjacent.add(lilypads[xPos][yPos]);
-      adjacent.add(lilypads[xPos+1][yPos]);
-      adjacent.add(lilypads[xPos+1][yPos+1]);
-      adjacent.add(lilypads[xPos+1][yPos-1]);
+      adjacent.add(lilypads[xPos-1][yPos]); //west
+      adjacent.add(lilypads[xPos-1][yPos-1]); //southwest
+      adjacent.add(lilypads[xPos-1][yPos+1]); //northwest
+      adjacent.add(lilypads[xPos][yPos+1]); //north
+      adjacent.add(lilypads[xPos][yPos-1]); //south
+      adjacent.add(lilypads[xPos+1][yPos]); //east
+      adjacent.add(lilypads[xPos+1][yPos+1]); //northeast
+      adjacent.add(lilypads[xPos+1][yPos-1]); //southeast
       return adjacent;
    }
    
    /**
    * A method which bombs the spaces all around a bonus bomb tile.
-   * @param x the row of the bomb lily pad.
-   * @param y the column of the bomb lily pad.
+   * @param p - the loaction of a bomb
    */
    public void bombSpaces(Point p){
       ArrayList<Lilypad> explosion = getAdjacent(p);
@@ -153,7 +152,7 @@ public class Pond extends JPanel{
    
    /**
    * A method for highlighting available moves.
-   * @param p The current location of the player.
+   * @param p - The current location of the player.
    */
    public void highlightSpaces(Point p){
       ArrayList<Lilypad> highlight = getAdjacent(p);
@@ -179,6 +178,7 @@ public class Pond extends JPanel{
    /**
    * A method which determines the life status of a player.
    * @param p the location of the player being checked for life.
+   * @return boolean true if a player is alive, false if not
    */
    public boolean lifeStatus(Point p){
       System.out.println("We have entered the lifeStatus method.");
@@ -248,7 +248,9 @@ public class Pond extends JPanel{
    }
    
    /**
-   *A method which moves a player
+   * A method which moves a player
+   * @param newPoint - the new location that a player moves to
+   * @param player - a player object
    */
    public void move(Point newPoint, Player player){
    
@@ -287,7 +289,7 @@ public class Pond extends JPanel{
    
    /**
    * A method which provides the sound effects for a Bompad game.
-   * @param fileName the name of the .au file containing the sound effect.
+   * @param fileName - the name of the .au file containing the sound effect.
    */
    public void sound(String fileName){
       try{

@@ -9,11 +9,19 @@ import java.io.*;
 public class MoveRequestPacket implements Serializable{
    private Point newLilypad;
    
+   /**
+   * Parameterized constructor for MoveRequestPacket
+   * @param p - the location of a lilypad that the player wants to move to
+   */
    public MoveRequestPacket(Point p)
    {
       newLilypad = p;
    }
    
+   /**
+   * A method that returns the location of a lilypad that the player wants to move to
+   * @return the location of the player's requested lilypad   
+   */
    public Point getNewLoc(){
       return newLilypad;
    }
